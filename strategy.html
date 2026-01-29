@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Puerto Rico — Strategy & Methodology</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="description" content="Synthesis of Puerto Rico’s demographic and economic challenges and an evidence-based roadmap for sustainable, locally driven development."/>
+  <style>
+    body { font-family: Inter, system-ui, sans-serif; background:#f3f4f6; }
+    .card { background:#fff; border-radius:1rem; box-shadow:0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05); }
+    .chip { display:inline-flex; align-items:center; gap:.5rem; padding:.375rem .6rem; border-radius:999px; background:#eef2ff; color:#3730a3; font-weight:600; font-size:.8rem; }
+    .lead { font-size:1.05rem; color:#374151; }
+    .kpi { display:flex; gap:.8rem; align-items:center; }
+    .kpi .icon { width:2.25rem; height:2.25rem; border-radius:.6rem; background:#f3f4f6; display:flex; align-items:center; justify-content:center; }
+    .kpi .val { font-weight:800; font-size:1.4rem; line-height:1.1; }
+    .link { color:#2563eb; text-decoration:underline; }
+    .hero {
+      background:
+        radial-gradient(1200px 600px at 20% -10%, rgba(239,68,68,.12), transparent 60%),
+        radial-gradient(1200px 600px at 80% -10%, rgba(37,99,235,.10), transparent 60%),
+        linear-gradient(180deg, #fafafa 0%, #f3f4f6 100%);
+    }
+
+    /* Updated Navigation Dropdown Base Styles */
+    .nav-dropdown-menu { 
+        opacity: 0; 
+        visibility: hidden; 
+        transform: translateY(4px); 
+        pointer-events: none; 
+        transition: all .15s ease; 
+        z-index: 50;
+    }
+    
+    .nav-dropdown-root:hover .nav-dropdown-menu, 
+    .nav-dropdown-root.hovering .nav-dropdown-menu { 
+        opacity: 1; 
+        visibility: visible; 
+        transform: translateY(0); 
+        pointer-events: auto; 
+    }
+    
+    .nav-dropdown-root:hover .nav-chevron, 
+    .nav-dropdown-root.hovering .nav-chevron { 
+        transform: rotate(180deg); 
+    }
+
+    /* New style for simulating 65% zoom on the main content */
+    #scale-wrapper {
+        transform: scale(0.65); 
+        transform-origin: top center; 
+        height: 154%; 
+        padding-bottom: 200px;
+        margin-bottom: -35%; 
+    }
+
+    /* --- RADIAL MENU STYLES --- */
+    #radial-menu-container { pointer-events: none; width: 300px; height: 300px; position: fixed; bottom: 0; right: 0; z-index: 9999; }
+    #radial-trigger { pointer-events: auto; }
+    .radial-item {
+        position: absolute; bottom: 7rem; right: 2rem;  
+        width: 3rem; height: 3rem; border-radius: 50%;
+        background-color: white; color: #4f46e5;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        display: flex; align-items: center; justify-content: center;
+        text-decoration: none; opacity: 0; pointer-events: none;
+        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        z-index: 9990;
+        --tx: 0px; --ty: 0px; --lx: 0px; --ly: 0px; --lr: 0deg;
+        transform: translate(0, 0) scale(0.5);
+    }
+    .radial-open .radial-item { opacity: 1; pointer-events: auto; transform: translate(var(--tx), var(--ty)) scale(1); }
+    .radial-open .radial-item:hover { background-color: #e0e7ff; transform: translate(var(--tx), var(--ty)) scale(1.1); z-index: 10005 !important; }
+    .radial-label {
+        position: absolute; left: 50%; top: 50%; 
+        transform: translate(calc(-50% + var(--lx)), calc(-50% + var(--ly))) rotate(var(--lr));
+        transform-origin: center center;
+        background: rgba(255, 255, 255, 0.95); color: black; 
+        padding: 4px 8px; border-radius: 6px; 
+        font-size: 12px; font-weight: 700; white-space: nowrap; 
+        opacity: 0; transition: opacity 0.3s ease;
+        pointer-events: none; box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    }
+    .radial-open .radial-label { opacity: 1; }
+    #radial-trigger {
+        position: absolute; bottom: 7rem; right: 2rem;
+        width: 4rem; height: 4rem; border-radius: 50%;
+        background-color: #4f46e5; color: white;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; transition: transform 0.3s ease;
+        z-index: 10000;
+    }
+    #radial-trigger:hover { transform: scale(1.05); background-color: #4338ca; }
+    .radial-open #radial-trigger { transform: rotate(45deg); background-color: #ef4444; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+  <nav class="bg-white shadow sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-center gap-6 text-sm sm:text-base">
+      <a href="index.html"   class="nav-link border-b-2 border-transparent">Home</a>
+
+      <div class="relative nav-dropdown-root">
+        <a href="metrics.html" class="nav-link border-b-2 border-transparent inline-flex items-center gap-1 cursor-pointer select-none">
+          Metrics
+          <svg xmlns="http://www.w3.org/2000/svg" class="nav-chevron w-4 h-4 transition-transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
+          </svg>
+        </a>
+        <div class="nav-dropdown-menu absolute right-0 mt-2 w-64 rounded-xl border border-gray-200 bg-white shadow-lg ring-1 ring-black/5">
+          <div class="py-2">
+            <a href="metrics.html"               class="block px-4 py-2 hover:bg-gray-50 font-semibold">All Metrics Overview</a>
+            <div class="my-1 border-t border-gray-100"></div>
+            <a href="metrics/population.html"     class="block px-4 py-2 hover:bg-gray-50">Population</a>
+            <a href="metrics/employment.html"     class="block px-4 py-2 hover:bg-gray-50">Employment Rate</a>
+            <a href="metrics/establishments.html" class="block px-4 py-2 hover:bg-gray-50">Employer Establishments</a>
+            <a href="metrics/income.html"         class="block px-4 py-2 hover:bg-gray-50">Household Income</a>
+            <a href="metrics/housing.html"        class="block px-4 py-2 hover:bg-gray-50">Housing Units</a>
+            <a href="metrics/education.html"      class="block px-4 py-2 hover:bg-gray-50">Education</a>
+            <a href="metrics/health.html"         class="block px-4 py-2 hover:bg-gray-50">Health</a>
+            <a href="metrics/disasters_earthquakes.html"      class="block px-4 py-2 hover:bg-gray-50">Earthquakes</a>
+            <a href="metrics/disasters_hurricanes.html"      class="block px-4 py-2 hover:bg-gray-50">Hurricanes</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative nav-dropdown-root">
+        <div class="nav-link border-b-2 border-transparent inline-flex items-center gap-1 cursor-pointer select-none">
+          Dashboards
+          <svg xmlns="http://www.w3.org/2000/svg" class="nav-chevron w-4 h-4 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+
+        <div class="nav-dropdown-menu absolute right-0 mt-2 w-64 rounded-xl border border-gray-200 bg-white shadow-lg ring-1 ring-black/5 z-50">
+          <div class="py-2">
+            <a href="dashboards.html" class="block px-4 py-2 hover:bg-gray-50 font-semibold">Initial Dashboard</a>
+            <div class="my-1 border-t border-gray-100"></div>
+            <a href="dashboards/socio_economic.html" class="block px-4 py-2 hover:bg-gray-50">Socio-Economic Relationships</a>
+            <a href="#" class="block px-4 py-2 hover:bg-gray-50">Trend Analysis</a>
+          </div>
+        </div>
+      </div>
+
+      <a href="literature.html"  class="nav-link border-b-2 border-transparent">Literature</a>
+      <a href="strategy.html"class="nav-link border-b-2 border-blue-600 text-blue-600 font-semibold">Strategy</a>
+      <a href="about.html"   class="nav-link border-b-2 border-transparent">About</a>
+    </div>
+  </nav>
+
+  <div id="scale-wrapper">
+    <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
+      <header class="card hero p-6 sm:p-8 lg:p-10">
+        <p class="text-sm font-semibold text-gray-500 uppercase">Graduate Capstone Project</p>
+        <h1 class="mt-2 text-4xl sm:text-5xl font-extrabold leading-tight">
+          Population & Economic Dynamics in Puerto Rico
+        </h1>
+        <p class="mt-3 text-lg text-gray-700">
+          A graduate research project examining demographic shifts, out-migration, and sustainable development strategies through linked data analysis and policy synthesis.
+        </p>
+
+        <p class="mt-4 text-sm text-gray-700">
+          <strong>Synthesis & Strategic Solutions: </strong> Puerto Rico’s demographic and economic challenges reinforce one another. 
+        </p>
+
+        <div class="mt-3">&nbsp;</div>
+      </header>
+
+      <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <article class="card p-6 lg:col-span-2">
+          <h2 class="text-2xl font-bold">Proposed Predictive & Analytical Framework</h2>
+          <p class="mt-3 text-gray-700">
+            To address the convergence of population decline and economic fragility, this project implements a 
+            <strong>municipal-level predictive data science framework</strong>. The approach moves beyond descriptive dashboards 
+            to forecast trajectories and quantify the relative importance of fertility, age structure, and hazard exposure.
+          </p>
+          
+          <div class="mt-6 grid grid-cols-1 gap-5">
+            
+            <div class="p-5 rounded-xl border border-indigo-100 bg-white shadow-sm flex flex-col sm:flex-row gap-4">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl">📊</div>
+              </div>
+              <div>
+                <h3 class="font-semibold text-lg text-gray-900">1. Population Forecasting (Supervised Learning)</h3>
+                <p class="mt-2 text-sm text-gray-600 leading-relaxed">
+                  We employ <strong>regularized regression (Ridge/Lasso)</strong> and <strong>tree-based models</strong> (Random Forest, Gradient Boosting) to forecast percent population change. 
+                  Unlike standard cohort models, this approach integrates demographic momentum features (median age, birth rates) with economic covariates and hazard data to separate structural decline from shock-related migration.
+                </p>
+              </div>
+            </div>
+
+            <div class="p-5 rounded-xl border border-emerald-100 bg-white shadow-sm flex flex-col sm:flex-row gap-4">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">🔍</div>
+              </div>
+              <div>
+                <h3 class="font-semibold text-lg text-gray-900">2. Driver Analysis & Explainability</h3>
+                <p class="mt-2 text-sm text-gray-600 leading-relaxed">
+                  To open the "black box" of prediction, we apply <strong>SHAP values</strong> and permutation importance. 
+                  This allows us to rank drivers of change, explicitly comparing the influence of structural factors (low fertility) against policy-amenable factors (employment density, housing vacancy).
+                </p>
+              </div>
+            </div>
+
+            <div class="p-5 rounded-xl border border-amber-100 bg-white shadow-sm flex flex-col sm:flex-row gap-4">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-xl">🧩</div>
+              </div>
+              <div>
+                <h3 class="font-semibold text-lg text-gray-900">3. Municipal Typologies (Unsupervised Learning)</h3>
+                <p class="mt-2 text-sm text-gray-600 leading-relaxed">
+                  Using <strong>K-means clustering</strong>, we identify distinct municipal profiles that share trajectories. 
+                  This helps classify municipalities into actionable groups, such as "Low-Fertility/High-Migration" or "Hazard-Exposed/Aging," facilitating targeted rather than blanket policy interventions.
+                </p>
+              </div>
+            </div>
+
+            <div class="p-5 rounded-xl border border-rose-100 bg-white shadow-sm flex flex-col sm:flex-row gap-4">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center text-xl">🛡️</div>
+              </div>
+              <div>
+                <h3 class="font-semibold text-lg text-gray-900">4. Risk Scoring & Scenario Analysis</h3>
+                <p class="mt-2 text-sm text-gray-600 leading-relaxed">
+                  The model outputs feed into a <strong>Municipal Demographic Vulnerability Score</strong>. 
+                  We simulate simplified scenarios (e.g., improved employment vs. stagnation) to assess potential resilience even under the constraints of low fertility and demographic momentum.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </article>
+
+        <aside class="card p-6 space-y-4 h-fit">
+          <h3 class="text-lg font-semibold">Context at a Glance</h3>
+          <div class="kpi">
+            <div class="icon">📉</div>
+            <div>
+              <div class="val">Population decline</div>
+              <div class="text-xs text-gray-500">Linked to low fertility, aging, and out-migration<sup><a class="link" href="#ref-1">1</a>, <a class="link" href="#ref-2">2</a></sup></div>
+            </div>
+          </div>
+          <div class="kpi">
+            <div class="icon">🏭</div>
+            <div>
+              <div class="val">Legacy of §936</div>
+              <div class="text-xs text-gray-500">Tax-credit phase-out weakened employment base<sup><a class="link" href="#ref-3">3</a>, <a class="link" href="#ref-4">4</a></sup></div>
+            </div>
+          </div>
+          <div class="kpi">
+            <div class="icon">💸</div>
+            <div>
+              <div class="val">High poverty</div>
+              <div class="text-xs text-gray-500">Poverty rate & inequality among highest in U.S.<sup><a class="link" href="#ref-17">17</a></sup></div>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="card p-6">
+        <h2 class="text-2xl font-bold">Expected Outcomes & Impact</h2>
+        <p class="mt-3 text-gray-700">
+          This project aligns with the Puerto Rico Planning Board’s need for evidence-based tools. By explicitly incorporating demographic momentum into a predictive pipeline, we aim to produce actionable intelligence for workforce development, housing, and resilience planning.
+        </p>
+
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-6 rounded-xl bg-gradient-to-br from-sky-50 to-white border border-sky-100">
+            <h3 class="font-semibold text-sky-900 mb-2">Reproducible Pipeline</h3>
+            <p class="text-sm text-gray-700">
+              A fully reproducible, end-to-end data science framework that harmonizes public datasets (Census, NOAA, BLS) into a standardized municipal panel, ready for extension to future years or other regions.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-gradient-to-br from-lime-50 to-white border border-lime-100">
+            <h3 class="font-semibold text-lime-900 mb-2">Structural vs. Shock</h3>
+            <p class="text-sm text-gray-700">
+              Quantitative evidence that helps planners distinguish <strong>structural decline</strong> (driven by aging and sub-replacement fertility) from <strong>migration-driven loss</strong> caused by economic shocks or disasters.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-gradient-to-br from-fuchsia-50 to-white border border-fuchsia-100">
+            <h3 class="font-semibold text-fuchsia-900 mb-2">Actionable Intelligence</h3>
+            <p class="text-sm text-gray-700">
+              Actionable risk scores and a spatial typology that allow agencies to prioritize place-based strategies—identifying where policy intervention (e.g., job creation) can effectively counter demographic drag.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card p-6">
+        <h2 class="text-2xl font-bold">Resources & Further Reading</h2>
+        <p class="mt-2 text-sm text-gray-600">Click a source to open it in a new tab.</p>
+        <ol class="mt-4 space-y-2 text-sm leading-6">
+          <li id="ref-1"><a class="link" target="_blank" rel="noopener" href="https://www.estadisticas.pr/files/ArticulosCientificos/Migration-is-the-driving-force-of-rapid-aging.pdf">1. Migration is the driving force of rapid aging in Puerto Rico</a></li>
+          <li id="ref-2"><a class="link" target="_blank" rel="noopener" href="https://www.bls.gov/opub/mlr/2015/beyond-bls/puerto-rico-a-study-of-population-loss-amid-economic-decline.htm">2. BLS: Population loss amid economic decline</a></li>
+          <li id="ref-3"><a class="link" target="_blank" rel="noopener" href="https://www.gao.gov/assets/ggd-93-109.pdf">3. GAO: Puerto Rico & Section 936 Tax Credit</a></li>
+          <li id="ref-4"><a class="link" target="_blank" rel="noopener" href="https://www.finance.senate.gov/download/arthur-macewan-and-j-tomas-hexner-6">4. Senate Finance: The Effect of §936</a></li>
+          <li id="ref-5"><a class="link" target="_blank" rel="noopener" href="https://www.bea.gov/news/2019/prototype-economic-statistics-puerto-rico-2012-2017">5. BEA: Prototype economic statistics for PR, 2012–2017</a></li>
+          <li id="ref-6"><a class="link" target="_blank" rel="noopener" href="https://fred.stlouisfed.org/series/LAUST720000000000003A">6. FRED: Unemployment Rate in Puerto Rico</a></li>
+          <li id="ref-7"><a class="link" target="_blank" rel="noopener" href="https://www.bls.gov/news.release/pdf/laus.pdf">7. BLS: LAUS – July 2025</a></li>
+          <li id="ref-8"><a class="link" target="_blank" rel="noopener" href="https://www.bls.gov/regions/northeast/news-release/countyemploymentandwages_puertorico.htm">8. BLS: QCEW – PR & U.S., Q4 2024</a></li>
+          <li id="ref-9"><a class="link" target="_blank" rel="noopener" href="https://bvirtualogp.pr.gov/ogp/Bvirtual/reogGubernamental/PDF/Informes%20y%20Estudios/RB2019-01.pdf">9. Population decline & school closures in PR</a></li>
+          <li id="ref-10"><a class="link" target="_blank" rel="noopener" href="https://www.pnas.org/doi/10.1073/pnas.2001671117">10. PNAS: Migration dynamics after Hurricane Maria</a></li>
+          <li id="ref-11"><a class="link" target="_blank" rel="noopener" href="https://centropr.hunter.cuny.edu/app/uploads/2023/03/RB2017-01-POST-MARIA-EXODUS_V3.pdf">11. Centro: Post-Maria Exodus estimates</a></li>
+          <li id="ref-12"><a class="link" target="_blank" rel="noopener" href="https://datausa.io/profile/geo/puerto-rico/">12. DataUSA: Puerto Rico profile</a></li>
+          <li id="ref-13"><a class="link" target="_blank" rel="noopener" href="https://arxiv.org/pdf/2504.01148">13. arXiv: Bayesian APC model for fertility in PR</a></li>
+          <li id="ref-14"><a class="link" target="_blank" rel="noopener" href="https://data.census.gov/profile/Puerto_Rico?g=040XX00US72">14. Census: PR profile</a></li>
+          <li id="ref-15"><a class="link" target="_blank" rel="noopener" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12337888/">15. Puerto Rico exodus & long-term economic headwinds</a></li>
+          <li id="ref-16"><a class="link" target="_blank" rel="noopener" href="https://data.census.gov/profile/Puerto_Rico?g=%20040XX00US72">16. Census: PR profile (alt link)</a></li>
+          <li id="ref-17"><a class="link" target="_blank" rel="noopener" href="https://academicworks.cuny.edu/cgi/viewcontent.cgi?article=1014&context=cpr_pubs">17. Center for Puerto Rican Studies: Pervasive Poverty in PR (2023)</a></li>
+          <li id="ref-18"><a class="link" target="_blank" rel="noopener" href="https://hazards.colorado.edu/public-health-disaster-research/steep-risks">18. NHC/Colorado: Steep Risks—Landslide vulnerability in rural PR</a></li>
+        </ol>
+      </section>
+    </main>
+  </div>
+
+  <div class="fixed bottom-8 right-8 z-[9998]">
+    <a href="metrics.html" class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-4 rounded-full shadow-2xl transition transform hover:scale-105 font-bold text-lg no-underline">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+        Metrics Overview
+    </a>
+  </div>
+
+  <div id="radial-menu-container">
+      <button id="radial-trigger" onclick="toggleRadialMenu()">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+      </button>
+  </div>
+
+  <script>
+    // Highlight active nav
+    document.querySelectorAll('.nav-link').forEach(a=>{
+      if (location.pathname.endsWith(a.getAttribute('href')) ||
+          (location.pathname === '/' && a.getAttribute('href') === 'strategy.html')) {
+        a.classList.add('text-blue-600','font-semibold','border-blue-600');
+        a.setAttribute('aria-current','page');
+      }
+    });
+
+    // Shared hover persistence for ALL dropdowns
+    (function() {
+      const dropdownRoots = document.querySelectorAll('.nav-dropdown-root');
+      
+      dropdownRoots.forEach(root => {
+        const menu = root.querySelector('.nav-dropdown-menu');
+        if (!menu) return;
+
+        let hoverTimeout;
+        function addHovering() { clearTimeout(hoverTimeout); root.classList.add('hovering'); }
+        function removeHovering() { hoverTimeout = setTimeout(() => { root.classList.remove('hovering'); }, 300); }
+
+        root.addEventListener('mouseenter', addHovering);
+        root.addEventListener('mouseleave', removeHovering);
+        menu.addEventListener('mouseenter', addHovering);
+        menu.addEventListener('mouseleave', removeHovering);
+      });
+    })();
+
+    // --- RADIAL MENU LOGIC ---
+    const menuItems = [
+        { label: 'Population', href: 'metrics/population.html', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
+        { label: 'Employment Rate', href: 'metrics/employment.html', icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
+        { label: 'Establishments', href: 'metrics/establishments.html', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' },
+        { label: 'Household Income', href: 'metrics/income.html', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+        { label: 'Housing Units', href: 'metrics/housing.html', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+        { label: 'Education', href: 'metrics/education.html', icon: 'M12 14l9-5-9-5-9 5 9 5z M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z' },
+        { label: 'Health', href: 'metrics/health.html', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z' },
+        { label: 'Earthquakes', href: 'metrics/disasters_earthquakes.html', icon: 'M13 10V3L4 14h7v7l9-11h-7z' },
+        { label: 'Hurricanes', href: 'metrics/disasters_hurricanes.html', icon: 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z' }
+    ];
+
+    function initRadialMenu() {
+        const container = document.getElementById('radial-menu-container');
+        const trigger = document.getElementById('radial-trigger');
+        const totalAngle = 100; const radius = 180; const count = menuItems.length; const startAngle = -95; const step = totalAngle / (count - 1);
+
+        menuItems.forEach((item, index) => {
+            const angleDeg = startAngle - (step * index); 
+            const angleRad = angleDeg * (Math.PI / 180);
+            const x = Math.round(radius * Math.cos(angleRad));
+            const y = Math.round(radius * Math.sin(angleRad));
+            const el = document.createElement('a');
+            el.href = item.href; el.className = 'radial-item'; el.style.transitionDelay = `${index * 0.03}s`;
+            el.style.setProperty('--tx', `${x}px`);
+            el.style.setProperty('--ty', `${y}px`);
+            el.style.setProperty('--lx', `${Math.round(75 * Math.cos(angleRad))}px`);
+            el.style.setProperty('--ly', `${Math.round(75 * Math.sin(angleRad))}px`);
+            el.style.setProperty('--lr', `${angleDeg + 180}deg`);
+
+            el.innerHTML = `<span class="radial-label">${item.label}</span><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${item.icon}" /></svg>`;
+            container.insertBefore(el, trigger);
+        });
+    }
+
+    function toggleRadialMenu() { document.getElementById('radial-menu-container').classList.toggle('radial-open'); }
+    initRadialMenu();
+  </script>
+</body>
+</html>

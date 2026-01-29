@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Employment & Labor Dynamics in Puerto Rico</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    .card {
+      background:#fff;
+      border-radius:1rem;
+      box-shadow:0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05);
+      overflow:visible;
+    }
+    .hero {
+      background:
+        radial-gradient(1200px 600px at 20% -10%, rgba(239,68,68,.12), transparent 60%),
+        radial-gradient(1200px 600px at 80% -10%, rgba(37,99,235,.10), transparent 60%),
+        linear-gradient(180deg, #fafafa 0%, #f3f4f6 100%);
+    }
+    #map { height: 48vh; width: 100%; border-radius: .75rem; }
+    @media (min-width: 1280px) { #map { height: 46vh; } }
+    @media (max-width: 640px)  { #map { height: 54vh; } }
+
+    .leaflet-tooltip {
+      background: rgba(255,255,255,.95);
+      border-color:#333;
+      color:#111827;
+      font-size:14px;
+      font-weight:600;
+      box-shadow:0 2px 5px rgba(0,0,0,.2);
+      padding:5px 10px;
+    }
+
+    .mini { min-height: 260px; }
+
+    /* Navigation Dropdown Base Styles */
+    .nav-dropdown-menu { 
+        opacity: 0; 
+        visibility: hidden; 
+        transform: translateY(4px); 
+        pointer-events: none; 
+        transition: all .15s ease; 
+        z-index: 50;
+    }
+    
+    .nav-dropdown-root:hover .nav-dropdown-menu, 
+    .nav-dropdown-root.hovering .nav-dropdown-menu { 
+        opacity: 1; 
+        visibility: visible; 
+        transform: translateY(0); 
+        pointer-events: auto; 
+    }
+    
+    .nav-dropdown-root:hover .nav-chevron, 
+    .nav-dropdown-root.hovering .nav-chevron { 
+        transform: rotate(180deg); 
+    }
+    
+    /* New style for simulating 65% zoom on the main content */
+    #scale-wrapper {
+        /* Apply the scale transformation */
+        transform: scale(0.65); 
+        transform-origin: top center; /* Scale from the top-center */
+        
+        /* Adjustments to compensate for the scaling effect on surrounding content */
+        height: 154%; /* Approx 1 / 0.65 to ensure vertical space is reserved */
+        padding-bottom: 200px;
+        margin-bottom: -35%; /* Pull up content following the wrapper */
+    }
+
+    /* --- LEAFLET CONTROL STYLES (Map Dropdown) --- */
+    .leaflet-control-map-dropdown {
+      padding: 0; 
+      margin-left: 45px; /* Pushes the control right to clear the zoom buttons */
+      margin-top: 5px; 
+    }
+    .leaflet-control-map-dropdown .dropdown-root {
+      background: #fff;
+      box-shadow: 0 1px 5px rgba(0,0,0,.65);
+      border-radius: 4px;
+      position: relative; 
+    }
+    .leaflet-control-map-dropdown .nav-link {
+        padding: 6px 10px;
+        color: #333;
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 1.2;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
+    }
+    
+    .leaflet-control-map-dropdown .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        margin-top: 5px; 
+        z-index: 1000;
+        
+        /* Hiding logic */
+        opacity: 0; visibility: hidden; transform: translateY(4px);
+        pointer-events: none;
+        transition: opacity .15s ease, transform .15s ease, visibility .15s ease;
+    }
+    
+    .leaflet-control-map-dropdown .dropdown-root.hovering .dropdown-menu {
+        opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto;
+    }
+    .leaflet-control-map-dropdown .dropdown-root.hovering #map-selection-chevron {
+        transform: rotate(180deg);
+    }
+    
+    .leaflet-control-map-dropdown .dropdown-menu a {
+        text-decoration: none;
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+
+    /* --- RADIAL MENU STYLES --- */
+    #radial-menu-container { pointer-events: none; width: 300px; height: 300px; position: fixed; bottom: 0; right: 0; z-index: 9999; }
+    
+    #radial-trigger { pointer-events: auto; }
+    
+    /* Radial Item Base State */
+    .radial-item {
+        position: absolute;
+        bottom: 7rem;
+        right: 2rem;  
+        width: 3rem; height: 3rem;
+        border-radius: 50%;
+        background-color: white;
+        color: #4f46e5;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        display: flex; align-items: center; justify-content: center;
+        text-decoration: none;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        z-index: 9990;
+
+        /* CSS Variables for position */
+        --tx: 0px;
+        --ty: 0px;
+        /* CSS Variables for Label Offset */
+        --lx: 0px;
+        --ly: 0px;
+        /* CSS Variable for Label Rotation */
+        --lr: 0deg;
+        
+        transform: translate(0, 0) scale(0.5);
+    }
+    
+    /* Radial Item Open State */
+    .radial-open .radial-item {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translate(var(--tx), var(--ty)) scale(1);
+    }
+
+    /* Radial Item Hover State */
+    .radial-open .radial-item:hover { 
+        background-color: #e0e7ff; 
+        transform: translate(var(--tx), var(--ty)) scale(1.1); 
+        z-index: 10005 !important; /* Stacking fix */
+    }
+    
+    /* UPDATED RADIAL LABEL STYLES */
+    .radial-label {
+        position: absolute;
+        left: 50%; 
+        top: 50%; 
+        /* Move label radially outward based on calculations AND rotate */
+        transform: translate(calc(-50% + var(--lx)), calc(-50% + var(--ly))) rotate(var(--lr));
+        transform-origin: center center;
+        
+        /* Visual Styles: White bg, Black text */
+        background: rgba(255, 255, 255, 0.95); 
+        color: black; 
+        padding: 4px 8px; 
+        border-radius: 6px; 
+        font-size: 12px; 
+        font-weight: 700;
+        white-space: nowrap; 
+        
+        /* Visibility Control */
+        opacity: 0; 
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    }
+    
+    /* Show ALL labels when menu is open */
+    .radial-open .radial-label { 
+        opacity: 1; 
+    }
+
+    #radial-trigger {
+        position: absolute; bottom: 7rem; right: 2rem;
+        width: 4rem; height: 4rem;
+        border-radius: 50%;
+        background-color: #4f46e5;
+        color: white;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        z-index: 10000;
+    }
+    #radial-trigger:hover { transform: scale(1.05); background-color: #4338ca; }
+    .radial-open #radial-trigger { transform: rotate(45deg); background-color: #ef4444; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+  <nav class="bg-white shadow sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-center gap-6 text-sm sm:text-base">
+      <a href="../index.html" class="nav-link border-b-2 border-transparent">Home</a>
+
+      <div class="relative nav-dropdown-root">
+        <a href="../metrics.html" class="nav-link border-b-2 border-blue-600 text-blue-600 font-semibold inline-flex items-center gap-1 cursor-pointer select-none" aria-current="page">
+          Metrics
+          <svg xmlns="http://www.w3.org/2000/svg" class="nav-chevron w-4 h-4 transition-transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
+          </svg>
+        </a>
+        <div class="nav-dropdown-menu absolute right-0 mt-2 w-64 rounded-xl border border-gray-200 bg-white shadow-lg ring-1 ring-black/5 z-50">
+          <div class="py-2">
+            <a href="../metrics.html" class="block px-4 py-2 hover:bg-gray-50 font-semibold">All Metrics Overview</a>
+            <div class="my-1 border-t border-gray-100"></div>
+            <a href="population.html"     class="block px-4 py-2 hover:bg-gray-50">Population</a>
+            <a href="employment.html"     class="block px-4 py-2 bg-gray-100 font-semibold">Employment Rate</a>
+            <a href="establishments.html" class="block px-4 py-2 hover:bg-gray-50">Employer Establishments</a>
+            <a href="income.html"         class="block px-4 py-2 hover:bg-gray-50">Household Income</a>
+            <a href="housing.html"        class="block px-4 py-2 hover:bg-gray-50">Housing Units</a>
+            <a href="education.html"      class="block px-4 py-2 hover:bg-gray-50">Education</a>
+            <a href="health.html"         class="block px-4 py-2 hover:bg-gray-50">Health</a>
+            <a href="disasters_earthquakes.html"      class="block px-4 py-2 hover:bg-gray-50">Earthquakes</a>
+            <a href="disasters_hurricanes.html"      class="block px-4 py-2 hover:bg-gray-50">Hurricanes</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative nav-dropdown-root">
+        <div class="nav-link border-b-2 border-transparent inline-flex items-center gap-1 cursor-pointer select-none">
+          Dashboards
+          <svg xmlns="http://www.w3.org/2000/svg" class="nav-chevron w-4 h-4 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+
+        <div class="nav-dropdown-menu absolute right-0 mt-2 w-64 rounded-xl border border-gray-200 bg-white shadow-lg ring-1 ring-black/5 z-50">
+          <div class="py-2">
+            <a href="../dashboards.html" class="block px-4 py-2 hover:bg-gray-50 font-semibold">Initial Dashboard</a>
+            <div class="my-1 border-t border-gray-100"></div>
+            <a href="../dashboards/socio_economic.html" class="block px-4 py-2 hover:bg-gray-50">Socio-Economic Relationships</a>
+            <a href="#" class="block px-4 py-2 hover:bg-gray-50">Trend Analysis</a>
+          </div>
+        </div>
+      </div>
+
+      <a href="../literature.html" class="nav-link border-b-2 border-transparent">Literature</a>
+      <a href="../strategy.html"   class="nav-link border-b-2 border-transparent">Strategy</a>
+      <a href="../about.html"      class="nav-link border-b-2 border-transparent">About</a>
+    </div>
+  </nav>
+
+  <div id="scale-wrapper">
+    <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+      <header class="card hero p-6 sm:p-8 lg:p-10 relative">
+        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between">
+          <div>
+            <p class="text-sm font-semibold text-gray-500 uppercase">Graduate Capstone Project</p>
+            <h1 class="mt-2 text-4xl sm:text-5xl font-extrabold leading-tight">
+              Population & Economic Dynamics in Puerto Rico
+            </h1>
+            <p class="mt-3 text-lg text-gray-700">
+              A graduate research project examining demographic shifts, out-migration, and sustainable development strategies through linked data analysis and policy synthesis.
+            </p>
+            <div class="mt-5">
+              <span class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-100 text-slate-800">
+                <span class="inline-flex w-5 h-5 items-center justify-center rounded-full bg-slate-800 text-white text-xs">i</span>
+                Hover over the map to see county / municipality details
+              </span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="card p-4">
+        <div class="flex items-center justify-between gap-3">
+          <div class="text-sm text-gray-700 font-medium">Map shading by</div>
+          <div class="flex items-center gap-2">
+            <div class="inline-flex rounded-lg border bg-white shadow-sm overflow-hidden">
+              <button id="metricEmp" type="button" class="px-3 py-1.5 text-sm font-medium hover:bg-gray-50">Employment-Pop Ratio</button>
+              <button id="metricUnemp" type="button" class="px-3 py-1.5 text-sm font-medium hover:bg-gray-50">Unemployment Rate</button>
+              <button id="metricLabor" type="button" class="px-3 py-1.5 text-sm font-medium hover:bg-gray-50">Labor Force Part.</button>
+            </div>
+            <button id="clearSel" class="px-3 py-1.5 text-sm rounded-lg border bg-white hover:bg-gray-50">Clear selection</button>
+          </div>
+        </div>
+        <div id="map" class="mt-3">
+          <div class="leaflet-control-container" id="map-dropdown-container">
+            <div class="leaflet-top leaflet-left">
+              <div class="leaflet-control leaflet-control-map-dropdown">
+                <div class="relative dropdown-root" id="map-selection-dropdown-root">
+                  <div class="nav-link inline-flex items-center gap-1 cursor-pointer select-none">
+                    Metric Selection
+                    <svg id="map-selection-chevron" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
+                    </svg>
+                  </div>
+                  <div id="map-selection-menu" class="dropdown-menu w-64 rounded-xl border border-gray-200 bg-white shadow-lg ring-1 ring-black/5">
+                    <div class="py-2">
+                      <a href="population.html"     class="block px-4 py-2 hover:bg-gray-50">Population</a>
+                      <a href="employment.html"     class="block px-4 py-2 bg-gray-100 font-semibold">Employment Rate</a>
+                      <a href="establishments.html" class="block px-4 py-2 hover:bg-gray-50">Employer Establishments</a>
+                      <a href="income.html"         class="block px-4 py-2 hover:bg-gray-50">Household Income</a>
+                      <a href="housing.html"        class="block px-4 py-2 hover:bg-gray-50">Housing Units</a>
+                      <a href="education.html"      class="block px-4 py-2 hover:bg-gray-50">Education</a>
+                      <a href="health.html"         class="block px-4 py-2 hover:bg-gray-50">Health</a>
+                      <a href="disasters_earthquakes.html"      class="block px-4 py-2 hover:bg-gray-50">Earthquakes</a>
+                      <a href="disasters_hurricanes.html"      class="block px-4 py-2 hover:bg-gray-50">Hurricanes</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+      </section>
+
+      <section class="card p-6">
+        <h2 class="text-lg font-semibold mb-4">Employment details</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div>
+            <div class="text-sm">
+              <div>Municipio: <span id="d-name" class="font-semibold">Puerto Rico</span></div>
+              <div>Centroid: <span id="d-centroid" class="text-gray-600">—</span></div>
+            </div>
+
+            <div class="mt-4 text-sm">
+              <div class="font-semibold text-gray-700">Latest Values (2023):</div>
+              <ul class="mt-1 space-y-1">
+                <li>Employment-population ratio: <span id="d-emppop" class="font-semibold">—</span></li>
+                <li>Unemployment rate: <span id="d-unemp" class="font-semibold">—</span></li>
+                <li>Labor force participation: <span id="d-labor" class="font-semibold">—</span></li>
+              </ul>
+            </div>
+
+            <div class="mt-4 text-sm">
+              <a id="d-census" class="text-blue-600 underline" href="#" target="_blank" rel="noopener">
+                Open on data.census.gov ↗
+              </a>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="font-semibold mb-2">Employment-Pop Ratio Trend (2010–2023)</h3>
+            <div class="mini bg-gray-50 rounded p-3">
+              <canvas id="lineChartEmpPop"></canvas>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="font-semibold mb-2">Labor Force Participation Trend (2010–2023)</h3>
+            <div class="mini bg-gray-50 rounded p-3">
+              <canvas id="lineChartLabor"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card p-6">
+          <h2 class="text-lg font-semibold mb-4">Unemployment Rate Changes</h2>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div>
+                  <h3 class="font-semibold mb-2">Unemployment Rate Trend (2010–2023)</h3>
+                  <div class="mini bg-gray-50 rounded p-3">
+                      <canvas id="barChartUnemp"></canvas>
+                  </div>
+              </div>
+              <div>
+                  <h3 class="font-semibold mb-2">Annual Unemployment Change (2022–2023)</h3>
+                  <div class="mini bg-gray-50 rounded p-3">
+                      <canvas id="barChartAnnualChange"></canvas>
+                  </div>
+              </div>
+          </div>
+          
+          <div class="mt-6">
+              <h3 class="text-base font-semibold mb-2">Understanding the Unemployment Rate Charts</h3>
+              <p class="text-sm text-gray-700 space-y-3">
+                  The <strong>Unemployment Rate Trend (2010–2023)</strong> chart displays the yearly unemployment rate for the selected municipality (or Puerto Rico overall) as a share of the labor force. A lower percentage indicates a healthier labor market over the long term. This metric generally reflects a decade-long improvement in employment across Puerto Rico since peak unemployment rates in the early 2010s.
+              </p>
+              <p class="text-sm text-gray-700 mt-2 space-y-3">
+                  The <strong>Annual Unemployment Change (2022–2023)</strong> chart ranks all municipalities by the absolute change in their unemployment rate in the most recent year.
+                  <span class="font-semibold text-green-600">Green bars</span> represent a <strong>decrease</strong> in the unemployment rate (an improvement in the labor market).
+                  <span class="font-semibold text-red-600">Red bars</span> represent an <strong>increase</strong> (a deterioration in the labor market). This chart provides a snapshot of the fastest-changing municipal labor markets in the last year.
+              </p>
+          </div>
+      </section>
+
+      <!-- ANALYSIS AND SUPPORTING RESOURCES (REPLACED FILE SOURCES) -->
+      <section class="card p-6 space-y-6">
+        <h2 class="text-lg font-semibold">Analysis and Supporting Resources</h2>
+
+        <div class="space-y-4">
+            <h3 class="text-base font-semibold text-gray-700">Labor Market Resurgence vs. Structural Gaps 🏭</h3>
+            <p>
+                The data presented above reveals a dual narrative in Puerto Rico's labor market: a significant long-term recovery in unemployment figures contrasted with persistent structural challenges regarding workforce participation.
+            </p>
+            
+            <h4 class="text-sm font-semibold text-gray-600 mt-4">Post-Recession Recovery:</h4>
+            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                <li>The <strong>Unemployment Rate</strong> has seen a dramatic decline from the historic highs of the early 2010s (often exceeding 15-16%) to single-digit lows in 2023. This trend suggests a tightening labor market and economic stabilization following the debt crisis and natural disasters.</li>
+                <li>Recent years show a "green wave" in the annual change charts, indicating that the majority of municipalities are continuing to see year-over-year improvements in their jobless rates.</li>
+            </ul>
+
+            <h4 class="text-sm font-semibold text-gray-600 mt-4">The Participation Gap:</h4>
+            <p>
+                Despite the positive unemployment news, the <strong>Labor Force Participation Rate</strong> remains a critical concern. Hovering between 40% and 45%, it is significantly lower than the U.S. national average (typically >60%). This indicates that a large portion of the working-age population is detached from the formal economy, driven by factors such as:
+            </p>
+            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                <li>A large <strong>informal economy</strong> that is not captured in official employment statistics.</li>
+                <li>High rates of disability and discouraged workers who have stopped seeking employment.</li>
+                <li><strong>Out-migration</strong> of prime working-age adults ("brain drain"), which shrinks the talent pool available for specialized industries.</li>
+            </ul>
+        </div>
+        
+        <div class="space-y-2 text-sm text-gray-600">
+            <h4 class="font-semibold">Research References:</h4>
+            <ul class="list-disc list-inside ml-4 space-y-1">
+                <li>
+                    <strong>Employment Status Data:</strong> 
+                    <a href="https://data.census.gov/table?q=S2301:+EMPLOYMENT+STATUS+Puerto+Rico" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800 hover:underline">
+                        ACS S2301 – Employment Status, Puerto Rico Municipalities
+                    </a>
+                </li>
+                <li>
+                    <strong>Municipal Boundaries:</strong> 
+                    <span class="text-gray-500">U.S. Census Bureau (TIGER/Line Shapefiles)</span>
+                </li>
+                <li>
+                    <strong>Processed Data Files:</strong>
+                    <span class="text-gray-500 italic">municipios_acs_s2301_2010_2023_wide.json</span>
+                </li>
+            </ul>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div class="fixed bottom-8 right-8 z-[9998]">
+    <a href="../metrics.html" class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-4 rounded-full shadow-2xl transition transform hover:scale-105 font-bold text-lg no-underline">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+        Metrics Overview
+    </a>
+  </div>
+
+  <div id="radial-menu-container">
+      <button id="radial-trigger" onclick="toggleRadialMenu()">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+      </button>
+  </div>
+
+  <script>
+    // ---- Config ----
+    const GEOJSON_URL = '../data/tl_2022_72_cousub/pr_municipalities.geojson';
+    // Adjust this path if your JSON lives elsewhere:
+    const EMP_JSON    = '../data/employment/municipios_acs_s2301_2010_2023_wide.json';
+
+    const YEARS = [2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023];
+    const fmt = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 });
+
+    // Choropleth colors
+    const CHORO_COLORS = ['#7f1d1d', '#b91c1c', '#f97316', '#bbf7d0', '#22c55e', '#15803d'];
+    const EMP_BREAKS   = [30, 33, 36, 39, 42]; // employment-pop ratio % bins (Higher is better)
+    const UNEMP_BREAKS = [5, 10, 15, 20, 25];  // unemployment rate % bins (Lower is better)
+    const LABOR_BREAKS = [35, 38, 41, 44, 47]; // labor force participation % bins (Higher is better)
+
+    const sanitizeName = s => String(s||'').trim();
+    
+    // Stores the global min and max values for the current map mode
+    let _extremeValues = { min: Infinity, max: -Infinity };
+
+
+    // ---- Data helpers ----
+    function statsForMunicipio(name){
+      const key = sanitizeName(name).replace(/\s*Municipio$/,'');
+      const row = _rows.find(r => sanitizeName(r.Municipio) === key);
+      if (!row) return null;
+
+      const empVals   = YEARS.map(y => Number(row[`EmpPop_${y}`]));
+      const unempVals = YEARS.map(y => Number(row[`Unemp_${y}`]));
+      const laborVals = YEARS.map(y => Number(row[`LaborForce_${y}`]));
+
+      return { empVals, unempVals, laborVals, row };
+    }
+    
+    function colorFor(value, breaks, mode) {
+      if (!Number.isFinite(value)) return '#93c5fd';
+      // Note: Higher is better for EmpPop and Labor, so reverse the color scale
+      const isHigherBetter = (mode === 'emp' || mode === 'labor');
+      
+      let colors = [...CHORO_COLORS];
+      if (isHigherBetter) colors = colors.reverse();
+      
+      if (value <= breaks[0]) return colors[0];
+      if (value <= breaks[1]) return colors[1];
+      if (value <= breaks[2]) return colors[2];
+      if (value <= breaks[3]) return colors[3];
+      if (value <= breaks[4]) return colors[4];
+      return colors[5];
+    }
+    
+    function getAllMunicipios() {
+        return _rows.filter(r => r.Municipio !== 'Puerto Rico').map(r => r.Municipio).sort();
+    }
+    
+    function prepareAnnualChangeData() {
+        const municipios = getAllMunicipios();
+        const data = municipios.map(name => {
+            const row = _rows.find(r => r.Municipio === name);
+            return {
+                name: name.replace(/\s*Municipio$/,''),
+                change: Number(row.Change_2022_2023) // Absolute change
+            };
+        }).sort((a, b) => a.change - b.change); // Sort by change: most negative (best) at top
+
+        return {
+            labels: data.map(d => d.name),
+            values: data.map(d => d.change)
+        };
+    }
+    
+    // NEW: Function to pre-calculate global min/max for the current metric
+    function calculateExtremeValues() {
+        _extremeValues = { min: Infinity, max: -Infinity };
+        let valueKey;
+        if (currentMode === 'emp') valueKey = 'EmpPop_2023';
+        else if (currentMode === 'unemp') valueKey = 'Unemp_2023';
+        else if (currentMode === 'labor') valueKey = 'LaborForce_2023';
+        else return;
+
+        // Iterate through all municipalities to find the global min and max value
+        // Note: Exclude the overall "Puerto Rico" row.
+        const municipioRows = _rows.filter(r => r.Municipio !== 'Puerto Rico');
+        
+        municipioRows.forEach(row => {
+            const value = Number(row[valueKey]);
+
+            if (Number.isFinite(value)) {
+                _extremeValues.min = Math.min(_extremeValues.min, value);
+                _extremeValues.max = Math.max(_extremeValues.max, value);
+            }
+        });
+        
+        // Handle floating point precision for comparison
+        _extremeValues.min = parseFloat(_extremeValues.min.toFixed(2));
+        _extremeValues.max = parseFloat(_extremeValues.max.toFixed(2));
+    }
+
+
+    // ---- Charts + Details ----
+    let lineChartEmpPop=null, lineChartLabor=null, barChartUnemp=null, barChartAnnualChange=null;
+    const dName = document.getElementById('d-name');
+    const dCent = document.getElementById('d-centroid');
+    const dEmp  = document.getElementById('d-emppop');
+    const dUn   = document.getElementById('d-unemp');
+    const dLab  = document.getElementById('d-labor');
+    const dCenL = document.getElementById('d-census');
+
+    function drawCharts(name, st){
+      if (!st) return;
+      
+      const ctxL_EmpPop = document.getElementById('lineChartEmpPop').getContext('2d');
+      const ctxL_Labor  = document.getElementById('lineChartLabor').getContext('2d');
+      const ctxB_Unemp  = document.getElementById('barChartUnemp').getContext('2d');
+      
+      if (lineChartEmpPop) lineChartEmpPop.destroy();
+      if (lineChartLabor) lineChartLabor.destroy();
+      if (barChartUnemp) barChartUnemp.destroy();
+      
+      // 1. Employment-Pop Ratio Trend (Line Chart)
+      lineChartEmpPop = new Chart(ctxL_EmpPop, {
+        type: 'line',
+        data: {
+          labels: YEARS,
+          datasets:[{
+            label:'Employment-population ratio (%)',
+            data: st.empVals,
+            tension:.25,
+            pointRadius:3
+          }]
+        },
+        options: {
+          plugins:{ legend:{ display:false }, tooltip:{ callbacks:{ label:(c)=>`${fmt.format(c.parsed.y)}%` } } },
+          scales:{ y:{ ticks:{ callback:v=>`${v}%` } } },
+          maintainAspectRatio:false
+        }
+      });
+      
+      // 2. Labor Force Participation Trend (Line Chart)
+      lineChartLabor = new Chart(ctxL_Labor, {
+        type: 'line',
+        data: {
+          labels: YEARS,
+          datasets:[{
+            label:'Labor Force Participation (%)',
+            data: st.laborVals,
+            tension:.25,
+            pointRadius:3,
+            borderColor: 'rgb(21, 128, 61)' 
+          }]
+        },
+        options: {
+          plugins:{ legend:{ display:false }, tooltip:{ callbacks:{ label:(c)=>`${fmt.format(c.parsed.y)}%` } } },
+          scales:{ y:{ ticks:{ callback:v=>`${v}%` } } },
+          maintainAspectRatio:false
+        }
+      });
+
+      // 3. Unemployment Rate Trend (Bar Chart)
+      barChartUnemp = new Chart(ctxB_Unemp, {
+        type:'bar',
+        data:{
+          labels: YEARS,
+          datasets:[{
+            label:'Unemployment rate (%)',
+            data: st.unempVals,
+            backgroundColor: 'rgba(239, 68, 68, 0.7)' 
+          }]
+        },
+        options:{
+          plugins:{ legend:{ display:false }, tooltip:{ callbacks:{ label:(c)=>`${fmt.format(c.parsed.y)}%` } } },
+          scales:{ y:{ ticks:{ callback:v=>`${v}%` } } },
+          maintainAspectRatio:false
+        }
+      });
+      
+      // 4. Annual Unemployment Change Bar Chart (All Municipios)
+      const changeData = prepareAnnualChangeData();
+      const ctxB_AnnualChange = document.getElementById('barChartAnnualChange').getContext('2d');
+      if (barChartAnnualChange) barChartAnnualChange.destroy();
+      
+      // Assign different colors for positive (red) and negative (green) change
+      const colors = changeData.values.map(v => v < 0 ? 'rgb(34, 197, 94)' : 'rgb(239, 68, 68)');
+
+      barChartAnnualChange = new Chart(ctxB_AnnualChange, {
+        type: 'bar',
+        data: {
+            labels: changeData.labels,
+            datasets: [{
+                label: 'Absolute Change in Unemployment Rate (2022 to 2023)',
+                data: changeData.values,
+                backgroundColor: colors
+            }]
+        },
+        options: {
+            indexAxis: 'y', // Horizontal bars
+            plugins: {
+                legend: { display: false },
+                tooltip: { callbacks: { label: (c) => `${c.parsed.x < 0 ? 'Decreased' : 'Increased'} by ${fmt.format(Math.abs(c.parsed.x))} pp` } }
+            },
+            scales: {
+                x: {
+                    title: { display: true, text: 'Change in Percentage Points (pp)' },
+                    stacked: true
+                },
+                y: {
+                    stacked: true,
+                    ticks: { autoSkip: true, maxRotation: 0, minRotation: 0 }
+                }
+            },
+            maintainAspectRatio: false
+        }
+    });
+    }
+
+    function updateDetails(name, st, centroid){
+      dName.textContent = name.replace(/\s*Municipio$/,'');
+      dCent.textContent = centroid ? `${centroid.lat.toFixed(4)}, ${centroid.lng.toFixed(4)}` : '—';
+      dEmp.textContent  = st?.row?.EmpPop_2023   != null ? `${fmt.format(st.row.EmpPop_2023)}%`   : '—';
+      dUn.textContent   = st?.row?.Unemp_2023    != null ? `${fmt.format(st.row.Unemp_2023)}%`    : '—';
+      dLab.textContent  = st?.row?.LaborForce_2023!= null ? `${fmt.format(st.row.LaborForce_2023)}%` : '—';
+      dCenL.href = "https://data.census.gov/table?q=S2301:+EMPLOYMENT+STATUS+Puerto+Rico";
+      drawCharts(name, st);
+    }
+
+    // ---- Map + Legend ----
+    let _rows = [], map, layer, fc, legend;
+    let currentMode = 'emp'; 
+    let lockedName = null, selectedLayer = null;
+    const selectedOutline = { weight: 4, color: '#111827', dashArray: '3', fillOpacity: 0.85 };
+    let prBoundsGlobal = null;
+
+    function styleForFeature(feature){
+      const p = feature.properties || {};
+      const name = (p.NAME || p.NAMELSAD || p.name || 'Unknown').replace(/\s*Municipio$/,'');
+      const st = statsForMunicipio(name);
+      let value = NaN, breaks = EMP_BREAKS, mode = currentMode, valueKey;
+      
+      if (st && st.row) {
+        if (currentMode === 'emp') {
+          value = Number(st.row.EmpPop_2023);
+          breaks = EMP_BREAKS;
+          valueKey = 'EmpPop_2023';
+        } else if (currentMode === 'unemp') {
+          value = Number(st.row.Unemp_2023);
+          breaks = UNEMP_BREAKS;
+          valueKey = 'Unemp_2023';
+        } else if (currentMode === 'labor') {
+          value = Number(st.row.LaborForce_2023);
+          breaks = LABOR_BREAKS;
+          valueKey = 'LaborForce_2023';
+        }
+      }
+      
+      const col = colorFor(value, breaks, mode); 
+      // Default style
+      let style = { fillColor: col, weight: 1.2, color:'#111827', fillOpacity:.75 };
+      
+      // >>> START: Custom logic to highlight only the single min and max values (Thicker Yellow Line) <<<
+      if (Number.isFinite(value) && _extremeValues.min !== Infinity) {
+          // Compare value to the globally calculated min and max, accounting for floating point
+          const valRounded = parseFloat(value.toFixed(2));
+          const isExtreme = valRounded === _extremeValues.min || valRounded === _extremeValues.max;
+          
+          // Only highlight if min is not equal to max (i.e., not all values are the same)
+          if (isExtreme && _extremeValues.min !== _extremeValues.max) { 
+              style.weight = 5;            // Thicker border
+              style.color = '#facc15';     // Yellow border (tailwind yellow-400)
+              style.dashArray = '';        // Solid line
+              style.fillOpacity = 0.95;    // Max fill opacity to make the interior color stand out
+          }
+      }
+      // >>> END: Custom logic to highlight only the single min and max values (Thicker Yellow Line) <<<
+      
+      return style;
+    }
+
+    function renderLegend(){
+      if (!legend || !legend._div) return;
+      
+      let title, breaks, isHigherBetter;
+
+      if (currentMode === 'emp') {
+          title = 'Employment-population ratio (%)';
+          breaks = EMP_BREAKS;
+          isHigherBetter = true;
+      } else if (currentMode === 'unemp') {
+          title = 'Unemployment rate (%)';
+          breaks = UNEMP_BREAKS;
+          isHigherBetter = false;
+      } else { // 'labor'
+          title = 'Labor Force Participation (%)';
+          breaks = LABOR_BREAKS;
+          isHigherBetter = true;
+      }
+      
+      let colors = [...CHORO_COLORS];
+      if (isHigherBetter) colors = colors.reverse();
+      
+      const rows = [];
+      const row = (color, label) =>
+        `<div style="display:flex;align-items:center;gap:.5rem;margin:.2rem 0;">
+           <span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:${color};
+                        border:1px solid rgba(0,0,0,.15)"></span>
+           <span>${label}</span>
+         </div>`;
+
+      const fmtRange = (a,b) => `${a}% – ${b}%`;
+      rows.push(`<div style="font-weight:600;margin-bottom:.25rem">${title}</div>`);
+      
+      // Logic for Higher Better (Emp-Pop, Labor)
+      if (isHigherBetter) {
+        rows.push(row(colors[0], `≤ ${breaks[0]}%`));
+        rows.push(row(colors[1], fmtRange(breaks[0], breaks[1])));
+        rows.push(row(colors[2], fmtRange(breaks[1], breaks[2])));
+        rows.push(row(colors[3], fmtRange(breaks[2], breaks[3])));
+        rows.push(row(colors[4], fmtRange(breaks[3], breaks[4])));
+        rows.push(row(colors[5], `> ${breaks[4]}%`));
+      } else {
+        // Logic for Lower Better (Unemployment)
+        rows.push(row(colors[0], `> ${breaks[4]}%`));
+        rows.push(row(colors[1], fmtRange(breaks[3], breaks[4])));
+        rows.push(row(colors[2], fmtRange(breaks[2], breaks[3])));
+        rows.push(row(colors[3], fmtRange(breaks[1], breaks[2])));
+        rows.push(row(colors[4], fmtRange(breaks[0], breaks[1])));
+        rows.push(row(colors[5], `≤ ${breaks[0]}%`));
+      }
+
+      legend._div.innerHTML = rows.join('');
+    }
+
+    function wireMetricToggle(){
+      const btnEmp = document.getElementById('metricEmp');
+      const btnUn  = document.getElementById('metricUnemp');
+      const btnLab = document.getElementById('metricLabor');
+      
+      function setMode(mode){
+        currentMode = mode;
+        
+        btnEmp.classList.toggle('bg-blue-600', mode==='emp');
+        btnEmp.classList.toggle('text-white', mode==='emp');
+        btnEmp.classList.toggle('hover:bg-gray-50', mode!=='emp');
+        
+        btnUn.classList.toggle('bg-blue-600', mode==='unemp');
+        btnUn.classList.toggle('text-white', mode==='unemp');
+        btnUn.classList.toggle('hover:bg-gray-50', mode!=='unemp');
+        
+        btnLab.classList.toggle('bg-blue-600', mode==='labor');
+        btnLab.classList.toggle('text-white', mode==='labor');
+        btnLab.classList.toggle('hover:bg-gray-50', mode!=='labor');
+        
+        // RE-CALCULATE EXTREMES BEFORE RESTYLING
+        calculateExtremeValues();
+
+        layer.eachLayer(l => l.setStyle(styleForFeature(l.feature)));
+        if (selectedLayer) selectedLayer.setStyle(selectedOutline);
+        renderLegend();
+      }
+      
+      setMode(currentMode); 
+      
+      btnEmp.addEventListener('click', ()=>setMode('emp'));
+      btnUn.addEventListener('click', ()=>setMode('unemp'));
+      btnLab.addEventListener('click', ()=>setMode('labor'));
+    }
+
+    function wireClearSelection(){
+      function clearSelection(){
+        lockedName = null;
+        if (selectedLayer) { layer.resetStyle(selectedLayer); selectedLayer = null; }
+        if (prBoundsGlobal) map.fitBounds(prBoundsGlobal, { padding:[15,15] });
+        updateDetails('Puerto Rico', statsForMunicipio('Puerto Rico'), null); 
+      }
+      document.getElementById('clearSel').addEventListener('click', clearSelection);
+      document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') clearSelection(); });
+    }
+
+    function wireDropdown() {
+      // Wires all navigation dropdowns (top of page) using class selection
+      const dropdownRoots = document.querySelectorAll('.nav-dropdown-root');
+      
+      dropdownRoots.forEach(root => {
+        const menu = root.querySelector('.nav-dropdown-menu');
+        if (!menu) return;
+
+        let hoverTimeout;
+        function addHovering() { clearTimeout(hoverTimeout); root.classList.add('hovering'); }
+        function removeHovering() { hoverTimeout = setTimeout(() => { root.classList.remove('hovering'); }, 300); }
+
+        root.addEventListener('mouseenter', addHovering);
+        root.addEventListener('mouseleave', removeHovering);
+        menu.addEventListener('mouseenter', addHovering);
+        menu.addEventListener('mouseleave', removeHovering);
+      });
+    }
+
+    function wireMapDropdown() {
+        // Wires the new map selection dropdown (top left of map)
+        const root = document.getElementById('map-selection-dropdown-root');
+        if (!root) return;
+        let hoverTimeout;
+        const menu = document.getElementById('map-selection-menu');
+
+        function addHovering(){ 
+            clearTimeout(hoverTimeout); 
+            root.classList.add('hovering'); 
+        }
+        function removeHovering(){ 
+            hoverTimeout = setTimeout(()=>{
+                root.classList.remove('hovering');
+            }, 300); 
+        }
+
+        root.addEventListener('mouseenter', addHovering);
+        root.addEventListener('mouseleave', removeHovering);
+        if (menu) {
+            menu.addEventListener('mouseenter', addHovering);
+            menu.addEventListener('mouseleave', removeHovering);
+        }
+    }
+
+    // --- RADIAL MENU LOGIC ---
+    const menuItems = [
+        { label: 'Population', href: 'population.html', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
+        { label: 'Employment Rate', href: 'employment.html', icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
+        { label: 'Establishments', href: 'establishments.html', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' },
+        { label: 'Household Income', href: 'income.html', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+        { label: 'Housing Units', href: 'housing.html', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+        { label: 'Education', href: 'education.html', icon: 'M12 14l9-5-9-5-9 5 9 5z M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z' },
+        { label: 'Health', href: 'health.html', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z' },
+        { label: 'Earthquakes', href: 'disasters_earthquakes.html', icon: 'M13 10V3L4 14h7v7l9-11h-7z' },
+        { label: 'Hurricanes', href: 'disasters_hurricanes.html', icon: 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z' }
+    ];
+
+    function initRadialMenu() {
+        const container = document.getElementById('radial-menu-container');
+        const trigger = document.getElementById('radial-trigger');
+        
+        const totalAngle = 100; // Degrees of spread
+        const radius = 180; // Distance from center
+        const count = menuItems.length;
+        const startAngle = -95; // Top (12 o'clock ish)
+        const step = totalAngle / (count - 1);
+
+        menuItems.forEach((item, index) => {
+            const angleDeg = startAngle - (step * index); 
+            const angleRad = angleDeg * (Math.PI / 180);
+            
+            // Icon coordinates
+            const x = Math.round(radius * Math.cos(angleRad));
+            const y = Math.round(radius * Math.sin(angleRad));
+
+            // Label coordinates (offset further out for "red line" effect)
+            const textGap = 75; // Distance from icon center to text
+            const lx = Math.round(textGap * Math.cos(angleRad));
+            const ly = Math.round(textGap * Math.sin(angleRad));
+
+            const el = document.createElement('a');
+            el.href = item.href;
+            el.className = 'radial-item';
+            el.style.transitionDelay = `${index * 0.03}s`;
+            
+            // Store coordinates in CSS variables on the element
+            el.style.setProperty('--tx', `${x}px`);
+            el.style.setProperty('--ty', `${y}px`);
+            el.style.setProperty('--lx', `${lx}px`);
+            el.style.setProperty('--ly', `${ly}px`);
+            el.style.setProperty('--lr', `${angleDeg + 180}deg`); // Rotate text
+
+            el.innerHTML = `
+                <span class="radial-label">${item.label}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${item.icon}" />
+                </svg>
+            `;
+            container.insertBefore(el, trigger);
+        });
+    }
+
+    function toggleRadialMenu() {
+        const container = document.getElementById('radial-menu-container');
+        // Simply toggle class - CSS variables handle the positioning now
+        container.classList.toggle('radial-open');
+    }
+
+    // ---- Init ----
+    (async function init(){
+      const res = await fetch(EMP_JSON, { cache:'no-store' });
+      _rows = await res.json();
+
+      const prBounds = L.latLngBounds([[17.85, -67.45],[18.55, -65.25]]);
+      prBoundsGlobal = prBounds;
+      map = L.map('map', { zoomControl: false, zoomSnap:.25 }).fitBounds(prBounds); // Hide default zoom
+      
+      // Add zoom controls back as a separate control
+      L.control.zoom({ position: 'topleft' }).addTo(map);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        minZoom: 7, maxZoom: 19
+      }).addTo(map);
+
+      // Initialize the map dropdown control
+      L.Control.MapDropdown = L.Control.extend({
+          onAdd: function(map) {
+              const container = L.DomUtil.get('map-dropdown-container');
+              L.DomEvent.disableClickPropagation(container);
+              L.DomEvent.disableScrollPropagation(container);
+              return container.querySelector('.leaflet-control-map-dropdown');
+          },
+          onRemove: function(map) {}
+      });
+      new L.Control.MapDropdown({ position: 'topleft' }).addTo(map);
+
+      const gjRes = await fetch(GEOJSON_URL + (GEOJSON_URL.includes('?')?'&':'?') + 'cb=' + Date.now());
+      fc = await gjRes.json();
+
+      const hiStyle = { weight:3, color:'#111827', fillOpacity:0.9 };
+      
+      // Calculate initial extremes
+      calculateExtremeValues();
+
+      layer = L.geoJSON(fc, {
+        style: (feature) => styleForFeature(feature),
+        onEachFeature: (f, lyr) => {
+          const p = f.properties || {};
+          const rawName = p.NAME || p.NAMELSAD || p.name || 'Unknown';
+          const name = rawName.replace(/\s*Municipio$/,'');
+          const st = statsForMunicipio(name);
+          
+          let line = '';
+          if (st && st.row) {
+              const emp = fmt.format(st.row.EmpPop_2023);
+              const unemp = fmt.format(st.row.Unemp_2023);
+              const labor = fmt.format(st.row.LaborForce_2023);
+              line = `<br><small>Emp-Pop 2023: ${emp}% | Unemp 2023: ${unemp}% | LFP 2023: ${labor}%</small>`;
+          }
+          
+          lyr.bindTooltip(rawName, { direction:'center', className:'leaflet-tooltip' });
+          lyr.bindPopup(`<strong>${rawName}</strong>${line}`);
+
+          lyr.on({
+            mouseover: e => {
+              if (lockedName) return;
+              e.target.setStyle(hiStyle);
+              const c = e.target.getBounds().getCenter();
+              updateDetails(name, statsForMunicipio(name), c);
+            },
+            mouseout: e => {
+              if (lockedName) return;
+              layer.resetStyle(e.target);
+            },
+            click: e => {
+              if (selectedLayer) layer.resetStyle(selectedLayer);
+              selectedLayer = e.target;
+              lockedName = name;
+              e.target.setStyle(selectedOutline);
+              map.fitBounds(e.target.getBounds(), { padding:[20,20] });
+              const c = e.target.getBounds().getCenter();
+              updateDetails(lockedName, statsForMunicipio(lockedName), c);
+            }
+          });
+        }
+      }).addTo(map);
+
+      const b = layer.getBounds();
+      if (b.isValid()) map.fitBounds(b, { padding:[15,15] });
+
+      legend = L.control({ position:'bottomright' });
+      legend.onAdd = function(){
+        const div = L.DomUtil.create('div', 'info legend');
+        div.style.background = 'white';
+        div.style.padding = '8px 10px';
+        div.style.borderRadius = '8px';
+        div.style.boxShadow = '0 2px 8px rgba(0,0,0,.15)';
+        div.style.font = '12px/1.3 system-ui,-apple-system,Segoe UI,Roboto,sans-serif';
+        legend._div = div;
+        renderLegend();
+        return div;
+      };
+      legend.addTo(map);
+
+      // Initial details
+      updateDetails('Puerto Rico', statsForMunicipio('Puerto Rico'), null);
+
+      wireMetricToggle();
+      wireClearSelection();
+      wireDropdown(); // Main nav dropdown
+      wireMapDropdown(); // NEW map dropdown
+      initRadialMenu(); // Init Radial Menu
+
+      // highlight active link in dropdown based on URL
+      document.addEventListener('DOMContentLoaded', () => {
+        const currentPathname = window.location.pathname.split('/').pop();
+        const subPageLink = document.querySelector(`#metrics-menu a[href="${currentPathname}"]`);
+        if (subPageLink) subPageLink.classList.add('bg-gray-100','font-semibold');
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Earthquake Analysis Map & Charts in Puerto Rico</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    /* ... (CSS Styles remain largely unchanged) ... */
+    .card {
+      background:#fff;
+      border-radius:1rem;
+      box-shadow:0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05);
+      overflow:visible;
+    }
+    .hero {
+      background:
+        radial-gradient(1200px 600px at 20% -10%, rgba(239,68,68,.12), transparent 60%),
+        radial-gradient(1200px 600px at 80% -10%, rgba(37,99,235,.10), transparent 60%),
+        linear-gradient(180deg, #fafafa 0%, #f3f4f6 100%);
+    }
+    /* Map IDs updated to target only the first map */
+    #map { height: 48vh; width: 100%; border-radius: .75rem; } 
+    @media (min-width: 1280px) { #map { height: 46vh; } } 
+    @media (max-width: 640px)  { #map { height: 54vh; } } 
+
+    .leaflet-tooltip {
+      background: rgba(255,255,255,.95);
+      border-color:#333;
+      color:#111827;
+      font-size:14px;
+      font-weight:600;
+      box-shadow:0 2px 5px rgba(0,0,0,.2);
+      padding:5px 10px;
+    }
+
+    .mini { min-height: 300px; } /* Increased min-height for bigger graphs */
+
+    /* CUSTOM: Earthquake Legend positioned bottom-left */
+    .leaflet-control-eq-legend {
+        position: absolute;
+        bottom: 10px; 
+        left: 10px;  /* Position set to LEFT */
+        background: white;
+        padding: 8px 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,.15);
+        font: 12px/1.3 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+        z-index: 1000; 
+        width: 150px;
+    }
+    
+    /* Navigation Dropdown Base Styles */
+    .nav-dropdown-menu { 
+        opacity: 0; 
+        visibility: hidden; 
+        transform: translateY(4px); 
+        pointer-events: none; 
+        transition: all .15s ease; 
+        z-index: 50;
+    }
+    
+    .nav-dropdown-root:hover .nav-dropdown-menu, 
+    .nav-dropdown-root.hovering .nav-dropdown-menu { 
+        opacity: 1; 
+        visibility: visible; 
+        transform: translateY(0); 
+        pointer-events: auto; 
+    }
+    
+    .nav-dropdown-root:hover .nav-chevron, 
+    .nav-dropdown-root.hovering .nav-chevron { 
+        transform: rotate(180deg); 
+    }
+
+    #scale-wrapper {transform: scale(0.65); transform-origin: top center; height: 154%; padding-bottom: 200px; margin-bottom: -35%;}
+    .leaflet-control-map-dropdown {padding: 0; margin-left: 45px; margin-top: 5px;}
+    .leaflet-control-map-dropdown .dropdown-root {background: #fff; box-shadow: 0 1px 5px rgba(0,0,0,.65); border-radius: 4px; position: relative;}
+    .leaflet-control-map-dropdown .nav-link {padding: 6px 10px; color: #333; font-weight: 500; font-size: 13px; line-height: 1.2; display: flex; align-items: center; gap: 4px; cursor: pointer;}
+    .leaflet-control-map-dropdown .dropdown-menu {position: absolute; top: 100%; left: 0; margin-top: 5px; z-index: 1000; opacity: 0; visibility: hidden; transform: translateY(4px); pointer-events: none; transition: opacity .15s ease, transform .15s ease, visibility .15s ease;}
+    .leaflet-control-map-dropdown .dropdown-root.hovering .dropdown-menu {opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto;}
+    .leaflet-control-map-dropdown .dropdown-root.hovering #map-selection-chevron {transform: rotate(180deg);}
+    .leaflet-control-map-dropdown .dropdown-menu a {text-decoration: none; padding: 6px 12px; font-size: 13px;}
+    
+    /* --- RADIAL MENU STYLES --- */
+    #radial-menu-container { pointer-events: none; width: 300px; height: 300px; position: fixed; bottom: 0; right: 0; z-index: 9999; }
+    
+    #radial-trigger { pointer-events: auto; }
+    
+    /* Radial Item Base State */
+    .radial-item {
+        position: absolute;
+        bottom: 7rem;
+        right: 2rem;  
+        width: 3rem; height: 3rem;
+        border-radius: 50%;
+        background-color: white;
+        color: #4f46e5;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        display: flex; align-items: center; justify-content: center;
+        text-decoration: none;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        z-index: 9990;
+
+        /* CSS Variables for position */
+        --tx: 0px;
+        --ty: 0px;
+        /* CSS Variables for Label Offset */
+        --lx: 0px;
+        --ly: 0px;
+        /* CSS Variable for Label Rotation */
+        --lr: 0deg;
+        
+        transform: translate(0, 0) scale(0.5);
+    }
+    
+    /* Radial Item Open State */
+    .radial-open .radial-item {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translate(var(--tx), var(--ty)) scale(1);
+    }
+
+    /* Radial Item Hover State */
+    .radial-open .radial-item:hover { 
+        background-color: #e0e7ff; 
+        transform: translate(var(--tx), var(--ty)) scale(1.1); 
+        z-index: 10005 !important; /* Stacking fix */
+    }
+    
+    /* UPDATED RADIAL LABEL STYLES */
+    .radial-label {
+        position: absolute;
+        left: 50%; 
+        top: 50%; 
+        /* Move label radially outward based on calculations AND rotate */
+        transform: translate(calc(-50% + var(--lx)), calc(-50% + var(--ly))) rotate(var(--lr));
+        transform-origin: center center;
+        
+        /* Visual Styles: White bg, Black text */
+        background: rgba(255, 255, 255, 0.95); 
+        color: black; 
+        padding: 4px 8px; 
+        border-radius: 6px; 
+        font-size: 12px; 
+        font-weight: 700;
+        white-space: nowrap; 
+        
+        /* Visibility Control */
+        opacity: 0; 
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    }
+    
+    /* Show ALL labels when menu is open */
+    .radial-open .radial-label { 
+        opacity: 1; 
+    }
+
+    #radial-trigger {
+        position: absolute; bottom: 7rem; right: 2rem;
+        width: 4rem; height: 4rem;
+        border-radius: 50%;
+        background-color: #4f46e5;
+        color: white;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        z-index: 10000;
+    }
+    #radial-trigger:hover { transform: scale(1.05); background-color: #4338ca; }
+    .radial-open #radial-trigger { transform: rotate(45deg); background-color: #ef4444; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+  <nav class="bg-white shadow sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-center gap-6 text-sm sm:text-base">
+      <a href="../index.html" class="nav-link border-b-2 border-transparent">Home</a>
+
+      <div class="relative nav-dropdown-root">
+        <a href="../metrics.html" class="nav-link border-b-2 border-blue-600 text-blue-600 font-semibold inline-flex items-center gap-1 cursor-pointer select-none" aria-current="page">
+          Metrics
+          <svg xmlns="http://www.w3.org/2000/svg" class="nav-chevron w-4 h-4 transition-transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
+          </svg>
+        </a>
+        <div class="nav-dropdown-menu absolute right-0 mt-2 w-64 rounded-xl border border-gray-200 bg-white shadow-lg ring-1 ring-black/5 z-50">
+          <div class="py-2">
+            <a href="../metrics.html" class="block px-4 py-2 hover:bg-gray-50 font-semibold">All Metrics Overview</a>
+            <div class="my-1 border-t border-gray-100"></div>
+            <a href="population.html"     class="block px-4 py-2 hover:bg-gray-50">Population</a>
+            <a href="employment.html"     class="block px-4 py-2 hover:bg-gray-50">Employment Rate</a>
+            <a href="establishments.html" class="block px-4 py-2 hover:bg-gray-50">Employer Establishments</a>
+            <a href="income.html"         class="block px-4 py-2 hover:bg-gray-50">Household Income</a>
+            <a href="housing.html"        class="block px-4 py-2 bg-gray-100 font-semibold">Housing Units</a>
+            <a href="education.html"      class="block px-4 py-2 hover:bg-gray-50">Education</a>
+            <a href="health.html"         class="block px-4 py-2 hover:bg-gray-50">Health</a>
+            <a href="disasters_earthquakes.html"      class="block px-4 py-2 hover:bg-gray-50">Earthquakes</a>
+            <a href="disasters_hurricanes.html"      class="block px-4 py-2 hover:bg-gray-50">Hurricanes</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative nav-dropdown-root">
+        <div class="nav-link border-b-2 border-transparent inline-flex items-center gap-1 cursor-pointer select-none">
+          Dashboards
+          <svg xmlns="http://www.w3.org/2000/svg" class="nav-chevron w-4 h-4 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+
+        <div class="nav-dropdown-menu absolute right-0 mt-2 w-64 rounded-xl border border-gray-200 bg-white shadow-lg ring-1 ring-black/5 z-50">
+          <div class="py-2">
+            <a href="../dashboards.html" class="block px-4 py-2 hover:bg-gray-50 font-semibold">Initial Dashboard</a>
+            <div class="my-1 border-t border-gray-100"></div>
+            <a href="../dashboards/socio_economic.html" class="block px-4 py-2 hover:bg-gray-50">Socio-Economic Relationships</a>
+            <a href="#" class="block px-4 py-2 hover:bg-gray-50">Trend Analysis</a>
+          </div>
+        </div>
+      </div>
+
+      <a href="../literature.html" class="nav-link border-b-2 border-transparent">Literature</a>
+      <a href="../strategy.html"   class="nav-link border-b-2 border-transparent">Strategy</a>
+      <a href="../about.html"      class="nav-link border-b-2 border-transparent">About</a>
+    </div>
+  </nav>
+
+  <div id="scale-wrapper">
+    <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+      <header class="card hero p-6 sm:p-8 lg:p-10 relative">
+        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between">
+          <div>
+            <p class="text-sm font-semibold text-gray-500 uppercase">Graduate Capstone Project</p>
+            <h1 class="mt-2 text-4xl sm:text-5xl font-extrabold leading-tight">
+              Population & Economic Dynamics in Puerto Rico
+            </h1>
+            <p class="mt-3 text-lg text-gray-700">
+              A graduate research project examining demographic shifts, out-migration, and sustainable development strategies through linked data analysis and policy synthesis.
+            </p>
+            <div class="mt-5">
+              <span class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-100 text-slate-800">
+                <span class="inline-flex w-5 h-5 items-center justify-center rounded-full bg-slate-800 text-white text-xs">i</span>
+                Hover over the map to see county / municipality details
+              </span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="card p-4">
+        <div class="flex items-center justify-between gap-3">
+          <div class="text-sm text-gray-700 font-medium">Map shading by</div>
+          <div class="flex items-center gap-2">
+            <div class="inline-flex rounded-lg border bg-white shadow-sm overflow-hidden">
+              </div>
+          </div>
+        </div>
+        <div id="map" class="mt-3">
+          <div class="leaflet-control-container" id="map-dropdown-container">
+            <div class="leaflet-top leaflet-left">
+              <div class="leaflet-control leaflet-control-map-dropdown">
+                <div class="relative dropdown-root" id="map-selection-dropdown-root">
+                  <div class="nav-link inline-flex items-center gap-1 cursor-pointer select-none">
+                    Metric Selection
+                    <svg id="map-selection-chevron" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
+                    </svg>
+                  </div>
+                  <div id="map-selection-menu" class="dropdown-menu w-64 rounded-xl border border-gray-200 bg-white shadow-lg ring-1 ring-black/5 z-50">
+                    <div class="py-2">
+                      <a href="population.html"     class="block px-4 py-2 hover:bg-gray-50">Population</a>
+                      <a href="employment.html"     class="block px-4 py-2 hover:bg-gray-50">Employment Rate</a>
+                      <a href="establishments.html" class="block px-4 py-2 hover:bg-gray-50">Employer Establishments</a>
+                      <a href="income.html"         class="block px-4 py-2 hover:bg-gray-50">Household Income</a>
+                      <a href="housing.html"        class="block px-4 py-2 hover:bg-gray-50">Housing Units</a>
+                      <a href="education.html"      class="block px-4 py-2 hover:bg-gray-50">Education</a>
+                      <a href="health.html"         class="block px-4 py-2 hover:bg-gray-50">Health</a>
+                      <a href="disasters_earthquakes.html"      class="block px-4 py-2 bg-gray-100 font-semibold">Earthquakes</a>
+                      <a href="disasters_hurricanes.html"      class="block px-4 py-2 hover:bg-gray-50">Hurricanes</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+      </section>
+
+      <section class="card p-6">
+        <h2 class="text-lg font-semibold mb-4">Seismic and Educational Data Visualization</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6"> 
+            <div class="lg:col-span-2">
+                <h3 class="font-semibold mb-2">Earthquake Time Series (Count M 3.5+ / Year)</h3>
+                <div class="mini bg-gray-50 rounded p-3">
+                    <canvas id="lineChart"></canvas>
+                </div>
+            </div>
+
+            <div class="lg:col-span-1">
+                <h3 class="font-semibold mb-2">Magnitude Distribution</h3>
+                <div class="mini bg-gray-50 rounded p-3">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+
+            <div class="lg:col-span-1">
+                <h3 class="font-semibold mb-2">Total Earthquakes (M 3.5+)</h3>
+                <div id="totalEqMetricCard" class="mini bg-gray-50 rounded p-6 flex flex-col items-center justify-center">
+                    <div class="text-sm font-medium text-gray-600">Total Recorded Earthquakes</div>
+                    <div id="total-eq-val" class="mt-2 text-5xl font-extrabold text-gray-800">
+                        —
+                    </div>
+                    <div class="mt-3 text-lg font-semibold">
+                        Magnitude 3.5+
+                    </div>
+                </div>
+            </div>
+          </div>
+      </section>
+
+      <hr class="border-gray-300">
+
+      <section class="card p-6 space-y-6">
+        <h2 class="text-lg font-semibold">Analysis and Supporting Resources</h2>
+
+        <div class="space-y-4">
+            <h3 class="text-base font-semibold text-gray-700">Geology and Impact of Earthquakes in Puerto Rico 🇵🇷</h3>
+            <p>
+                Puerto Rico is located on a <strong>highly active tectonic boundary</strong> between the <strong>North American Plate</strong> and the <strong>Caribbean Plate</strong>. The high frequency of seismic activity is primarily driven by the complex interaction of these plates at two major offshore zones:
+                <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                    <li><strong>Puerto Rico Trench (North):</strong> Where the North American Plate is being subducted beneath the Caribbean Plate, forming the deepest point in the Atlantic Ocean.</li>
+                    <li><strong>Muertos Trough (South):</strong> An incipient subduction zone where the Caribbean Plate isbeing thrust southward, creating complex faulting, particularly along the southern and western coasts.</li>
+                </ul>
+            </p>
+            <p>
+                This ongoing tectonic stress results in numerous earthquakes, though most are microquakes (M &lt; 2.0). However, the region has a history of damaging events, most recently the <strong>2019-2020 earthquake swarm</strong>, which included a <strong>Magnitude 6.4</strong> shock on January 7, 2020.
+            </p>
+            <h4 class="text-sm font-semibold text-gray-600 mt-4">Socio-Economic Impact of Recent Quakes:</h4>
+            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                <li><strong>Infrastructure Damage:</strong> The 2020 quakes caused widespread power outages, affecting nearly a million people, and severely damaged key infrastructure like the <strong>Costa Sur power plant</strong>.</li>
+                <li><strong>Displacement:</strong> Thousands of residents, particularly in the southern municipalities (Guánica, Yauco, Ponce), were displaced, with initial damage estimates reaching <strong>$3.1 billion</strong>.</li>
+                <li><strong>Cascading Effects:</strong> Recovery efforts were complicated by existing damage from Hurricane Maria and subsequent mental health, housing, and economic instability.</li>
+            </ul>
+        </div>
+        
+        <div class="space-y-2 text-sm text-gray-600">
+            <h4 class="font-semibold">Data Source & Research References:</h4>
+            <ul class="list-disc list-inside ml-4 space-y-1">
+                <li><strong>Earthquake Data Source:</strong> The raw earthquake data plotted on the map is assumed to be sourced from the <strong>U.S. Geological Survey (USGS)</strong> or the <strong>Puerto Rico Seismic Network (PRSN)</strong>, typically available through a JSON API. (Link: <code>../data/natural_disasters/puerto_rico_earthquakes.json</code>)</li>
+                <li><strong>Hurricane Data Source:</strong> Filtered tracks for the Caribbean from 2015-2025. (Link: <code>../data/natural_disasters/caribbean_hurricane_tracks_2015_2025.json</code>)</li>
+                <li><strong>Geology and Impact Research:</strong> <a href="https://pubs.usgs.gov/fs/fs141-00/fs141-00.pdf" target="_blank" class="text-blue-600 underline">USGS: Earthquakes and Tsunamis in Puerto Rico and the U.S. Virgin Islands</a></li>
+                <li><strong>2020 Quake Impact:</strong> <a href="https://recovery.pr.gov/en/earthquakes-response" target="_blank" class="text-blue-600 underline">Puerto Rico Disaster Recovery Transparency Portal (COR3)</a></li>
+            </ul>
+        </div>
+      </section>
+      
+      </main>
+  </div>
+
+  <div class="fixed bottom-8 right-8 z-[9998]">
+    <a href="../metrics.html" class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-4 rounded-full shadow-2xl transition transform hover:scale-105 font-bold text-lg no-underline">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+        Metrics Overview
+    </a>
+  </div>
+
+  <div id="radial-menu-container">
+      <button id="radial-trigger" onclick="toggleRadialMenu()">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+      </button>
+  </div>
+
+  <script>
+    // ---------------------- Data Paths (REVERTED TO ORIGINAL ../data/ PATH) ----------------------
+    // NOTE: Paths are maintained as per user's working server environment.
+    const EQ_JSON = '../data/natural_disasters/puerto_rico_earthquakes.json'; 
+    const HU_JSON = '../data/natural_disasters/caribbean_hurricane_tracks_2015_2025.json'; 
+    let earthquakeLayerGroup = null; 
+    
+    // REMOVED: let hurricaneLayerGroup = null; 
+
+    // ---------------------- Earthquake Color & Size Scaling ----------------------
+    const MAGNITUDE_BREAKS = [3.5, 4.5, 5.5, 6.5, 7.5];
+    const MAGNITUDE_COLORS = ['#ffffe5', '#fee391', '#fec44f', '#fe9929', '#d95f0e', '#993404'];
+    const MIN_MAG_THRESHOLD = 3.5; 
+
+    function getColorForMagnitude(mag) {
+      if (mag <= MAGNITUDE_BREAKS[0]) return MAGNITUDE_COLORS[0];
+      if (mag <= MAGNITUDE_BREAKS[1]) return MAGNITUDE_COLORS[1];
+      if (mag <= MAGNITUDE_BREAKS[2]) return MAGNITUDE_COLORS[2];
+      if (mag <= MAGNITUDE_BREAKS[3]) return MAGNITUDE_COLORS[3];
+      if (mag <= MAGNITUDE_BREAKS[4]) return MAGNITUDE_COLORS[4];
+      return MAGNITUDE_COLORS[5];
+    }
+    
+    function getRadiusForMagnitude(mag) {
+        const min_mag = 3.5;
+        const min_size = 4;
+        const size = Math.max(min_size, (mag - min_mag) * 4.5 + min_size); 
+        return Math.min(size, 18);
+    }
+
+    function plotEarthquakes(data, mapInstance){
+        if (!data || data.length === 0) {
+            console.error("Earthquake data is empty or failed to load.");
+            return;
+        }
+
+        if (earthquakeLayerGroup) {
+            earthquakeLayerGroup.clearLayers();
+        } else {
+            earthquakeLayerGroup = L.layerGroup().addTo(mapInstance);
+        }
+
+        data.forEach(event => {
+            const mag = Number(event.mag);
+            
+            if (mag < MIN_MAG_THRESHOLD) return; 
+
+            const lat = event.latitude;
+            const lng = event.longitude;
+            const date = event.date;
+            const place = event.place || 'Unknown Location';
+            const depth = event.depth_km;
+
+            const circle = L.circleMarker([lat, lng], {
+                radius: getRadiusForMagnitude(mag), 
+                fillColor: getColorForMagnitude(mag), 
+                color: '#333', 
+                weight: 0.5,
+                opacity: 0.8,
+                fillOpacity: 0.8
+            }).addTo(earthquakeLayerGroup);
+
+            circle.bindPopup(`
+                <strong>Magnitude ${mag.toFixed(1)} Earthquake</strong>
+                <br>Size/Color: Scaled by Magnitude
+                <br>Place: ${place}
+                <br>Date: ${new Date(date).toLocaleString()}
+                <br>Depth: ${depth.toFixed(1)} km
+            `);
+        });
+        
+        earthquakeLayerGroup.bringToFront();
+    }
+    
+    function renderEarthquakeLegend(map){
+        const div = document.createElement('div');
+        div.className = 'leaflet-control-eq-legend'; 
+        
+        const title = 'Earthquake Magnitude (M 3.5+)';
+        let html = `<div style="font-weight:600;margin-bottom:5px; border-bottom: 1px solid #ccc;">${title}</div>`;
+
+        // Using the predefined Magnitude breaks and colors for the legend
+        MAGNITUDE_BREAKS.forEach((mag, i) => {
+            const color = MAGNITUDE_COLORS[i];
+            const size = getRadiusForMagnitude(mag);
+            
+            let label;
+            if (i === 0) {
+                label = `M $\\le$ ${mag.toFixed(1)} (Small)`;
+            } else if (i < MAGNITUDE_BREAKS.length - 1) {
+                label = `M ${MAGNITUDE_BREAKS[i-1].toFixed(1)} - ${mag.toFixed(1)}`;
+            } else {
+                 label = `M $\\ge$ ${MAGNITUDE_BREAKS[i-1].toFixed(1)} (Large)`;
+            }
+
+            html += `
+                <div style="display:flex;align-items:center;gap:8px;margin:4px 0;">
+                    <svg width="25" height="25" style="overflow: visible;">
+                        <circle cx="12.5" cy="12.5" r="${size / 2}" fill="${color}" stroke="#333" stroke-width="0.5" />
+                    </svg>
+                    <span>${label}</span>
+                </div>
+            `;
+        });
+        
+        const customControl = L.control({position: 'bottomleft'});
+        customControl.onAdd = function() {
+            div.style.position = 'relative'; 
+            return div;
+        };
+        customControl.addTo(map);
+    }
+    // ---------------------- End Earthquake Plotting Logic ----------------------
+
+
+    // ---------------------- Hurricane Plotting Logic (REMOVED: Keeping only stubs to prevent breaking other logic) ----------------------
+    
+    // Removed: const HU_WIND_BREAKS, HU_COLORS, getTrackColor, getStatusLabel, plotHurricaneTracks, renderHurricaneLegend
+    
+    function plotHurricaneTracks(data, mapInstance) {
+        // Function stub to prevent errors in init()
+        console.warn("Hurricane plotting logic has been removed as requested.");
+    }
+    
+    function renderHurricaneLegend(map){
+        // Function stub to prevent errors in init()
+        console.warn("Hurricane legend rendering logic has been removed as requested.");
+    }
+    // ---------------------- End Hurricane Plotting Logic ----------------------
+
+
+    // ---------------------- Earthquake Chart Logic (UPDATED COLORS) ----------------------
+    function aggregateEarthquakeData(data) {
+        if (!data || data.length === 0) return { timeSeries: {}, magnitudeBins: {}, totalCount: 0 };
+        // ... (data aggregation logic remains the same) ...
+        const timeSeries = {}; 
+        const magnitudeBins = {
+            '3.5-4.5': 0, '4.5-5.5': 0, '5.5-6.5': 0, '6.5-7.5': 0, '7.5+': 0
+        };
+        let totalCount = 0;
+
+        const MIN_MAG_THRESHOLD = 3.5;
+
+        data.forEach(event => {
+            const mag = Number(event.mag);
+            const date = new Date(event.date);
+
+            if (mag >= MIN_MAG_THRESHOLD) {
+                totalCount++;
+
+                // 1. Time Series (by year)
+                const year = date.getFullYear();
+                timeSeries[year] = (timeSeries[year] || 0) + 1;
+
+                // 2. Magnitude Distribution
+                if (mag >= 7.5) magnitudeBins['7.5+']++;
+                else if (mag >= 6.5) magnitudeBins['6.5-7.5']++;
+                else if (mag >= 5.5) magnitudeBins['5.5-6.5']++;
+                else if (mag >= 4.5) magnitudeBins['4.5-5.5']++;
+                else if (mag >= 3.5) magnitudeBins['3.5-4.5']++;
+            }
+        });
+
+        return { timeSeries, magnitudeBins, totalCount };
+    }
+    
+    function updateEarthquakeMetricCard(count){
+        document.getElementById('total-eq-val').textContent = count.toLocaleString();
+    }
+    
+    function drawEarthquakeCharts(aggregatedData){
+        const timeSeriesCtx = document.getElementById('lineChart').getContext('2d');
+        const magDistCtx = document.getElementById('barChart').getContext('2d');
+        
+        // --- 1. Earthquake Time Series (Line Chart) ---
+        const years = Object.keys(aggregatedData.timeSeries).sort();
+        const counts = years.map(year => aggregatedData.timeSeries[year]);
+        
+        if (window.earthquakeLineChart) window.earthquakeLineChart.destroy();
+        window.earthquakeLineChart = new Chart(timeSeriesCtx, {
+            type: 'line',
+            data: {
+                labels: years,
+                datasets: [{
+                    label: 'Earthquake Count',
+                    data: counts,
+                    borderColor: '#dc2626', // Red line
+                    tension: 0.2,
+                    pointRadius: 4,
+                    fill: false
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { title: { display: true, text: 'Year' } },
+                    y: { title: { display: true, text: 'Count (M 3.5+)' }, beginAtZero: true }
+                },
+                maintainAspectRatio: false
+            }
+        });
+
+        // --- 2. Magnitude Distribution (Bar Chart) ---
+        const magLabels = Object.keys(aggregatedData.magnitudeBins);
+        const magCounts = Object.values(aggregatedData.magnitudeBins);
+        
+        // UPDATED COLORS: New Blue/Cyan Palette for Bar Chart
+        const NEW_COLORS = ['#38bdf8', '#0ea5e9', '#0284c7', '#0369a1', '#075985'];
+        
+        const backgroundColors = magLabels.map((label, i) => {
+            if (label === '3.5-4.5') return NEW_COLORS[0]; // Light Blue/Sky
+            if (label === '4.5-5.5') return NEW_COLORS[1]; // Regular Blue/Cyan
+            if (label === '5.5-6.5') return NEW_COLORS[2]; // Darker Blue
+            if (label === '6.5-7.5') return NEW_COLORS[3]; // Even Darker Blue
+            return NEW_COLORS[4]; // For 7.5+ (Deep Blue)
+        });
+
+        if (window.earthquakeBarChart) window.earthquakeBarChart.destroy();
+        window.earthquakeBarChart = new Chart(magDistCtx, {
+            type: 'bar',
+            data: {
+                labels: magLabels,
+                datasets: [{
+                    label: 'Number of Earthquakes',
+                    data: magCounts,
+                    backgroundColor: backgroundColors
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { title: { display: true, text: 'Magnitude Range' } },
+                    y: { title: { display: true, text: 'Count' }, beginAtZero: true }
+                },
+                maintainAspectRatio: false
+            }
+        });
+        
+        updateEarthquakeMetricCard(aggregatedData.totalCount);
+    }
+    // ---------------------- End Earthquake Chart Logic ----------------------
+
+
+    // ---------------------- Original Education Logic ----------------------
+    const GEOJSON_URL = '../data/tl_2022_72_cousub/pr_municipalities.geojson';
+    const EDU_JSON    = '../data/education/municipios_acs_education_2013_2023_wide.json';
+    const YEARS = [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023];
+
+    const fmtPct = (v) => `${(Number(v)||0).toFixed(1)}%`;
+    const ppFmt = (v) => `${(Number(v)||0).toFixed(2)} pp`;
+    const signedPP = (n) => (n > 0 ? '+' : '') + ppFmt(n);
+    const signedPct = (n) => (n > 0 ? '+' : '') + fmtPct(n);
+    // Use the color index 4: #22c55e (Green)
+    const CHORO_COLORS = ['#7f1d1d', '#b91c1c', '#f97316', '#bbf7d0', '#22c55e', '#15803d']; 
+    const FIXED_GREEN_COLOR = CHORO_COLORS[4]; // <-- Target Green Color: #22c55e
+
+    const PCT_BREAKS = [20.0, 25.0, 30.0, 35.0, 40.0]; 
+    let ABS_BREAKS = [0.0, 2.0, 4.0, 6.0, 8.0]; 
+    let _extremeValues = { min: Infinity, max: -Infinity };
+    function colorFor(value, breaks, isLatest) {
+      if (!Number.isFinite(value)) return FIXED_GREEN_COLOR; // Default/Error color is fixed green
+      // No longer using the color breaks logic, forcing green.
+      return FIXED_GREEN_COLOR;
+    }
+    function sanitizeName(s){ 
+      return String(s||'').replace(/^\s*[.\-•]\s*/, '').replace(/\s*Municipio$/,'').trim(); 
+    }
+    function valFromRow(row, y){
+      const v = row?.[String(y)];
+      const n = Number(v);
+      return Number.isFinite(n) ? n : NaN;
+    }
+    function statsForMunicipio(name){
+      name = sanitizeName(name);
+      const row = _rows.find(r => sanitizeName(r.Municipio) === name && !r.metadata);
+      if (!row) return null;
+      const vals = YEARS.map(y => valFromRow(row, y));
+      const firstYear = YEARS[0];
+      const lastYear = YEARS.length - 1;
+      const changeAbs = row[`Cum_Change_${firstYear}_${YEARS[lastYear]}`]; 
+      const changePct = row[`Cum_Pct_Change_${firstYear}_${YEARS[lastYear]}`]; 
+      const annualChange = row[`Change_${YEARS[lastYear-1]}_${YEARS[lastYear]}`];
+      if (vals.some(v => !Number.isFinite(v))) return null;
+      const ppChangeYear = [];
+      for (let i = 1; i < YEARS.length; i++) {
+        ppChangeYear.push(vals[i] - vals[i - 1]);
+      }
+      const latestVal = vals[vals.length - 1];
+      return { vals, abs: Number(changeAbs), pctTot: Number(changePct), ppChangeYear, latestVal, annualChange: Number(annualChange) };
+    }
+    function calculateExtremeValues() {
+        _extremeValues = { min: Infinity, max: -Infinity };
+        let valueKey;
+        const lastYear = YEARS.length - 1;
+        currentMode = 'pct';
+        if (currentMode === 'pct') valueKey = `Cum_Change_${YEARS[0]}_${YEARS[lastYear]}`;
+        else if (currentMode === 'latest') valueKey = `${YEARS[lastYear]}`;
+        else return;
+        const municipioRows = _rows.filter(r => r.Municipio !== 'Puerto Rico' && !r.metadata);
+        municipioRows.forEach(row => {
+            const value = (currentMode === 'latest') ? Number(row[valueKey]) : Number(row[valueKey]);
+            if (Number.isFinite(value)) {
+                _extremeValues.min = Math.min(_extremeValues.min, value);
+                _extremeValues.max = Math.max(_extremeValues.max, value);
+            }
+        });
+        _extremeValues.min = parseFloat(_extremeValues.min.toFixed(2));
+        _extremeValues.max = parseFloat(_extremeValues.max.toFixed(2));
+    }
+    function censusLink(name){
+      return `https://data.census.gov/table?q=S1501:+EDUCATIONAL+ATTAINMENT+Puerto+Rico`;
+    }
+    const dName = document.getElementById('d-name');
+    const dCent = document.getElementById('d-centroid');
+    let _rows = [];
+    
+    // UPDATED: Detail updates only for initialization/reset
+    function updateDetails(name, st, centroid){
+      // dName and dCent elements are not present, this function is now just for data flow setup
+    }
+
+    // UPDATED: Simplifies styling to force FIXED GREEN color and remove all interaction/highlighting logic
+    function styleForFeature(feature){
+      // Returns static green style, removing all choropleth and highlighting logic
+      return { fillColor: FIXED_GREEN_COLOR, weight: 1.2, color:'#111827', fillOpacity:.75 };
+    }
+
+    // Compute ABS breaks from current data 
+    function computeBreaks(){
+      currentMode = 'pct';
+      ABS_BREAKS = [0.0, 2.0, 4.0, 6.0, 8.0];
+    }
+    
+    // REMOVED LOGIC: Clears out all map interaction wiring bodies
+    function wireMetricToggle(){ currentMode = 'pct'; }
+    function wireClearSelection(){ }
+    
+    // Dropdown fix implementations (kept at 500ms)
+    function wireDropdown() {
+      // Wires all navigation dropdowns (top of page) using class selection
+      const dropdownRoots = document.querySelectorAll('.nav-dropdown-root');
+      
+      dropdownRoots.forEach(root => {
+        const menu = root.querySelector('.nav-dropdown-menu');
+        if (!menu) return;
+
+        let hoverTimeout;
+        function addHovering() { clearTimeout(hoverTimeout); root.classList.add('hovering'); }
+        function removeHovering() { hoverTimeout = setTimeout(() => { root.classList.remove('hovering'); }, 300); }
+
+        root.addEventListener('mouseenter', addHovering);
+        root.addEventListener('mouseleave', removeHovering);
+        menu.addEventListener('mouseenter', addHovering);
+        menu.addEventListener('mouseleave', removeHovering);
+      });
+    }
+    
+    function wireMapDropdown() {
+        // Wiring for map 1 dropdown (only map left)
+        const root1 = document.getElementById('map-selection-dropdown-root'); 
+        if (root1) { 
+            let hoverTimeout; const menu = document.getElementById('map-selection-menu');
+            function addHovering(){ clearTimeout(hoverTimeout); root1.classList.add('hovering'); } 
+            function removeHovering(){ hoverTimeout = setTimeout(()=>{ root1.classList.remove('hovering'); }, 500); }
+            root1.addEventListener('mouseenter', addHovering); root1.addEventListener('mouseleave', removeHovering); 
+            if (menu) { menu.addEventListener('mouseenter', addHovering); menu.addEventListener('mouseleave', removeHovering); }
+        }
+        
+        // Removed: Wiring for map 2 dropdown
+    }
+    
+    // --- RADIAL MENU LOGIC ---
+    const menuItems = [
+        { label: 'Population', href: 'population.html', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
+        { label: 'Employment Rate', href: 'employment.html', icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
+        { label: 'Establishments', href: 'establishments.html', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' },
+        { label: 'Household Income', href: 'income.html', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+        { label: 'Housing Units', href: 'housing.html', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+        { label: 'Education', href: 'education.html', icon: 'M12 14l9-5-9-5-9 5 9 5z M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z' },
+        { label: 'Health', href: 'health.html', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z' },
+        { label: 'Earthquakes', href: 'disasters_earthquakes.html', icon: 'M13 10V3L4 14h7v7l9-11h-7z' },
+        { label: 'Hurricanes', href: 'disasters_hurricanes.html', icon: 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z' }
+    ];
+
+    function initRadialMenu() {
+        const container = document.getElementById('radial-menu-container');
+        const trigger = document.getElementById('radial-trigger');
+        
+        const totalAngle = 100; // Degrees of spread
+        const radius = 180; // Distance from center
+        const count = menuItems.length;
+        const startAngle = -95; // Top (12 o'clock ish)
+        const step = totalAngle / (count - 1);
+
+        menuItems.forEach((item, index) => {
+            const angleDeg = startAngle - (step * index); 
+            const angleRad = angleDeg * (Math.PI / 180);
+            
+            // Icon coordinates
+            const x = Math.round(radius * Math.cos(angleRad));
+            const y = Math.round(radius * Math.sin(angleRad));
+
+            // Label coordinates (offset further out for "red line" effect)
+            const textGap = 75; // Distance from icon center to text
+            const lx = Math.round(textGap * Math.cos(angleRad));
+            const ly = Math.round(textGap * Math.sin(angleRad));
+
+            const el = document.createElement('a');
+            el.href = item.href;
+            el.className = 'radial-item';
+            el.style.transitionDelay = `${index * 0.03}s`;
+            
+            // Store coordinates in CSS variables on the element
+            el.style.setProperty('--tx', `${x}px`);
+            el.style.setProperty('--ty', `${y}px`);
+            el.style.setProperty('--lx', `${lx}px`);
+            el.style.setProperty('--ly', `${ly}px`);
+            el.style.setProperty('--lr', `${angleDeg + 180}deg`); // Rotate text
+
+            el.innerHTML = `
+                <span class="radial-label">${item.label}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${item.icon}" />
+                </svg>
+            `;
+            container.insertBefore(el, trigger);
+        });
+    }
+
+    function toggleRadialMenu() {
+        const container = document.getElementById('radial-menu-container');
+        // Simply toggle class - CSS variables handle the positioning now
+        container.classList.toggle('radial-open');
+    }
+    
+    let prBoundsGlobal = null;
+    let map, layer, fc; // Removed map2 and layer2
+    let currentMode = 'pct'; 
+    let lockedName = null;
+    let selectedLayer = null;
+    const selectedOutline = { weight: 4, color: '#111827', dashArray: '3', fillOpacity: 0.85 };
+
+    (async function init(){
+      
+      // Load primary data (Education and GeoJSON)
+      const EDU_JSON_PATH = '../data/education/municipios_acs_education_2013_2023_wide.json'; // Original Path
+      const GEOJSON_URL_PATH = '../data/tl_2022_72_cousub/pr_municipalities.geojson'; // Original Path
+      
+      const res = await fetch(EDU_JSON_PATH, { cache:'no-store' });
+      const rawData = await res.json();
+      _rows = rawData.filter(row => !row.metadata);
+      
+      const gjRes = await fetch(GEOJSON_URL_PATH + '?' + Date.now());
+      const geojsonData = await gjRes.json(); // Load GeoJSON once
+
+      calculateExtremeValues();
+
+      const prBounds = L.latLngBounds([[17.85, -67.45],[18.55, -65.25]]);
+      prBoundsGlobal = prBounds;
+      
+      // --- Map 1 Init (Earthquakes / Educational Choropleth) ---
+      map = L.map('map', { zoomControl: false, zoomSnap: .25 }).fitBounds(prBounds);
+
+      L.control.zoom({ position: 'topleft' }).addTo(map);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        minZoom: 7, maxZoom: 19
+      }).addTo(map);
+
+      // Initialize the map dropdown control for map 1
+      L.Control.MapDropdown = L.Control.extend({
+          onAdd: function(map) {
+              const container = L.DomUtil.get('map-dropdown-container');
+              L.DomEvent.disableClickPropagation(container);
+              L.DomEvent.disableScrollPropagation(container);
+              return container.querySelector('.leaflet-control-map-dropdown');
+          },
+          onRemove: function(map) {}
+      });
+      new L.Control.MapDropdown({ position: 'topleft' }).addTo(map);
+
+      fc = geojsonData; // Use the loaded GeoJSON data
+
+      layer = L.geoJSON(fc, {
+        style: (feature) => styleForFeature(feature),
+        onEachFeature: (f, lyr) => {
+          const p = f.properties || {};
+          const name = p.NAME || p.NAMELSAD || p.name || 'Unknown';
+          const st = statsForMunicipio(sanitizeName(name));
+          
+          let changeLine = '';
+          if (st) {
+            const latest = fmtPct(st.latestVal);
+            const change = signedPP(st.abs);
+            changeLine = `Attainment (2023): ${latest} | Change: ${change}`;
+          }
+          
+          lyr.bindPopup(`<strong>${name}</strong>`);
+          lyr.bindTooltip(name, { direction:'center', className:'leaflet-tooltip' });
+        }
+      }).addTo(map);
+
+      const b = layer.getBounds();
+      if (b.isValid()) map.fitBounds(b, { padding:[15,15] });
+
+
+      // REMOVED: Map 2 Init (Hurricane Tracks / Educational Choropleth)
+
+
+      computeBreaks();
+
+      // --- DATA LOADING AND PLOTTING ---
+      
+      // 1. Earthquake Data (Map 1 and Charts)
+      let fullEarthquakeData = [];
+      let aggregatedData = { timeSeries: {}, magnitudeBins: {}, totalCount: 0 };
+      try {
+          const eqRes = await fetch(EQ_JSON);
+          fullEarthquakeData = await eqRes.json();
+          aggregatedData = aggregateEarthquakeData(fullEarthquakeData);
+      } catch (e) {
+          console.error("Error loading or processing earthquake data:", EQ_JSON, e);
+      }
+      
+      drawEarthquakeCharts(aggregatedData);
+      plotEarthquakes(fullEarthquakeData, map); // Plot on Map 1
+      renderEarthquakeLegend(map); // Legend on Map 1
+
+      // 2. Hurricane Data (Map 2) - Only call the stub functions
+      let fullHurricaneData = [];
+      try {
+          const huRes = await fetch(HU_JSON);
+          fullHurricaneData = await huRes.json();
+      } catch (e) {
+          console.error("Error loading or processing hurricane data:", HU_JSON, e);
+      }
+      
+      plotHurricaneTracks(fullHurricaneData, map); // Using map1 as a placeholder for the stub call
+      renderHurricaneLegend(map); // Using map1 as a placeholder for the stub call
+
+      const initName = 'Puerto Rico';
+      updateDetails(initName, statsForMunicipio(initName), null);
+
+      wireMetricToggle();
+      wireClearSelection(); 
+      wireMapDropdown(); 
+      // REMOVED: initRadialMenu(); from here
+    })();
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const metricsLink = document.querySelector('#metrics-dropdown-root > a'); const isMetricsSubPage = window.location.pathname.includes('/metrics/');
+        if (isMetricsSubPage) { metricsLink.classList.add('border-b-2', 'border-blue-600', 'text-blue-600', 'font-semibold'); metricsLink.setAttribute('aria-current', 'page');
+            const currentPathname = window.location.pathname.split('/').pop(); const subPageLink = document.querySelector(`#metrics-menu a[href="${currentPathname}"]`);
+            if (subPageLink) { subPageLink.classList.add('bg-gray-100', 'font-semibold'); }
+        } else {
+            document.querySelectorAll('.nav-link[href]').forEach(a => { if (a.href.endsWith(window.location.pathname)) { a.classList.add('border-b-2', 'border-blue-600', 'text-blue-600', 'font-semibold'); a.setAttribute('aria-current', 'page'); } });
+        }
+        wireMapDropdown(); 
+        
+        // ADDED: Init Radial Menu here for reliability
+        initRadialMenu(); 
+        wireDropdown();
+    });
+  </script>
+</body>
+</html>
