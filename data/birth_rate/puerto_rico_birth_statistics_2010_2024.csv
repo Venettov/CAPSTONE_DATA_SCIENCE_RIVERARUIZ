@@ -1,0 +1,1171 @@
+year,municipio,geoid,total_population,total_births_est,crude_birth_rate
+2010,Adjuntas Municipio,72001,19541.0,200.0,10.23
+2010,Aguada Municipio,72003,42232.0,367.0,8.69
+2010,Aguadilla Municipio,72005,61965.0,633.0,10.22
+2010,Aguas Buenas Municipio,72007,28827.0,164.0,5.69
+2010,Aibonito Municipio,72009,26161.0,266.0,10.17
+2010,Arecibo Municipio,72013,97633.0,1110.0,11.37
+2010,Arroyo Municipio,72015,19607.0,195.0,9.95
+2010,Añasco Municipio,72011,29254.0,174.0,5.95
+2010,Barceloneta Municipio,72017,24506.0,382.0,15.59
+2010,Barranquitas Municipio,72019,30272.0,386.0,12.75
+2010,Bayamón Municipio,72021,212183.0,2513.0,11.84
+2010,Cabo Rojo Municipio,72023,50468.0,452.0,8.96
+2010,Caguas Municipio,72025,143301.0,1687.0,11.77
+2010,Camuy Municipio,72027,35381.0,527.0,14.9
+2010,Canóvanas Municipio,72029,47151.0,636.0,13.49
+2010,Carolina Municipio,72031,179356.0,2413.0,13.45
+2010,Cataño Municipio,72033,28663.0,350.0,12.21
+2010,Cayey Municipio,72035,48255.0,549.0,11.38
+2010,Ceiba Municipio,72037,14493.0,76.0,5.24
+2010,Ciales Municipio,72039,19067.0,156.0,8.18
+2010,Cidra Municipio,72041,43604.0,567.0,13.0
+2010,Coamo Municipio,72043,40229.0,516.0,12.83
+2010,Comerío Municipio,72045,20773.0,144.0,6.93
+2010,Corozal Municipio,72047,37312.0,237.0,6.35
+2010,Culebra Municipio,72049,1939.0,15.0,7.74
+2010,Dorado Municipio,72051,37631.0,449.0,11.93
+2010,Fajardo Municipio,72053,37875.0,493.0,13.02
+2010,Florida Municipio,72054,12697.0,112.0,8.82
+2010,Guayama Municipio,72057,45416.0,447.0,9.84
+2010,Guayanilla Municipio,72059,21986.0,269.0,12.24
+2010,Guaynabo Municipio,72061,98875.0,863.0,8.73
+2010,Gurabo Municipio,72063,44073.0,500.0,11.34
+2010,Guánica Municipio,72055,19990.0,196.0,9.8
+2010,Hatillo Municipio,72065,41645.0,471.0,11.31
+2010,Hormigueros Municipio,72067,17213.0,156.0,9.06
+2010,Humacao Municipio,72069,58924.0,512.0,8.69
+2010,Isabela Municipio,72071,45681.0,547.0,11.97
+2010,Jayuya Municipio,72073,16865.0,196.0,11.62
+2010,Juana Díaz Municipio,72075,51020.0,522.0,10.23
+2010,Juncos Municipio,72077,39829.0,520.0,13.06
+2010,Lajas Municipio,72079,26000.0,391.0,15.04
+2010,Lares Municipio,72081,31600.0,265.0,8.39
+2010,Las Marías Municipio,72083,10156.0,94.0,9.26
+2010,Las Piedras Municipio,72085,38146.0,513.0,13.45
+2010,Loíza Municipio,72087,30703.0,412.0,13.42
+2010,Luquillo Municipio,72089,20131.0,111.0,5.51
+2010,Manatí Municipio,72091,44631.0,519.0,11.63
+2010,Maricao Municipio,72093,6244.0,41.0,6.57
+2010,Maunabo Municipio,72095,12393.0,172.0,13.88
+2010,Mayagüez Municipio,72097,91205.0,1197.0,13.12
+2010,Moca Municipio,72099,40280.0,387.0,9.61
+2010,Morovis Municipio,72101,32339.0,341.0,10.54
+2010,Naguabo Municipio,72103,26331.0,224.0,8.51
+2010,Naranjito Municipio,72105,30460.0,288.0,9.46
+2010,Orocovis Municipio,72107,23646.0,282.0,11.93
+2010,Patillas Municipio,72109,19552.0,193.0,9.87
+2010,Peñuelas Municipio,72111,24879.0,290.0,11.66
+2010,Ponce Municipio,72113,170920.0,2197.0,12.85
+2010,Quebradillas Municipio,72115,25985.0,245.0,9.43
+2010,Rincón Municipio,72117,15203.0,134.0,8.81
+2010,Río Grande Municipio,72119,54270.0,741.0,13.65
+2010,Sabana Grande Municipio,72121,25532.0,253.0,9.91
+2010,Salinas Municipio,72123,31265.0,287.0,9.18
+2010,San Germán Municipio,72125,35997.0,260.0,7.22
+2010,San Juan Municipio,72127,404748.0,5276.0,13.04
+2010,San Lorenzo Municipio,72129,41300.0,446.0,10.8
+2010,San Sebastián Municipio,72131,42982.0,331.0,7.7
+2010,Santa Isabel Municipio,72133,23113.0,224.0,9.69
+2010,Toa Alta Municipio,72135,72756.0,1171.0,16.09
+2010,Toa Baja Municipio,72137,90867.0,1152.0,12.68
+2010,Trujillo Alto Municipio,72139,75464.0,853.0,11.3
+2010,Utuado Municipio,72141,33741.0,317.0,9.4
+2010,Vega Alta Municipio,72143,39807.0,529.0,13.29
+2010,Vega Baja Municipio,72145,60436.0,736.0,12.18
+2010,Vieques Municipio,72147,9313.0,142.0,15.25
+2010,Villalba Municipio,72149,26565.0,345.0,12.99
+2010,Yabucoa Municipio,72151,38387.0,450.0,11.72
+2010,Yauco Municipio,72153,43082.0,424.0,9.84
+2011,Adjuntas Municipio,72001,19514.0,155.0,7.94
+2011,Aguada Municipio,72003,42082.0,386.0,9.17
+2011,Aguadilla Municipio,72005,61384.0,584.0,9.51
+2011,Aguas Buenas Municipio,72007,28745.0,137.0,4.77
+2011,Aibonito Municipio,72009,26011.0,378.0,14.53
+2011,Arecibo Municipio,72013,96984.0,1133.0,11.68
+2011,Arroyo Municipio,72015,19601.0,244.0,12.45
+2011,Añasco Municipio,72011,29266.0,162.0,5.54
+2011,Barceloneta Municipio,72017,24685.0,299.0,12.11
+2011,Barranquitas Municipio,72019,30317.0,369.0,12.17
+2011,Bayamón Municipio,72021,209900.0,2413.0,11.5
+2011,Cabo Rojo Municipio,72023,50733.0,513.0,10.11
+2011,Caguas Municipio,72025,143087.0,1572.0,10.99
+2011,Camuy Municipio,72027,35260.0,457.0,12.96
+2011,Canóvanas Municipio,72029,47458.0,717.0,15.11
+2011,Carolina Municipio,72031,177873.0,2395.0,13.46
+2011,Cataño Municipio,72033,28371.0,382.0,13.46
+2011,Cayey Municipio,72035,48184.0,486.0,10.09
+2011,Ceiba Municipio,72037,14087.0,124.0,8.8
+2011,Ciales Municipio,72039,18912.0,144.0,7.61
+2011,Cidra Municipio,72041,43564.0,521.0,11.96
+2011,Coamo Municipio,72043,40433.0,620.0,15.33
+2011,Comerío Municipio,72045,20778.0,141.0,6.79
+2011,Corozal Municipio,72047,37238.0,173.0,4.65
+2011,Culebra Municipio,72049,1831.0,16.0,8.74
+2011,Dorado Municipio,72051,37942.0,414.0,10.91
+2011,Fajardo Municipio,72053,37387.0,451.0,12.06
+2011,Florida Municipio,72054,12691.0,215.0,16.94
+2011,Guayama Municipio,72057,45390.0,460.0,10.13
+2011,Guayanilla Municipio,72059,21767.0,279.0,12.82
+2011,Guaynabo Municipio,72061,98326.0,789.0,8.02
+2011,Gurabo Municipio,72063,44868.0,522.0,11.63
+2011,Guánica Municipio,72055,19680.0,206.0,10.47
+2011,Hatillo Municipio,72065,41843.0,353.0,8.44
+2011,Hormigueros Municipio,72067,17239.0,229.0,13.28
+2011,Humacao Municipio,72069,58665.0,489.0,8.34
+2011,Isabela Municipio,72071,45668.0,473.0,10.36
+2011,Jayuya Municipio,72073,16744.0,277.0,16.54
+2011,Juana Díaz Municipio,72075,50894.0,467.0,9.18
+2011,Juncos Municipio,72077,40104.0,518.0,12.92
+2011,Lajas Municipio,72079,25856.0,370.0,14.31
+2011,Lares Municipio,72081,31120.0,238.0,7.65
+2011,Las Marías Municipio,72083,10012.0,91.0,9.09
+2011,Las Piedras Municipio,72085,38466.0,476.0,12.37
+2011,Loíza Municipio,72087,30359.0,358.0,11.79
+2011,Luquillo Municipio,72089,20106.0,75.0,3.73
+2011,Manatí Municipio,72091,44331.0,622.0,14.03
+2011,Maricao Municipio,72093,6300.0,57.0,9.05
+2011,Maunabo Municipio,72095,12304.0,172.0,13.98
+2011,Mayagüez Municipio,72097,89981.0,1143.0,12.7
+2011,Moca Municipio,72099,40199.0,439.0,10.92
+2011,Morovis Municipio,72101,32508.0,306.0,9.41
+2011,Naguabo Municipio,72103,26576.0,192.0,7.22
+2011,Naranjito Municipio,72105,30442.0,265.0,8.71
+2011,Orocovis Municipio,72107,23541.0,257.0,10.92
+2011,Patillas Municipio,72109,19397.0,167.0,8.61
+2011,Peñuelas Municipio,72111,24553.0,264.0,10.75
+2011,Ponce Municipio,72113,168382.0,2015.0,11.97
+2011,Quebradillas Municipio,72115,25951.0,264.0,10.17
+2011,Rincón Municipio,72117,15201.0,91.0,5.99
+2011,Río Grande Municipio,72119,54286.0,677.0,12.47
+2011,Sabana Grande Municipio,72121,25392.0,277.0,10.91
+2011,Salinas Municipio,72123,31165.0,282.0,9.05
+2011,San Germán Municipio,72125,35736.0,243.0,6.8
+2011,San Juan Municipio,72127,399474.0,5219.0,13.06
+2011,San Lorenzo Municipio,72129,41176.0,328.0,7.97
+2011,San Sebastián Municipio,72131,42667.0,285.0,6.68
+2011,Santa Isabel Municipio,72133,23210.0,166.0,7.15
+2011,Toa Alta Municipio,72135,73553.0,1196.0,16.26
+2011,Toa Baja Municipio,72137,90147.0,1039.0,11.53
+2011,Trujillo Alto Municipio,72139,75122.0,896.0,11.93
+2011,Utuado Municipio,72141,33404.0,364.0,10.9
+2011,Vega Alta Municipio,72143,39906.0,429.0,10.75
+2011,Vega Baja Municipio,72145,59995.0,889.0,14.82
+2011,Vieques Municipio,72147,9318.0,148.0,15.88
+2011,Villalba Municipio,72149,26290.0,361.0,13.73
+2011,Yabucoa Municipio,72151,38138.0,515.0,13.5
+2011,Yauco Municipio,72153,42516.0,442.0,10.4
+2012,Adjuntas Municipio,72001,19458.0,150.0,7.71
+2012,Aguada Municipio,72003,41876.0,382.0,9.12
+2012,Aguadilla Municipio,72005,60714.0,506.0,8.33
+2012,Aguas Buenas Municipio,72007,28573.0,183.0,6.4
+2012,Aibonito Municipio,72009,25823.0,390.0,15.1
+2012,Arecibo Municipio,72013,96176.0,1023.0,10.64
+2012,Arroyo Municipio,72015,19542.0,296.0,15.15
+2012,Añasco Municipio,72011,29236.0,132.0,4.51
+2012,Barceloneta Municipio,72017,24815.0,346.0,13.94
+2012,Barranquitas Municipio,72019,30322.0,327.0,10.78
+2012,Bayamón Municipio,72021,207337.0,2253.0,10.87
+2012,Cabo Rojo Municipio,72023,50866.0,442.0,8.69
+2012,Caguas Municipio,72025,142549.0,1552.0,10.89
+2012,Camuy Municipio,72027,35085.0,451.0,12.85
+2012,Canóvanas Municipio,72029,47656.0,670.0,14.06
+2012,Carolina Municipio,72031,176157.0,1967.0,11.17
+2012,Cataño Municipio,72033,28049.0,349.0,12.44
+2012,Cayey Municipio,72035,48008.0,537.0,11.19
+2012,Ceiba Municipio,72037,13726.0,115.0,8.38
+2012,Ciales Municipio,72039,18712.0,171.0,9.14
+2012,Cidra Municipio,72041,43414.0,487.0,11.22
+2012,Coamo Municipio,72043,40577.0,628.0,15.48
+2012,Comerío Municipio,72045,20745.0,119.0,5.74
+2012,Corozal Municipio,72047,37074.0,142.0,3.83
+2012,Culebra Municipio,72049,1535.0,16.0,10.42
+2012,Dorado Municipio,72051,38179.0,450.0,11.79
+2012,Fajardo Municipio,72053,36857.0,451.0,12.24
+2012,Florida Municipio,72054,12657.0,253.0,19.99
+2012,Guayama Municipio,72057,45250.0,541.0,11.96
+2012,Guayanilla Municipio,72059,21493.0,251.0,11.68
+2012,Guaynabo Municipio,72061,97639.0,757.0,7.75
+2012,Gurabo Municipio,72063,45540.0,451.0,9.9
+2012,Guánica Municipio,72055,19363.0,201.0,10.38
+2012,Hatillo Municipio,72065,41945.0,433.0,10.32
+2012,Hormigueros Municipio,72067,17217.0,178.0,10.34
+2012,Humacao Municipio,72069,58333.0,443.0,7.59
+2012,Isabela Municipio,72071,45567.0,450.0,9.88
+2012,Jayuya Municipio,72073,16600.0,281.0,16.93
+2012,Juana Díaz Municipio,72075,50695.0,495.0,9.76
+2012,Juncos Municipio,72077,40292.0,532.0,13.2
+2012,Lajas Municipio,72079,25671.0,289.0,11.26
+2012,Lares Municipio,72081,30628.0,197.0,6.43
+2012,Las Marías Municipio,72083,9853.0,100.0,10.15
+2012,Las Piedras Municipio,72085,38687.0,482.0,12.46
+2012,Loíza Municipio,72087,29997.0,394.0,13.13
+2012,Luquillo Municipio,72089,20050.0,62.0,3.09
+2012,Manatí Municipio,72091,43974.0,598.0,13.6
+2012,Maricao Municipio,72093,6546.0,31.0,4.74
+2012,Maunabo Municipio,72095,12201.0,234.0,19.18
+2012,Mayagüez Municipio,72097,88664.0,993.0,11.2
+2012,Moca Municipio,72099,40044.0,541.0,13.51
+2012,Morovis Municipio,72101,32617.0,296.0,9.08
+2012,Naguabo Municipio,72103,26761.0,210.0,7.85
+2012,Naranjito Municipio,72105,30385.0,287.0,9.45
+2012,Orocovis Municipio,72107,23386.0,222.0,9.49
+2012,Patillas Municipio,72109,19225.0,135.0,7.02
+2012,Peñuelas Municipio,72111,24193.0,299.0,12.36
+2012,Ponce Municipio,72113,165602.0,2072.0,12.51
+2012,Quebradillas Municipio,72115,25874.0,279.0,10.78
+2012,Rincón Municipio,72117,15182.0,30.0,1.98
+2012,Río Grande Municipio,72119,54203.0,661.0,12.19
+2012,Sabana Grande Municipio,72121,25216.0,322.0,12.77
+2012,Salinas Municipio,72123,31019.0,233.0,7.51
+2012,San Germán Municipio,72125,35441.0,246.0,6.94
+2012,San Juan Municipio,72127,393633.0,4793.0,12.18
+2012,San Lorenzo Municipio,72129,40979.0,332.0,8.1
+2012,San Sebastián Municipio,72131,42291.0,267.0,6.31
+2012,Santa Isabel Municipio,72133,23261.0,229.0,9.84
+2012,Toa Alta Municipio,72135,74178.0,1279.0,17.24
+2012,Toa Baja Municipio,72137,89294.0,870.0,9.74
+2012,Trujillo Alto Municipio,72139,74655.0,940.0,12.59
+2012,Utuado Municipio,72141,33033.0,372.0,11.26
+2012,Vega Alta Municipio,72143,39913.0,334.0,8.37
+2012,Vega Baja Municipio,72145,59444.0,853.0,14.35
+2012,Vieques Municipio,72147,9293.0,69.0,7.42
+2012,Villalba Municipio,72149,25983.0,366.0,14.09
+2012,Yabucoa Municipio,72151,37823.0,463.0,12.24
+2012,Yauco Municipio,72153,41876.0,447.0,10.67
+2013,Adjuntas Municipio,72001,19334.0,139.0,7.19
+2013,Aguada Municipio,72003,41595.0,397.0,9.54
+2013,Aguadilla Municipio,72005,59982.0,490.0,8.17
+2013,Aguas Buenas Municipio,72007,28378.0,156.0,5.5
+2013,Aibonito Municipio,72009,25560.0,395.0,15.45
+2013,Arecibo Municipio,72013,95185.0,868.0,9.12
+2013,Arroyo Municipio,72015,19443.0,295.0,15.17
+2013,Añasco Municipio,72011,29086.0,184.0,6.33
+2013,Barceloneta Municipio,72017,24884.0,346.0,13.9
+2013,Barranquitas Municipio,72019,30218.0,269.0,8.9
+2013,Bayamón Municipio,72021,204725.0,1941.0,9.48
+2013,Cabo Rojo Municipio,72023,50869.0,220.0,4.32
+2013,Caguas Municipio,72025,141600.0,1821.0,12.86
+2013,Camuy Municipio,72027,34806.0,431.0,12.38
+2013,Canóvanas Municipio,72029,47730.0,660.0,13.83
+2013,Carolina Municipio,72031,173994.0,1852.0,10.64
+2013,Cataño Municipio,72033,27669.0,289.0,10.44
+2013,Cayey Municipio,72035,47700.0,519.0,10.88
+2013,Ceiba Municipio,72037,13419.0,104.0,7.75
+2013,Ciales Municipio,72039,18509.0,165.0,8.91
+2013,Cidra Municipio,72041,43238.0,402.0,9.3
+2013,Coamo Municipio,72043,40579.0,624.0,15.38
+2013,Comerío Municipio,72045,20676.0,87.0,4.21
+2013,Corozal Municipio,72047,36828.0,163.0,4.43
+2013,Culebra Municipio,72049,1478.0,11.0,7.44
+2013,Dorado Municipio,72051,38303.0,399.0,10.42
+2013,Fajardo Municipio,72053,36252.0,420.0,11.59
+2013,Florida Municipio,72054,12645.0,257.0,20.32
+2013,Guayama Municipio,72057,44725.0,537.0,12.01
+2013,Guayanilla Municipio,72059,21218.0,209.0,9.85
+2013,Guaynabo Municipio,72061,96670.0,672.0,6.95
+2013,Gurabo Municipio,72063,46084.0,322.0,6.99
+2013,Guánica Municipio,72055,19019.0,152.0,7.99
+2013,Hatillo Municipio,72065,41932.0,404.0,9.63
+2013,Hormigueros Municipio,72067,17151.0,161.0,9.39
+2013,Humacao Municipio,72069,57823.0,408.0,7.06
+2013,Isabela Municipio,72071,45315.0,399.0,8.81
+2013,Jayuya Municipio,72073,16413.0,236.0,14.38
+2013,Juana Díaz Municipio,72075,50365.0,583.0,11.58
+2013,Juncos Municipio,72077,40346.0,399.0,9.89
+2013,Lajas Municipio,72079,25442.0,231.0,9.08
+2013,Lares Municipio,72081,30051.0,244.0,8.12
+2013,Las Marías Municipio,72083,9699.0,83.0,8.56
+2013,Las Piedras Municipio,72085,38777.0,443.0,11.42
+2013,Loíza Municipio,72087,29549.0,350.0,11.84
+2013,Luquillo Municipio,72089,19918.0,124.0,6.23
+2013,Manatí Municipio,72091,43497.0,481.0,11.06
+2013,Maricao Municipio,72093,6552.0,37.0,5.65
+2013,Maunabo Municipio,72095,12070.0,279.0,23.12
+2013,Mayagüez Municipio,72097,87161.0,960.0,11.01
+2013,Moca Municipio,72099,39755.0,614.0,15.44
+2013,Morovis Municipio,72101,32609.0,423.0,12.97
+2013,Naguabo Municipio,72103,26867.0,289.0,10.76
+2013,Naranjito Municipio,72105,30256.0,270.0,8.92
+2013,Orocovis Municipio,72107,23194.0,294.0,12.68
+2013,Patillas Municipio,72109,19017.0,142.0,7.47
+2013,Peñuelas Municipio,72111,23783.0,333.0,14.0
+2013,Ponce Municipio,72113,162793.0,1736.0,10.66
+2013,Quebradillas Municipio,72115,25738.0,268.0,10.41
+2013,Rincón Municipio,72117,15094.0,42.0,2.78
+2013,Río Grande Municipio,72119,54035.0,557.0,10.31
+2013,Sabana Grande Municipio,72121,24974.0,322.0,12.89
+2013,Salinas Municipio,72123,30807.0,196.0,6.36
+2013,San Germán Municipio,72125,35070.0,279.0,7.96
+2013,San Juan Municipio,72127,387336.0,4446.0,11.48
+2013,San Lorenzo Municipio,72129,40701.0,306.0,7.52
+2013,San Sebastián Municipio,72131,41798.0,302.0,7.23
+2013,Santa Isabel Municipio,72133,23231.0,168.0,7.23
+2013,Toa Alta Municipio,72135,74561.0,1276.0,17.11
+2013,Toa Baja Municipio,72137,88195.0,945.0,10.71
+2013,Trujillo Alto Municipio,72139,73970.0,1056.0,14.28
+2013,Utuado Municipio,72141,32593.0,390.0,11.97
+2013,Vega Alta Municipio,72143,39856.0,281.0,7.05
+2013,Vega Baja Municipio,72145,58782.0,731.0,12.44
+2013,Vieques Municipio,72147,9273.0,79.0,8.52
+2013,Villalba Municipio,72149,25618.0,439.0,17.14
+2013,Yabucoa Municipio,72151,37404.0,415.0,11.1
+2013,Yauco Municipio,72153,41194.0,403.0,9.78
+2014,Adjuntas Municipio,72001,19188.0,115.0,5.99
+2014,Aguada Municipio,72003,41176.0,317.0,7.7
+2014,Aguadilla Municipio,72005,59068.0,498.0,8.43
+2014,Aguas Buenas Municipio,72007,28083.0,236.0,8.4
+2014,Aibonito Municipio,72009,25241.0,370.0,14.66
+2014,Arecibo Municipio,72013,93969.0,940.0,10.0
+2014,Arroyo Municipio,72015,19255.0,257.0,13.35
+2014,Añasco Municipio,72011,28874.0,179.0,6.2
+2014,Barceloneta Municipio,72017,24908.0,324.0,13.01
+2014,Barranquitas Municipio,72019,30045.0,174.0,5.79
+2014,Bayamón Municipio,72021,201273.0,1899.0,9.43
+2014,Cabo Rojo Municipio,72023,50706.0,171.0,3.37
+2014,Caguas Municipio,72025,140166.0,1567.0,11.18
+2014,Camuy Municipio,72027,34438.0,363.0,10.54
+2014,Canóvanas Municipio,72029,47655.0,635.0,13.32
+2014,Carolina Municipio,72031,171310.0,1739.0,10.15
+2014,Cataño Municipio,72033,27211.0,265.0,9.74
+2014,Cayey Municipio,72035,47252.0,492.0,10.41
+2014,Ceiba Municipio,72037,13122.0,100.0,7.62
+2014,Ciales Municipio,72039,18242.0,144.0,7.89
+2014,Cidra Municipio,72041,42878.0,447.0,10.42
+2014,Coamo Municipio,72043,40496.0,552.0,13.63
+2014,Comerío Municipio,72045,20533.0,111.0,5.41
+2014,Corozal Municipio,72047,36463.0,162.0,4.44
+2014,Culebra Municipio,72049,1585.0,13.0,8.2
+2014,Dorado Municipio,72051,38305.0,408.0,10.65
+2014,Fajardo Municipio,72053,35539.0,405.0,11.4
+2014,Florida Municipio,72054,12565.0,270.0,21.49
+2014,Guayama Municipio,72057,44261.0,595.0,13.44
+2014,Guayanilla Municipio,72059,20862.0,160.0,7.67
+2014,Guaynabo Municipio,72061,95428.0,598.0,6.27
+2014,Gurabo Municipio,72063,46460.0,424.0,9.13
+2014,Guánica Municipio,72055,18627.0,99.0,5.31
+2014,Hatillo Municipio,72065,41830.0,342.0,8.18
+2014,Hormigueros Municipio,72067,17023.0,147.0,8.64
+2014,Humacao Municipio,72069,57181.0,522.0,9.13
+2014,Isabela Municipio,72071,44965.0,477.0,10.61
+2014,Jayuya Municipio,72073,16183.0,333.0,20.58
+2014,Juana Díaz Municipio,72075,49876.0,642.0,12.87
+2014,Juncos Municipio,72077,40284.0,389.0,9.66
+2014,Lajas Municipio,72079,25117.0,242.0,9.63
+2014,Lares Municipio,72081,29426.0,255.0,8.67
+2014,Las Marías Municipio,72083,9521.0,105.0,11.03
+2014,Las Piedras Municipio,72085,38759.0,360.0,9.29
+2014,Loíza Municipio,72087,29054.0,330.0,11.36
+2014,Luquillo Municipio,72089,19731.0,144.0,7.3
+2014,Manatí Municipio,72091,42900.0,594.0,13.85
+2014,Maricao Municipio,72093,6384.0,21.0,3.29
+2014,Maunabo Municipio,72095,11904.0,224.0,18.82
+2014,Mayagüez Municipio,72097,85425.0,872.0,10.21
+2014,Moca Municipio,72099,39349.0,560.0,14.23
+2014,Morovis Municipio,72101,32484.0,467.0,14.38
+2014,Naguabo Municipio,72103,26881.0,261.0,9.71
+2014,Naranjito Municipio,72105,30034.0,165.0,5.49
+2014,Orocovis Municipio,72107,22927.0,301.0,13.13
+2014,Patillas Municipio,72109,18766.0,139.0,7.41
+2014,Peñuelas Municipio,72111,23307.0,358.0,15.36
+2014,Ponce Municipio,72113,159660.0,1633.0,10.23
+2014,Quebradillas Municipio,72115,25512.0,245.0,9.6
+2014,Rincón Municipio,72117,14998.0,31.0,2.07
+2014,Río Grande Municipio,72119,53628.0,625.0,11.65
+2014,Sabana Grande Municipio,72121,24692.0,232.0,9.4
+2014,Salinas Municipio,72123,30506.0,183.0,6.0
+2014,San Germán Municipio,72125,34725.0,200.0,5.76
+2014,San Juan Municipio,72127,380149.0,4311.0,11.34
+2014,San Lorenzo Municipio,72129,40313.0,271.0,6.72
+2014,San Sebastián Municipio,72131,41204.0,236.0,5.73
+2014,Santa Isabel Municipio,72133,23114.0,177.0,7.66
+2014,Toa Alta Municipio,72135,74688.0,1114.0,14.92
+2014,Toa Baja Municipio,72137,86873.0,879.0,10.12
+2014,Trujillo Alto Municipio,72139,73030.0,1059.0,14.5
+2014,Utuado Municipio,72141,32086.0,319.0,9.94
+2014,Vega Alta Municipio,72143,39670.0,328.0,8.27
+2014,Vega Baja Municipio,72145,57915.0,823.0,14.21
+2014,Vieques Municipio,72147,9217.0,94.0,10.2
+2014,Villalba Municipio,72149,25196.0,386.0,15.32
+2014,Yabucoa Municipio,72151,36903.0,418.0,11.33
+2014,Yauco Municipio,72153,40391.0,379.0,9.38
+2015,Adjuntas Municipio,72001,18962.0,81.0,4.27
+2015,Aguada Municipio,72003,40603.0,211.0,5.2
+2015,Aguadilla Municipio,72005,57973.0,351.0,6.05
+2015,Aguas Buenas Municipio,72007,27693.0,248.0,8.96
+2015,Aibonito Municipio,72009,24829.0,360.0,14.5
+2015,Arecibo Municipio,72013,92511.0,784.0,8.47
+2015,Arroyo Municipio,72015,19018.0,183.0,9.62
+2015,Añasco Municipio,72011,28579.0,193.0,6.75
+2015,Barceloneta Municipio,72017,24775.0,336.0,13.56
+2015,Barranquitas Municipio,72019,29805.0,111.0,3.72
+2015,Bayamón Municipio,72021,197287.0,1754.0,8.89
+2015,Cabo Rojo Municipio,72023,50380.0,377.0,7.48
+2015,Caguas Municipio,72025,138262.0,1472.0,10.65
+2015,Camuy Municipio,72027,33949.0,254.0,7.48
+2015,Canóvanas Municipio,72029,47432.0,486.0,10.25
+2015,Carolina Municipio,72031,168114.0,1764.0,10.49
+2015,Cataño Municipio,72033,26680.0,210.0,7.87
+2015,Cayey Municipio,72035,46647.0,414.0,8.88
+2015,Ceiba Municipio,72037,12810.0,115.0,8.98
+2015,Ciales Municipio,72039,17928.0,231.0,12.88
+2015,Cidra Municipio,72041,42298.0,401.0,9.48
+2015,Coamo Municipio,72043,40293.0,571.0,14.17
+2015,Comerío Municipio,72045,20339.0,113.0,5.56
+2015,Corozal Municipio,72047,35975.0,234.0,6.5
+2015,Culebra Municipio,72049,1557.0,11.0,7.06
+2015,Dorado Municipio,72051,38166.0,387.0,10.14
+2015,Fajardo Municipio,72053,34720.0,368.0,10.6
+2015,Florida Municipio,72054,12408.0,211.0,17.01
+2015,Guayama Municipio,72057,43700.0,474.0,10.85
+2015,Guayanilla Municipio,72059,20442.0,186.0,9.1
+2015,Guaynabo Municipio,72061,93899.0,641.0,6.83
+2015,Gurabo Municipio,72063,46765.0,300.0,6.42
+2015,Guánica Municipio,72055,18207.0,123.0,6.76
+2015,Hatillo Municipio,72065,41578.0,275.0,6.61
+2015,Hormigueros Municipio,72067,16845.0,105.0,6.23
+2015,Humacao Municipio,72069,56384.0,530.0,9.4
+2015,Isabela Municipio,72071,44438.0,461.0,10.37
+2015,Jayuya Municipio,72073,15890.0,275.0,17.31
+2015,Juana Díaz Municipio,72075,49259.0,572.0,11.61
+2015,Juncos Municipio,72077,40104.0,322.0,8.03
+2015,Lajas Municipio,72079,24722.0,189.0,7.65
+2015,Lares Municipio,72081,28727.0,277.0,9.64
+2015,Las Marías Municipio,72083,9306.0,125.0,13.43
+2015,Las Piedras Municipio,72085,38605.0,303.0,7.85
+2015,Loíza Municipio,72087,28454.0,285.0,10.02
+2015,Luquillo Municipio,72089,19497.0,151.0,7.74
+2015,Manatí Municipio,72091,42167.0,541.0,12.83
+2015,Maricao Municipio,72093,6315.0,21.0,3.33
+2015,Maunabo Municipio,72095,11701.0,180.0,15.38
+2015,Mayagüez Municipio,72097,83418.0,741.0,8.88
+2015,Moca Municipio,72099,38815.0,449.0,11.57
+2015,Morovis Municipio,72101,32294.0,504.0,15.61
+2015,Naguabo Municipio,72103,26804.0,257.0,9.59
+2015,Naranjito Municipio,72105,29751.0,198.0,6.66
+2015,Orocovis Municipio,72107,22595.0,191.0,8.45
+2015,Patillas Municipio,72109,18441.0,119.0,6.45
+2015,Peñuelas Municipio,72111,22770.0,393.0,17.26
+2015,Ponce Municipio,72113,156054.0,1586.0,10.16
+2015,Quebradillas Municipio,72115,25205.0,239.0,9.48
+2015,Rincón Municipio,72117,14841.0,79.0,5.32
+2015,Río Grande Municipio,72119,53029.0,541.0,10.2
+2015,Sabana Grande Municipio,72121,24307.0,221.0,9.09
+2015,Salinas Municipio,72123,30114.0,197.0,6.54
+2015,San Germán Municipio,72125,34125.0,259.0,7.59
+2015,San Juan Municipio,72127,371400.0,3569.0,9.61
+2015,San Lorenzo Municipio,72129,39778.0,285.0,7.16
+2015,San Sebastián Municipio,72131,40471.0,239.0,5.91
+2015,Santa Isabel Municipio,72133,22913.0,222.0,9.69
+2015,Toa Alta Municipio,72135,74603.0,1087.0,14.57
+2015,Toa Baja Municipio,72137,85242.0,823.0,9.65
+2015,Trujillo Alto Municipio,72139,71886.0,952.0,13.24
+2015,Utuado Municipio,72141,31474.0,256.0,8.13
+2015,Vega Alta Municipio,72143,39319.0,324.0,8.24
+2015,Vega Baja Municipio,72145,56858.0,782.0,13.75
+2015,Vieques Municipio,72147,9130.0,24.0,2.63
+2015,Villalba Municipio,72149,24685.0,294.0,11.91
+2015,Yabucoa Municipio,72151,36279.0,422.0,11.63
+2015,Yauco Municipio,72153,39474.0,468.0,11.86
+2016,Adjuntas Municipio,72001,18760.0,86.0,4.58
+2016,Aguada Municipio,72003,40083.0,211.0,5.26
+2016,Aguadilla Municipio,72005,56893.0,353.0,6.2
+2016,Aguas Buenas Municipio,72007,27323.0,188.0,6.88
+2016,Aibonito Municipio,72009,24438.0,267.0,10.93
+2016,Arecibo Municipio,72013,91096.0,725.0,7.96
+2016,Arroyo Municipio,72015,18778.0,191.0,10.17
+2016,Añasco Municipio,72011,28250.0,140.0,4.96
+2016,Barceloneta Municipio,72017,24699.0,338.0,13.68
+2016,Barranquitas Municipio,72019,29548.0,98.0,3.32
+2016,Bayamón Municipio,72021,192974.0,1711.0,8.87
+2016,Cabo Rojo Municipio,72023,50096.0,324.0,6.47
+2016,Caguas Municipio,72025,136372.0,1566.0,11.48
+2016,Camuy Municipio,72027,33481.0,235.0,7.02
+2016,Canóvanas Municipio,72029,47174.0,387.0,8.2
+2016,Carolina Municipio,72031,165040.0,1555.0,9.42
+2016,Cataño Municipio,72033,26137.0,135.0,5.17
+2016,Cayey Municipio,72035,46071.0,408.0,8.86
+2016,Ceiba Municipio,72037,12538.0,90.0,7.18
+2016,Ciales Municipio,72039,17644.0,225.0,12.75
+2016,Cidra Municipio,72041,41782.0,477.0,11.42
+2016,Coamo Municipio,72043,40090.0,484.0,12.07
+2016,Comerío Municipio,72045,20153.0,168.0,8.34
+2016,Corozal Municipio,72047,35484.0,334.0,9.41
+2016,Culebra Municipio,72049,1508.0,10.0,6.63
+2016,Dorado Municipio,72051,38013.0,344.0,9.05
+2016,Fajardo Municipio,72053,33912.0,361.0,10.65
+2016,Florida Municipio,72054,12287.0,148.0,12.05
+2016,Guayama Municipio,72057,43210.0,414.0,9.58
+2016,Guayanilla Municipio,72059,20025.0,210.0,10.49
+2016,Guaynabo Municipio,72061,92444.0,631.0,6.83
+2016,Gurabo Municipio,72063,46990.0,281.0,5.98
+2016,Guánica Municipio,72055,17788.0,102.0,5.73
+2016,Hatillo Municipio,72065,41327.0,267.0,6.46
+2016,Hormigueros Municipio,72067,16678.0,67.0,4.02
+2016,Humacao Municipio,72069,55621.0,548.0,9.85
+2016,Isabela Municipio,72071,43919.0,436.0,9.93
+2016,Jayuya Municipio,72073,15605.0,230.0,14.74
+2016,Juana Díaz Municipio,72075,48658.0,495.0,10.17
+2016,Juncos Municipio,72077,39942.0,266.0,6.66
+2016,Lajas Municipio,72079,24323.0,251.0,10.32
+2016,Lares Municipio,72081,28052.0,280.0,9.98
+2016,Las Marías Municipio,72083,9093.0,130.0,14.3
+2016,Las Piedras Municipio,72085,38466.0,348.0,9.05
+2016,Loíza Municipio,72087,27857.0,244.0,8.76
+2016,Luquillo Municipio,72089,19237.0,142.0,7.38
+2016,Manatí Municipio,72091,41468.0,395.0,9.53
+2016,Maricao Municipio,72093,6274.0,0.0,0.0
+2016,Maunabo Municipio,72095,11506.0,151.0,13.12
+2016,Mayagüez Municipio,72097,81594.0,651.0,7.98
+2016,Moca Municipio,72099,38289.0,322.0,8.41
+2016,Morovis Municipio,72101,32087.0,437.0,13.62
+2016,Naguabo Municipio,72103,26722.0,252.0,9.43
+2016,Naranjito Municipio,72105,29467.0,226.0,7.67
+2016,Orocovis Municipio,72107,22258.0,248.0,11.14
+2016,Patillas Municipio,72109,18135.0,126.0,6.95
+2016,Peñuelas Municipio,72111,22231.0,332.0,14.93
+2016,Ponce Municipio,72113,152594.0,1470.0,9.63
+2016,Quebradillas Municipio,72115,24904.0,225.0,9.03
+2016,Rincón Municipio,72117,14700.0,81.0,5.51
+2016,Río Grande Municipio,72119,52479.0,550.0,10.48
+2016,Sabana Grande Municipio,72121,24013.0,279.0,11.62
+2016,Salinas Municipio,72123,29722.0,158.0,5.32
+2016,San Germán Municipio,72125,33546.0,269.0,8.02
+2016,San Juan Municipio,72127,363744.0,3529.0,9.7
+2016,San Lorenzo Municipio,72129,39283.0,305.0,7.76
+2016,San Sebastián Municipio,72131,39755.0,201.0,5.06
+2016,Santa Isabel Municipio,72133,22732.0,249.0,10.95
+2016,Toa Alta Municipio,72135,74467.0,929.0,12.48
+2016,Toa Baja Municipio,72137,83645.0,801.0,9.58
+2016,Trujillo Alto Municipio,72139,70737.0,833.0,11.78
+2016,Utuado Municipio,72141,30869.0,233.0,7.55
+2016,Vega Alta Municipio,72143,39018.0,388.0,9.94
+2016,Vega Baja Municipio,72145,55866.0,589.0,10.54
+2016,Vieques Municipio,72147,9046.0,17.0,1.88
+2016,Villalba Municipio,72149,24186.0,287.0,11.87
+2016,Yabucoa Municipio,72151,35670.0,345.0,9.67
+2016,Yauco Municipio,72153,38519.0,487.0,12.64
+2017,Adjuntas Municipio,72001,18525.0,93.0,5.02
+2017,Aguada Municipio,72003,39470.0,196.0,4.97
+2017,Aguadilla Municipio,72005,55722.0,307.0,5.51
+2017,Aguas Buenas Municipio,72007,26855.0,192.0,7.15
+2017,Aibonito Municipio,72009,24008.0,219.0,9.12
+2017,Arecibo Municipio,72013,89550.0,772.0,8.62
+2017,Arroyo Municipio,72015,18504.0,139.0,7.51
+2017,Añasco Municipio,72011,27892.0,153.0,5.49
+2017,Barceloneta Municipio,72017,24583.0,300.0,12.2
+2017,Barranquitas Municipio,72019,29237.0,70.0,2.39
+2017,Bayamón Municipio,72021,188614.0,1601.0,8.49
+2017,Cabo Rojo Municipio,72023,49726.0,463.0,9.31
+2017,Caguas Municipio,72025,134269.0,1482.0,11.04
+2017,Camuy Municipio,72027,32936.0,150.0,4.55
+2017,Canóvanas Municipio,72029,46779.0,294.0,6.28
+2017,Carolina Municipio,72031,161684.0,1448.0,8.96
+2017,Cataño Municipio,72033,25595.0,189.0,7.38
+2017,Cayey Municipio,72035,45431.0,448.0,9.86
+2017,Ceiba Municipio,72037,12238.0,82.0,6.7
+2017,Ciales Municipio,72039,17325.0,183.0,10.56
+2017,Cidra Municipio,72041,41181.0,468.0,11.36
+2017,Coamo Municipio,72043,39796.0,357.0,8.97
+2017,Comerío Municipio,72045,19914.0,188.0,9.44
+2017,Corozal Municipio,72047,34933.0,363.0,10.39
+2017,Culebra Municipio,72049,1494.0,26.0,17.4
+2017,Dorado Municipio,72051,37722.0,227.0,6.02
+2017,Fajardo Municipio,72053,33075.0,336.0,10.16
+2017,Florida Municipio,72054,12140.0,139.0,11.45
+2017,Guayama Municipio,72057,42623.0,278.0,6.52
+2017,Guayanilla Municipio,72059,19578.0,228.0,11.65
+2017,Guaynabo Municipio,72061,90773.0,587.0,6.47
+2017,Gurabo Municipio,72063,47074.0,293.0,6.22
+2017,Guánica Municipio,72055,17327.0,78.0,4.5
+2017,Hatillo Municipio,72065,40978.0,170.0,4.15
+2017,Hormigueros Municipio,72067,16474.0,88.0,5.34
+2017,Humacao Municipio,72069,54736.0,530.0,9.68
+2017,Isabela Municipio,72071,43314.0,483.0,11.15
+2017,Jayuya Municipio,72073,15297.0,206.0,13.47
+2017,Juana Díaz Municipio,72075,47952.0,437.0,9.11
+2017,Juncos Municipio,72077,39704.0,273.0,6.88
+2017,Lajas Municipio,72079,23893.0,208.0,8.71
+2017,Lares Municipio,72081,27321.0,297.0,10.87
+2017,Las Marías Municipio,72083,8874.0,121.0,13.64
+2017,Las Piedras Municipio,72085,38253.0,255.0,6.67
+2017,Loíza Municipio,72087,27242.0,215.0,7.89
+2017,Luquillo Municipio,72089,18952.0,114.0,6.02
+2017,Manatí Municipio,72091,40705.0,379.0,9.31
+2017,Maricao Municipio,72093,6180.0,22.0,3.56
+2017,Maunabo Municipio,72095,11297.0,131.0,11.6
+2017,Mayagüez Municipio,72097,79615.0,617.0,7.75
+2017,Moca Municipio,72099,37676.0,192.0,5.1
+2017,Morovis Municipio,72101,31785.0,438.0,13.78
+2017,Naguabo Municipio,72103,26584.0,332.0,12.49
+2017,Naranjito Municipio,72105,29112.0,218.0,7.49
+2017,Orocovis Municipio,72107,21906.0,294.0,13.42
+2017,Patillas Municipio,72109,17769.0,79.0,4.45
+2017,Peñuelas Municipio,72111,21661.0,260.0,12.0
+2017,Ponce Municipio,72113,148863.0,1375.0,9.24
+2017,Quebradillas Municipio,72115,24548.0,136.0,5.54
+2017,Rincón Municipio,72117,14526.0,122.0,8.4
+2017,Río Grande Municipio,72119,51768.0,540.0,10.43
+2017,Sabana Grande Municipio,72121,23610.0,216.0,9.15
+2017,Salinas Municipio,72123,29239.0,151.0,5.16
+2017,San Germán Municipio,72125,32937.0,263.0,7.98
+2017,San Juan Municipio,72127,355181.0,3282.0,9.24
+2017,San Lorenzo Municipio,72129,38689.0,189.0,4.89
+2017,San Sebastián Municipio,72131,38970.0,196.0,5.03
+2017,Santa Isabel Municipio,72133,22475.0,177.0,7.88
+2017,Toa Alta Municipio,72135,74169.0,820.0,11.06
+2017,Toa Baja Municipio,72137,81905.0,754.0,9.21
+2017,Trujillo Alto Municipio,72139,69478.0,602.0,8.66
+2017,Utuado Municipio,72141,30209.0,218.0,7.22
+2017,Vega Alta Municipio,72143,38589.0,358.0,9.28
+2017,Vega Baja Municipio,72145,54754.0,516.0,9.42
+2017,Vieques Municipio,72147,8931.0,14.0,1.57
+2017,Villalba Municipio,72149,23659.0,322.0,13.61
+2017,Yabucoa Municipio,72151,35025.0,335.0,9.56
+2017,Yauco Municipio,72153,37585.0,374.0,9.95
+2018,Adjuntas Municipio,72001,18181.0,95.0,5.23
+2018,Aguada Municipio,72003,38643.0,118.0,3.05
+2018,Aguadilla Municipio,72005,54166.0,341.0,6.3
+2018,Aguas Buenas Municipio,72007,26275.0,219.0,8.33
+2018,Aibonito Municipio,72009,23457.0,134.0,5.71
+2018,Arecibo Municipio,72013,87242.0,850.0,9.74
+2018,Arroyo Municipio,72015,18111.0,256.0,14.14
+2018,Añasco Municipio,72011,27368.0,119.0,4.35
+2018,Barceloneta Municipio,72017,24299.0,296.0,12.18
+2018,Barranquitas Municipio,72019,28755.0,87.0,3.03
+2018,Bayamón Municipio,72021,182955.0,1446.0,7.9
+2018,Cabo Rojo Municipio,72023,49005.0,528.0,10.77
+2018,Caguas Municipio,72025,131363.0,1178.0,8.97
+2018,Camuy Municipio,72027,32222.0,92.0,2.86
+2018,Canóvanas Municipio,72029,46108.0,221.0,4.79
+2018,Carolina Municipio,72031,157453.0,1270.0,8.07
+2018,Cataño Municipio,72033,24888.0,159.0,6.39
+2018,Cayey Municipio,72035,44530.0,344.0,7.73
+2018,Ceiba Municipio,72037,11853.0,107.0,9.03
+2018,Ciales Municipio,72039,16912.0,149.0,8.81
+2018,Cidra Municipio,72041,40343.0,454.0,11.25
+2018,Coamo Municipio,72043,39265.0,216.0,5.5
+2018,Comerío Municipio,72045,19539.0,177.0,9.06
+2018,Corozal Municipio,72047,34165.0,308.0,9.02
+2018,Culebra Municipio,72049,1314.0,40.0,30.44
+2018,Dorado Municipio,72051,37208.0,272.0,7.31
+2018,Fajardo Municipio,72053,32001.0,307.0,9.59
+2018,Florida Municipio,72054,11910.0,94.0,7.89
+2018,Guayama Municipio,72057,41706.0,268.0,6.43
+2018,Guayanilla Municipio,72059,19008.0,253.0,13.31
+2018,Guaynabo Municipio,72061,88663.0,557.0,6.28
+2018,Gurabo Municipio,72063,46894.0,342.0,7.29
+2018,Guánica Municipio,72055,16783.0,88.0,5.24
+2018,Hatillo Municipio,72065,40390.0,223.0,5.52
+2018,Hormigueros Municipio,72067,16180.0,124.0,7.66
+2018,Humacao Municipio,72069,53466.0,543.0,10.16
+2018,Isabela Municipio,72071,42420.0,454.0,10.7
+2018,Jayuya Municipio,72073,14906.0,210.0,14.09
+2018,Juana Díaz Municipio,72075,46960.0,395.0,8.41
+2018,Juncos Municipio,72077,39128.0,464.0,11.86
+2018,Lajas Municipio,72079,23315.0,164.0,7.03
+2018,Lares Municipio,72081,26451.0,289.0,10.93
+2018,Las Marías Municipio,72083,8599.0,115.0,13.37
+2018,Las Piedras Municipio,72085,37768.0,186.0,4.92
+2018,Loíza Municipio,72087,26463.0,149.0,5.63
+2018,Luquillo Municipio,72089,18547.0,70.0,3.77
+2018,Manatí Municipio,72091,39692.0,421.0,10.61
+2018,Maricao Municipio,72093,6202.0,19.0,3.06
+2018,Maunabo Municipio,72095,11023.0,70.0,6.35
+2018,Mayagüez Municipio,72097,77255.0,605.0,7.83
+2018,Moca Municipio,72099,36872.0,112.0,3.04
+2018,Morovis Municipio,72101,31320.0,430.0,13.73
+2018,Naguabo Municipio,72103,26266.0,314.0,11.95
+2018,Naranjito Municipio,72105,28557.0,182.0,6.37
+2018,Orocovis Municipio,72107,21407.0,229.0,10.7
+2018,Patillas Municipio,72109,17334.0,53.0,3.06
+2018,Peñuelas Municipio,72111,20984.0,181.0,8.63
+2018,Ponce Municipio,72113,143926.0,1318.0,9.16
+2018,Quebradillas Municipio,72115,24036.0,115.0,4.78
+2018,Rincón Municipio,72117,14269.0,67.0,4.7
+2018,Río Grande Municipio,72119,50550.0,585.0,11.57
+2018,Sabana Grande Municipio,72121,23054.0,244.0,10.58
+2018,Salinas Municipio,72123,28633.0,231.0,8.07
+2018,San Germán Municipio,72125,32114.0,280.0,8.72
+2018,San Juan Municipio,72127,344606.0,2798.0,8.12
+2018,San Lorenzo Municipio,72129,37873.0,172.0,4.54
+2018,San Sebastián Municipio,72131,37964.0,154.0,4.06
+2018,Santa Isabel Municipio,72133,22066.0,187.0,8.47
+2018,Toa Alta Municipio,72135,73405.0,739.0,10.07
+2018,Toa Baja Municipio,72137,79726.0,655.0,8.22
+2018,Trujillo Alto Municipio,72139,67780.0,448.0,6.61
+2018,Utuado Municipio,72141,29402.0,220.0,7.48
+2018,Vega Alta Municipio,72143,37724.0,382.0,10.13
+2018,Vega Baja Municipio,72145,53371.0,483.0,9.05
+2018,Vieques Municipio,72147,8771.0,17.0,1.94
+2018,Villalba Municipio,72149,22993.0,249.0,10.83
+2018,Yabucoa Municipio,72151,34149.0,434.0,12.71
+2018,Yauco Municipio,72153,36439.0,351.0,9.63
+2019,Adjuntas Municipio,72001,17891.0,114.0,6.37
+2019,Aguada Municipio,72003,37954.0,201.0,5.3
+2019,Aguadilla Municipio,72005,52803.0,345.0,6.53
+2019,Aguas Buenas Municipio,72007,25748.0,153.0,5.94
+2019,Aibonito Municipio,72009,22988.0,145.0,6.31
+2019,Arecibo Municipio,72013,85390.0,611.0,7.16
+2019,Arroyo Municipio,72015,17805.0,257.0,14.43
+2019,Añasco Municipio,72011,26934.0,110.0,4.08
+2019,Barceloneta Municipio,72017,24079.0,249.0,10.34
+2019,Barranquitas Municipio,72019,28393.0,123.0,4.33
+2019,Bayamón Municipio,72021,178192.0,1191.0,6.68
+2019,Cabo Rojo Municipio,72023,48487.0,543.0,11.2
+2019,Caguas Municipio,72025,128937.0,1069.0,8.29
+2019,Camuy Municipio,72027,31598.0,126.0,3.99
+2019,Canóvanas Municipio,72029,45588.0,213.0,4.67
+2019,Carolina Municipio,72031,153779.0,1127.0,7.33
+2019,Cataño Municipio,72033,24271.0,156.0,6.43
+2019,Cayey Municipio,72035,43785.0,306.0,6.99
+2019,Ceiba Municipio,72037,11515.0,122.0,10.59
+2019,Ciales Municipio,72039,16513.0,169.0,10.23
+2019,Cidra Municipio,72041,39607.0,367.0,9.27
+2019,Coamo Municipio,72043,38906.0,222.0,5.71
+2019,Comerío Municipio,72045,19224.0,116.0,6.03
+2019,Corozal Municipio,72047,33500.0,301.0,8.99
+2019,Culebra Municipio,72049,1311.0,19.0,14.49
+2019,Dorado Municipio,72051,36803.0,319.0,8.67
+2019,Fajardo Municipio,72053,31111.0,274.0,8.81
+2019,Florida Municipio,72054,11697.0,61.0,5.22
+2019,Guayama Municipio,72057,40889.0,248.0,6.07
+2019,Guayanilla Municipio,72059,18514.0,212.0,11.45
+2019,Guaynabo Municipio,72061,86937.0,527.0,6.06
+2019,Gurabo Municipio,72063,46910.0,186.0,3.97
+2019,Guánica Municipio,72055,16293.0,82.0,5.03
+2019,Hatillo Municipio,72065,39950.0,260.0,6.51
+2019,Hormigueros Municipio,72067,15943.0,148.0,9.28
+2019,Humacao Municipio,72069,52507.0,328.0,6.25
+2019,Isabela Municipio,72071,41707.0,476.0,11.41
+2019,Jayuya Municipio,72073,14539.0,29.0,1.99
+2019,Juana Díaz Municipio,72075,46152.0,353.0,7.65
+2019,Juncos Municipio,72077,38780.0,413.0,10.65
+2019,Lajas Municipio,72079,22835.0,203.0,8.89
+2019,Lares Municipio,72081,25696.0,228.0,8.87
+2019,Las Marías Municipio,72083,8370.0,68.0,8.12
+2019,Las Piedras Municipio,72085,37499.0,243.0,6.48
+2019,Loíza Municipio,72087,25778.0,130.0,5.04
+2019,Luquillo Municipio,72089,18224.0,54.0,2.96
+2019,Manatí Municipio,72091,38836.0,335.0,8.63
+2019,Maricao Municipio,72093,6075.0,38.0,6.26
+2019,Maunabo Municipio,72095,10776.0,79.0,7.33
+2019,Mayagüez Municipio,72097,75232.0,483.0,6.42
+2019,Moca Municipio,72099,36161.0,87.0,2.41
+2019,Morovis Municipio,72101,30962.0,358.0,11.56
+2019,Naguabo Municipio,72103,26075.0,300.0,11.51
+2019,Naranjito Municipio,72105,28112.0,162.0,5.76
+2019,Orocovis Municipio,72107,20982.0,198.0,9.44
+2019,Patillas Municipio,72109,16929.0,68.0,4.02
+2019,Peñuelas Municipio,72111,20383.0,121.0,5.94
+2019,Ponce Municipio,72113,139671.0,1198.0,8.58
+2019,Quebradillas Municipio,72115,23629.0,102.0,4.32
+2019,Rincón Municipio,72117,14056.0,70.0,4.98
+2019,Río Grande Municipio,72119,49613.0,428.0,8.63
+2019,Sabana Grande Municipio,72121,22560.0,291.0,12.9
+2019,Salinas Municipio,72123,28109.0,201.0,7.15
+2019,San Germán Municipio,72125,31442.0,308.0,9.8
+2019,San Juan Municipio,72127,335468.0,2383.0,7.1
+2019,San Lorenzo Municipio,72129,37209.0,148.0,3.98
+2019,San Sebastián Municipio,72131,37120.0,150.0,4.04
+2019,Santa Isabel Municipio,72133,21757.0,106.0,4.87
+2019,Toa Alta Municipio,72135,72864.0,614.0,8.43
+2019,Toa Baja Municipio,72137,77810.0,830.0,10.67
+2019,Trujillo Alto Municipio,72139,66338.0,335.0,5.05
+2019,Utuado Municipio,72141,28676.0,240.0,8.37
+2019,Vega Alta Municipio,72143,37106.0,370.0,9.97
+2019,Vega Baja Municipio,72145,52192.0,375.0,7.19
+2019,Vieques Municipio,72147,8642.0,0.0,0.0
+2019,Villalba Municipio,72149,22403.0,230.0,10.27
+2019,Yabucoa Municipio,72151,33499.0,424.0,12.66
+2019,Yauco Municipio,72153,35428.0,312.0,8.81
+2020,Adjuntas Municipio,72001,17614.0,59.0,3.35
+2020,Aguada Municipio,72003,37307.0,216.0,5.79
+2020,Aguadilla Municipio,72005,51552.0,337.0,6.54
+2020,Aguas Buenas Municipio,72007,25298.0,156.0,6.17
+2020,Aibonito Municipio,72009,22545.0,187.0,8.29
+2020,Arecibo Municipio,72013,83682.0,586.0,7.0
+2020,Arroyo Municipio,72015,17502.0,273.0,15.6
+2020,Añasco Municipio,72011,26555.0,66.0,2.49
+2020,Barceloneta Municipio,72017,23913.0,216.0,9.03
+2020,Barranquitas Municipio,72019,28026.0,164.0,5.85
+2020,Bayamón Municipio,72021,173695.0,1110.0,6.39
+2020,Cabo Rojo Municipio,72023,47977.0,311.0,6.48
+2020,Caguas Municipio,72025,126734.0,909.0,7.17
+2020,Camuy Municipio,72027,31066.0,132.0,4.25
+2020,Canóvanas Municipio,72029,45120.0,171.0,3.79
+2020,Carolina Municipio,72031,150378.0,938.0,6.24
+2020,Cataño Municipio,72033,23698.0,137.0,5.78
+2020,Cayey Municipio,72035,43126.0,307.0,7.12
+2020,Ceiba Municipio,72037,11207.0,133.0,11.87
+2020,Ciales Municipio,72039,16188.0,182.0,11.24
+2020,Cidra Municipio,72041,38977.0,309.0,7.93
+2020,Coamo Municipio,72043,38603.0,106.0,2.75
+2020,Comerío Municipio,72045,18942.0,96.0,5.07
+2020,Corozal Municipio,72047,32928.0,353.0,10.72
+2020,Culebra Municipio,72049,1371.0,23.0,16.78
+2020,Dorado Municipio,72051,36475.0,343.0,9.4
+2020,Fajardo Municipio,72053,30263.0,296.0,9.78
+2020,Florida Municipio,72054,11513.0,69.0,5.99
+2020,Guayama Municipio,72057,40198.0,332.0,8.26
+2020,Guayanilla Municipio,72059,18080.0,139.0,7.69
+2020,Guaynabo Municipio,72061,85312.0,370.0,4.34
+2020,Gurabo Municipio,72063,46948.0,216.0,4.6
+2020,Guánica Municipio,72055,15825.0,78.0,4.93
+2020,Hatillo Municipio,72065,39561.0,300.0,7.58
+2020,Hormigueros Municipio,72067,15731.0,191.0,12.14
+2020,Humacao Municipio,72069,51586.0,280.0,5.43
+2020,Isabela Municipio,72071,41084.0,345.0,8.4
+2020,Jayuya Municipio,72073,14239.0,125.0,8.78
+2020,Juana Díaz Municipio,72075,45414.0,496.0,10.92
+2020,Juncos Municipio,72077,38471.0,481.0,12.5
+2020,Lajas Municipio,72079,22391.0,231.0,10.32
+2020,Lares Municipio,72081,24945.0,233.0,9.34
+2020,Las Marías Municipio,72083,8131.0,30.0,3.69
+2020,Las Piedras Municipio,72085,37233.0,298.0,8.0
+2020,Loíza Municipio,72087,25164.0,160.0,6.36
+2020,Luquillo Municipio,72089,17924.0,53.0,2.96
+2020,Manatí Municipio,72091,38062.0,310.0,8.14
+2020,Maricao Municipio,72093,5900.0,52.0,8.81
+2020,Maunabo Municipio,72095,10568.0,102.0,9.65
+2020,Mayagüez Municipio,72097,73336.0,468.0,6.38
+2020,Moca Municipio,72099,35547.0,84.0,2.36
+2020,Morovis Municipio,72101,30652.0,320.0,10.44
+2020,Naguabo Municipio,72103,25931.0,321.0,12.38
+2020,Naranjito Municipio,72105,27719.0,90.0,3.25
+2020,Orocovis Municipio,72107,20608.0,208.0,10.09
+2020,Patillas Municipio,72109,16591.0,68.0,4.1
+2020,Peñuelas Municipio,72111,19797.0,64.0,3.23
+2020,Ponce Municipio,72113,135674.0,1090.0,8.03
+2020,Quebradillas Municipio,72115,23261.0,72.0,3.1
+2020,Rincón Municipio,72117,13849.0,15.0,1.08
+2020,Río Grande Municipio,72119,48828.0,392.0,8.03
+2020,Sabana Grande Municipio,72121,22140.0,257.0,11.61
+2020,Salinas Municipio,72123,27638.0,142.0,5.14
+2020,San Germán Municipio,72125,30811.0,278.0,9.02
+2020,San Juan Municipio,72127,326953.0,2476.0,7.57
+2020,San Lorenzo Municipio,72129,36586.0,95.0,2.6
+2020,San Sebastián Municipio,72131,36292.0,83.0,2.29
+2020,Santa Isabel Municipio,72133,21474.0,107.0,4.98
+2020,Toa Alta Municipio,72135,72450.0,523.0,7.22
+2020,Toa Baja Municipio,72137,76008.0,802.0,10.55
+2020,Trujillo Alto Municipio,72139,65011.0,257.0,3.95
+2020,Utuado Municipio,72141,28041.0,228.0,8.13
+2020,Vega Alta Municipio,72143,36559.0,380.0,10.39
+2020,Vega Baja Municipio,72145,51089.0,392.0,7.67
+2020,Vieques Municipio,72147,8508.0,0.0,0.0
+2020,Villalba Municipio,72149,21899.0,325.0,14.84
+2020,Yabucoa Municipio,72151,32867.0,339.0,10.31
+2020,Yauco Municipio,72153,34501.0,276.0,8.0
+2021,Adjuntas Municipio,72001,18068.0,72.0,3.98
+2021,Aguada Municipio,72003,38307.0,137.0,3.58
+2021,Aguadilla Municipio,72005,55241.0,301.0,5.45
+2021,Aguas Buenas Municipio,72007,24567.0,154.0,6.27
+2021,Aibonito Municipio,72009,24565.0,182.0,7.41
+2021,Arecibo Municipio,72013,88017.0,731.0,8.31
+2021,Arroyo Municipio,72015,16183.0,103.0,6.36
+2021,Añasco Municipio,72011,25859.0,61.0,2.36
+2021,Barceloneta Municipio,72017,22836.0,230.0,10.07
+2021,Barranquitas Municipio,72019,28982.0,212.0,7.31
+2021,Bayamón Municipio,72021,185939.0,952.0,5.12
+2021,Cabo Rojo Municipio,72023,47403.0,299.0,6.31
+2021,Caguas Municipio,72025,128182.0,700.0,5.46
+2021,Camuy Municipio,72027,32885.0,102.0,3.1
+2021,Canóvanas Municipio,72029,42811.0,192.0,4.48
+2021,Carolina Municipio,72031,155886.0,916.0,5.88
+2021,Cataño Municipio,72033,23536.0,164.0,6.97
+2021,Cayey Municipio,72035,42134.0,283.0,6.72
+2021,Ceiba Municipio,72037,11463.0,162.0,14.13
+2021,Ciales Municipio,72039,17045.0,205.0,12.03
+2021,Cidra Municipio,72041,40125.0,170.0,4.24
+2021,Coamo Municipio,72043,35268.0,183.0,5.19
+2021,Comerío Municipio,72045,18990.0,30.0,1.58
+2021,Corozal Municipio,72047,34631.0,318.0,9.18
+2021,Culebra Municipio,72049,1293.0,12.0,9.28
+2021,Dorado Municipio,72051,36030.0,337.0,9.35
+2021,Fajardo Municipio,72053,32336.0,220.0,6.8
+2021,Florida Municipio,72054,11725.0,137.0,11.68
+2021,Guayama Municipio,72057,37388.0,316.0,8.45
+2021,Guayanilla Municipio,72059,18047.0,105.0,5.82
+2021,Guaynabo Municipio,72061,90014.0,283.0,3.14
+2021,Gurabo Municipio,72063,41237.0,145.0,3.52
+2021,Guánica Municipio,72055,14297.0,68.0,4.76
+2021,Hatillo Municipio,72065,38739.0,490.0,12.65
+2021,Hormigueros Municipio,72067,15726.0,133.0,8.46
+2021,Humacao Municipio,72069,51398.0,321.0,6.25
+2021,Isabela Municipio,72071,42985.0,264.0,6.14
+2021,Jayuya Municipio,72073,14877.0,137.0,9.21
+2021,Juana Díaz Municipio,72075,46704.0,638.0,13.66
+2021,Juncos Municipio,72077,37290.0,541.0,14.51
+2021,Lajas Municipio,72079,23407.0,113.0,4.83
+2021,Lares Municipio,72081,28092.0,287.0,10.22
+2021,Las Marías Municipio,72083,8896.0,40.0,4.5
+2021,Las Piedras Municipio,72085,35495.0,249.0,7.02
+2021,Loíza Municipio,72087,24216.0,184.0,7.6
+2021,Luquillo Municipio,72089,17917.0,58.0,3.24
+2021,Manatí Municipio,72091,39693.0,364.0,9.17
+2021,Maricao Municipio,72093,5389.0,48.0,8.91
+2021,Maunabo Municipio,72095,10700.0,108.0,10.09
+2021,Mayagüez Municipio,72097,74146.0,497.0,6.7
+2021,Moca Municipio,72099,37532.0,62.0,1.65
+2021,Morovis Municipio,72101,29069.0,267.0,9.19
+2021,Naguabo Municipio,72103,23722.0,271.0,11.42
+2021,Naranjito Municipio,72105,29200.0,31.0,1.06
+2021,Orocovis Municipio,72107,21510.0,142.0,6.6
+2021,Patillas Municipio,72109,16231.0,85.0,5.24
+2021,Peñuelas Municipio,72111,20625.0,65.0,3.15
+2021,Ponce Municipio,72113,139245.0,1029.0,7.39
+2021,Quebradillas Municipio,72115,23743.0,98.0,4.13
+2021,Rincón Municipio,72117,15097.0,12.0,0.79
+2021,Río Grande Municipio,72119,47630.0,360.0,7.56
+2021,Sabana Grande Municipio,72121,22860.0,121.0,5.29
+2021,Salinas Municipio,72123,26208.0,88.0,3.36
+2021,San Germán Municipio,72125,32031.0,224.0,6.99
+2021,San Juan Municipio,72127,344791.0,2010.0,5.83
+2021,San Lorenzo Municipio,72129,37822.0,126.0,3.33
+2021,San Sebastián Municipio,72131,39351.0,97.0,2.46
+2021,Santa Isabel Municipio,72133,20530.0,144.0,7.01
+2021,Toa Alta Municipio,72135,67602.0,268.0,3.96
+2021,Toa Baja Municipio,72137,76248.0,734.0,9.63
+2021,Trujillo Alto Municipio,72139,68001.0,182.0,2.68
+2021,Utuado Municipio,72141,28585.0,139.0,4.86
+2021,Vega Alta Municipio,72143,35728.0,280.0,7.84
+2021,Vega Baja Municipio,72145,54544.0,365.0,6.69
+2021,Vieques Municipio,72147,8317.0,0.0,0.0
+2021,Villalba Municipio,72149,22341.0,340.0,15.22
+2021,Yabucoa Municipio,72151,31047.0,284.0,9.15
+2021,Yauco Municipio,72153,34704.0,221.0,6.37
+2022,Adjuntas Municipio,72001,17972.0,83.0,4.62
+2022,Aguada Municipio,72003,37998.0,122.0,3.21
+2022,Aguadilla Municipio,72005,54752.0,342.0,6.25
+2022,Aguas Buenas Municipio,72007,24136.0,181.0,7.5
+2022,Aibonito Municipio,72009,24555.0,227.0,9.24
+2022,Arecibo Municipio,72013,87217.0,709.0,8.13
+2022,Arroyo Municipio,72015,15797.0,105.0,6.65
+2022,Añasco Municipio,72011,25497.0,38.0,1.49
+2022,Barceloneta Municipio,72017,22604.0,176.0,7.79
+2022,Barranquitas Municipio,72019,28899.0,307.0,10.62
+2022,Bayamón Municipio,72021,184326.0,1056.0,5.73
+2022,Cabo Rojo Municipio,72023,46983.0,198.0,4.21
+2022,Caguas Municipio,72025,126772.0,577.0,4.55
+2022,Camuy Municipio,72027,32733.0,163.0,4.98
+2022,Canóvanas Municipio,72029,42218.0,255.0,6.04
+2022,Carolina Municipio,72031,154126.0,997.0,6.47
+2022,Cataño Municipio,72033,23060.0,133.0,5.77
+2022,Cayey Municipio,72035,41509.0,249.0,6.0
+2022,Ceiba Municipio,72037,11256.0,148.0,13.15
+2022,Ciales Municipio,72039,16924.0,265.0,15.66
+2022,Cidra Municipio,72041,39831.0,142.0,3.57
+2022,Coamo Municipio,72043,34557.0,191.0,5.53
+2022,Comerío Municipio,72045,18817.0,30.0,1.59
+2022,Corozal Municipio,72047,34459.0,366.0,10.62
+2022,Culebra Municipio,72049,1186.0,0.0,0.0
+2022,Dorado Municipio,72051,35786.0,363.0,10.14
+2022,Fajardo Municipio,72053,31984.0,194.0,6.07
+2022,Florida Municipio,72054,11641.0,92.0,7.9
+2022,Guayama Municipio,72057,36365.0,294.0,8.08
+2022,Guayanilla Municipio,72059,17670.0,98.0,5.55
+2022,Guaynabo Municipio,72061,89554.0,275.0,3.07
+2022,Gurabo Municipio,72063,40517.0,214.0,5.28
+2022,Guánica Municipio,72055,13682.0,104.0,7.6
+2022,Hatillo Municipio,72065,38330.0,426.0,11.11
+2022,Hormigueros Municipio,72067,15571.0,121.0,7.77
+2022,Humacao Municipio,72069,50729.0,237.0,4.67
+2022,Isabela Municipio,72071,42817.0,332.0,7.75
+2022,Jayuya Municipio,72073,14726.0,132.0,8.96
+2022,Juana Díaz Municipio,72075,46333.0,643.0,13.88
+2022,Juncos Municipio,72077,36928.0,511.0,13.84
+2022,Lajas Municipio,72079,23202.0,143.0,6.16
+2022,Lares Municipio,72081,27990.0,240.0,8.57
+2022,Las Marías Municipio,72083,8826.0,15.0,1.7
+2022,Las Piedras Municipio,72085,35099.0,228.0,6.5
+2022,Loíza Municipio,72087,23580.0,168.0,7.12
+2022,Luquillo Municipio,72089,17716.0,88.0,4.97
+2022,Manatí Municipio,72091,39310.0,435.0,11.07
+2022,Maricao Municipio,72093,5354.0,17.0,3.18
+2022,Maunabo Municipio,72095,10563.0,73.0,6.91
+2022,Mayagüez Municipio,72097,72721.0,550.0,7.56
+2022,Moca Municipio,72099,37363.0,123.0,3.29
+2022,Morovis Municipio,72101,28659.0,203.0,7.08
+2022,Naguabo Municipio,72103,23340.0,129.0,5.53
+2022,Naranjito Municipio,72105,29153.0,30.0,1.03
+2022,Orocovis Municipio,72107,21378.0,134.0,6.27
+2022,Patillas Municipio,72109,15927.0,118.0,7.41
+2022,Peñuelas Municipio,72111,20298.0,49.0,2.41
+2022,Ponce Municipio,72113,136542.0,943.0,6.91
+2022,Quebradillas Municipio,72115,23540.0,79.0,3.36
+2022,Rincón Municipio,72117,15164.0,7.0,0.46
+2022,Río Grande Municipio,72119,46838.0,356.0,7.6
+2022,Sabana Grande Municipio,72121,22639.0,106.0,4.68
+2022,Salinas Municipio,72123,25688.0,137.0,5.33
+2022,San Germán Municipio,72125,31680.0,142.0,4.48
+2022,San Juan Municipio,72127,340903.0,1990.0,5.84
+2022,San Lorenzo Municipio,72129,37552.0,116.0,3.09
+2022,San Sebastián Municipio,72131,39183.0,270.0,6.89
+2022,Santa Isabel Municipio,72133,20207.0,155.0,7.67
+2022,Toa Alta Municipio,72135,66699.0,219.0,3.28
+2022,Toa Baja Municipio,72137,74854.0,694.0,9.27
+2022,Trujillo Alto Municipio,72139,67497.0,341.0,5.05
+2022,Utuado Municipio,72141,28155.0,132.0,4.69
+2022,Vega Alta Municipio,72143,35279.0,315.0,8.93
+2022,Vega Baja Municipio,72145,54182.0,352.0,6.5
+2022,Vieques Municipio,72147,8199.0,0.0,0.0
+2022,Villalba Municipio,72149,21984.0,309.0,14.06
+2022,Yabucoa Municipio,72151,30313.0,293.0,9.67
+2022,Yauco Municipio,72153,33988.0,227.0,6.68
+2023,Adjuntas Municipio,72001,17975.0,87.0,4.84
+2023,Aguada Municipio,72003,37904.0,144.0,3.8
+2023,Aguadilla Municipio,72005,54486.0,339.0,6.22
+2023,Aguas Buenas Municipio,72007,23888.0,138.0,5.78
+2023,Aibonito Municipio,72009,24610.0,218.0,8.86
+2023,Arecibo Municipio,72013,86875.0,598.0,6.88
+2023,Arroyo Municipio,72015,15573.0,0.0,0.0
+2023,Añasco Municipio,72011,25316.0,9.0,0.36
+2023,Barceloneta Municipio,72017,22565.0,128.0,5.67
+2023,Barranquitas Municipio,72019,28984.0,289.0,9.97
+2023,Bayamón Municipio,72021,183456.0,1230.0,6.7
+2023,Cabo Rojo Municipio,72023,46955.0,228.0,4.86
+2023,Caguas Municipio,72025,126239.0,526.0,4.17
+2023,Camuy Municipio,72027,32753.0,163.0,4.98
+2023,Canóvanas Municipio,72029,42037.0,345.0,8.21
+2023,Carolina Municipio,72031,153226.0,992.0,6.47
+2023,Cataño Municipio,72033,22768.0,146.0,6.41
+2023,Cayey Municipio,72035,41231.0,402.0,9.75
+2023,Ceiba Municipio,72037,11128.0,109.0,9.8
+2023,Ciales Municipio,72039,16874.0,196.0,11.62
+2023,Cidra Municipio,72041,39765.0,183.0,4.6
+2023,Coamo Municipio,72043,34294.0,190.0,5.54
+2023,Comerío Municipio,72045,18775.0,25.0,1.33
+2023,Corozal Municipio,72047,34474.0,594.0,17.23
+2023,Culebra Municipio,72049,1281.0,18.0,14.05
+2023,Dorado Municipio,72051,35816.0,491.0,13.71
+2023,Fajardo Municipio,72053,31756.0,175.0,5.51
+2023,Florida Municipio,72054,11624.0,87.0,7.48
+2023,Guayama Municipio,72057,35845.0,263.0,7.34
+2023,Guayanilla Municipio,72059,17418.0,79.0,4.54
+2023,Guaynabo Municipio,72061,89503.0,361.0,4.03
+2023,Gurabo Municipio,72063,40383.0,306.0,7.58
+2023,Guánica Municipio,72055,13266.0,64.0,4.82
+2023,Hatillo Municipio,72065,38266.0,415.0,10.85
+2023,Hormigueros Municipio,72067,15520.0,152.0,9.79
+2023,Humacao Municipio,72069,50441.0,237.0,4.7
+2023,Isabela Municipio,72071,42878.0,374.0,8.72
+2023,Jayuya Municipio,72073,14653.0,159.0,10.85
+2023,Juana Díaz Municipio,72075,46276.0,625.0,13.51
+2023,Juncos Municipio,72077,36895.0,289.0,7.83
+2023,Lajas Municipio,72079,23133.0,154.0,6.66
+2023,Lares Municipio,72081,27944.0,191.0,6.84
+2023,Las Marías Municipio,72083,8790.0,15.0,1.71
+2023,Las Piedras Municipio,72085,35034.0,251.0,7.16
+2023,Loíza Municipio,72087,23176.0,180.0,7.77
+2023,Luquillo Municipio,72089,17631.0,60.0,3.4
+2023,Manatí Municipio,72091,39152.0,476.0,12.16
+2023,Maricao Municipio,72093,5176.0,14.0,2.7
+2023,Maunabo Municipio,72095,10482.0,73.0,6.96
+2023,Mayagüez Municipio,72097,71824.0,508.0,7.07
+2023,Moca Municipio,72099,37402.0,152.0,4.06
+2023,Morovis Municipio,72101,28534.0,159.0,5.57
+2023,Naguabo Municipio,72103,23205.0,92.0,3.96
+2023,Naranjito Municipio,72105,29246.0,102.0,3.49
+2023,Orocovis Municipio,72107,21351.0,167.0,7.82
+2023,Patillas Municipio,72109,15753.0,97.0,6.16
+2023,Peñuelas Municipio,72111,20082.0,63.0,3.14
+2023,Ponce Municipio,72113,134676.0,927.0,6.88
+2023,Quebradillas Municipio,72115,23486.0,112.0,4.77
+2023,Rincón Municipio,72117,15276.0,13.0,0.85
+2023,Río Grande Municipio,72119,46478.0,337.0,7.25
+2023,Sabana Grande Municipio,72121,22541.0,62.0,2.75
+2023,Salinas Municipio,72123,25397.0,80.0,3.15
+2023,San Germán Municipio,72125,31514.0,67.0,2.13
+2023,San Juan Municipio,72127,338661.0,2121.0,6.26
+2023,San Lorenzo Municipio,72129,37515.0,100.0,2.67
+2023,San Sebastián Municipio,72131,39168.0,383.0,9.78
+2023,Santa Isabel Municipio,72133,20064.0,113.0,5.63
+2023,Toa Alta Municipio,72135,66536.0,284.0,4.27
+2023,Toa Baja Municipio,72137,73987.0,768.0,10.38
+2023,Trujillo Alto Municipio,72139,67329.0,365.0,5.42
+2023,Utuado Municipio,72141,27896.0,108.0,3.87
+2023,Vega Alta Municipio,72143,35114.0,371.0,10.57
+2023,Vega Baja Municipio,72145,54058.0,314.0,5.81
+2023,Vieques Municipio,72147,8147.0,0.0,0.0
+2023,Villalba Municipio,72149,21778.0,241.0,11.07
+2023,Yabucoa Municipio,72151,29868.0,176.0,5.89
+2023,Yauco Municipio,72153,33509.0,205.0,6.12
+2024,Adjuntas Municipio,72001,17960.0,85.0,4.73
+2024,Aguada Municipio,72003,37758.0,47.0,1.24
+2024,Aguadilla Municipio,72005,54137.0,236.0,4.36
+2024,Aguas Buenas Municipio,72007,23614.0,113.0,4.79
+2024,Aibonito Municipio,72009,24636.0,141.0,5.72
+2024,Arecibo Municipio,72013,86467.0,595.0,6.88
+2024,Arroyo Municipio,72015,15341.0,0.0,0.0
+2024,Añasco Municipio,72011,25094.0,0.0,0.0
+2024,Barceloneta Municipio,72017,22494.0,83.0,3.69
+2024,Barranquitas Municipio,72019,29054.0,236.0,8.12
+2024,Bayamón Municipio,72021,182469.0,1465.0,8.03
+2024,Cabo Rojo Municipio,72023,46876.0,217.0,4.63
+2024,Caguas Municipio,72025,125586.0,521.0,4.15
+2024,Camuy Municipio,72027,32734.0,183.0,5.59
+2024,Canóvanas Municipio,72029,41816.0,318.0,7.6
+2024,Carolina Municipio,72031,152204.0,927.0,6.09
+2024,Cataño Municipio,72033,22467.0,147.0,6.54
+2024,Cayey Municipio,72035,40917.0,430.0,10.51
+2024,Ceiba Municipio,72037,10995.0,101.0,9.19
+2024,Ciales Municipio,72039,16805.0,134.0,7.97
+2024,Cidra Municipio,72041,39643.0,204.0,5.15
+2024,Coamo Municipio,72043,33998.0,219.0,6.44
+2024,Comerío Municipio,72045,18711.0,47.0,2.51
+2024,Corozal Municipio,72047,34444.0,704.0,20.44
+2024,Culebra Municipio,72049,1387.0,20.0,14.42
+2024,Dorado Municipio,72051,35810.0,405.0,11.31
+2024,Fajardo Municipio,72053,31489.0,182.0,5.78
+2024,Florida Municipio,72054,11532.0,102.0,8.84
+2024,Guayama Municipio,72057,35298.0,354.0,10.03
+2024,Guayanilla Municipio,72059,17141.0,97.0,5.66
+2024,Guaynabo Municipio,72061,89378.0,410.0,4.59
+2024,Gurabo Municipio,72063,40228.0,387.0,9.62
+2024,Guánica Municipio,72055,12855.0,19.0,1.48
+2024,Hatillo Municipio,72065,38157.0,333.0,8.73
+2024,Hormigueros Municipio,72067,15441.0,109.0,7.06
+2024,Humacao Municipio,72069,50100.0,296.0,5.91
+2024,Isabela Municipio,72071,42890.0,285.0,6.64
+2024,Jayuya Municipio,72073,14566.0,199.0,13.66
+2024,Juana Díaz Municipio,72075,46156.0,670.0,14.52
+2024,Juncos Municipio,72077,36829.0,322.0,8.74
+2024,Lajas Municipio,72079,23035.0,199.0,8.64
+2024,Lares Municipio,72081,27855.0,181.0,6.5
+2024,Las Marías Municipio,72083,8744.0,22.0,2.52
+2024,Las Piedras Municipio,72085,34951.0,424.0,12.13
+2024,Loíza Municipio,72087,22768.0,171.0,7.51
+2024,Luquillo Municipio,72089,17532.0,71.0,4.05
+2024,Manatí Municipio,72091,38943.0,517.0,13.28
+2024,Maricao Municipio,72093,4988.0,0.0,0.0
+2024,Maunabo Municipio,72095,10399.0,51.0,4.9
+2024,Mayagüez Municipio,72097,70828.0,557.0,7.86
+2024,Moca Municipio,72099,37424.0,157.0,4.2
+2024,Morovis Municipio,72101,28397.0,182.0,6.41
+2024,Naguabo Municipio,72103,23054.0,90.0,3.9
+2024,Naranjito Municipio,72105,29310.0,234.0,7.98
+2024,Orocovis Municipio,72107,21309.0,154.0,7.23
+2024,Patillas Municipio,72109,15563.0,75.0,4.82
+2024,Peñuelas Municipio,72111,19853.0,108.0,5.44
+2024,Ponce Municipio,72113,132760.0,1151.0,8.67
+2024,Quebradillas Municipio,72115,23409.0,76.0,3.25
+2024,Rincón Municipio,72117,15378.0,42.0,2.73
+2024,Río Grande Municipio,72119,46051.0,399.0,8.66
+2024,Sabana Grande Municipio,72121,22407.0,139.0,6.2
+2024,Salinas Municipio,72123,25079.0,66.0,2.63
+2024,San Germán Municipio,72125,31305.0,95.0,3.03
+2024,San Juan Municipio,72127,336160.0,2015.0,5.99
+2024,San Lorenzo Municipio,72129,37431.0,207.0,5.53
+2024,San Sebastián Municipio,72131,39088.0,385.0,9.85
+2024,Santa Isabel Municipio,72133,19903.0,158.0,7.94
+2024,Toa Alta Municipio,72135,66320.0,384.0,5.79
+2024,Toa Baja Municipio,72137,73039.0,491.0,6.72
+2024,Trujillo Alto Municipio,72139,67088.0,388.0,5.78
+2024,Utuado Municipio,72141,27621.0,176.0,6.37
+2024,Vega Alta Municipio,72143,34921.0,344.0,9.85
+2024,Vega Baja Municipio,72145,53892.0,218.0,4.05
+2024,Vieques Municipio,72147,8078.0,0.0,0.0
+2024,Villalba Municipio,72149,21556.0,206.0,9.56
+2024,Yabucoa Municipio,72151,29400.0,225.0,7.65
+2024,Yauco Municipio,72153,32993.0,207.0,6.27
