@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Social Vulnerability Index (SVI) | Puerto Rico</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    /* Global Styles */
+    .card {
+      background:#fff;
+      border-radius:1rem;
+      box-shadow:0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05);
+      overflow:visible;
+    }
+    .hero {
+      background:
+        radial-gradient(1200px 600px at 20% -10%, rgba(79, 70, 229, 0.12), transparent 60%),
+        radial-gradient(1200px 600px at 80% -10%, rgba(147, 51, 234, 0.10), transparent 60%),
+        linear-gradient(180deg, #fafafa 0%, #f3f4f6 100%);
+    }
+    #map { height: 48vh; width: 100%; border-radius: .75rem; }
+    @media (min-width: 1280px) { #map { height: 46vh; } }
+    @media (max-width: 640px)  { #map { height: 54vh; } }
+
+    .leaflet-tooltip {
+      background: rgba(255,255,255,.95);
+      border-color:#333;
+      color:#111827;
+      font-size:14px;
+      font-weight:600;
+      box-shadow:0 2px 5px rgba(0,0,0,.2);
+      padding:5px 10px;
+    }
+
+    .mini { min-height: 260px; }
+
+    /* Navigation Dropdown Base Styles */
+    .nav-dropdown-menu { 
+        opacity: 0; 
+        visibility: hidden; 
+        transform: translateY(4px); 
+        pointer-events: none; 
+        transition: all .15s ease; 
+        z-index: 50;
+    }
+    
+    .nav-dropdown-root:hover .nav-dropdown-menu, 
+    .nav-dropdown-root.hovering .nav-dropdown-menu { 
+        opacity: 1; 
+        visibility: visible; 
+        transform: translateY(0); 
+        pointer-events: auto; 
+    }
+    
+    .nav-dropdown-root:hover .nav-chevron, 
+    .nav-dropdown-root.hovering .nav-chevron { 
+        transform: rotate(180deg); 
+    }
+    
+    /* Scale Wrapper for 65% Zoom Look */
+    #scale-wrapper {
+        transform: scale(0.65); 
+        transform-origin: top center; 
+        height: 154%; 
+        padding-bottom: 200px;
+        margin-bottom: -35%; 
+    }
+
+    /* --- LEAFLET CONTROL STYLES (Map Dropdown) --- */
+    .leaflet-control-map-dropdown {
+      padding: 0; 
+      margin-left: 45px; 
+      margin-top: 5px; 
+    }
+    .leaflet-control-map-dropdown .dropdown-root {
+      background: #fff;
+      box-shadow: 0 1px 5px rgba(0,0,0,.65);
+      border-radius: 4px;
+      position: relative; 
+    }
+    .leaflet-control-map-dropdown .nav-link {
+        padding: 6px 10px;
+        color: #333;
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 1.2;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
+    }
+    
+    .leaflet-control-map-dropdown .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        margin-top: 5px; 
+        z-index: 1000;
+        opacity: 0; visibility: hidden; transform: translateY(4px);
+        pointer-events: none;
+        transition: opacity .15s ease, transform .15s ease, visibility .15s ease;
+    }
+    
+    .leaflet-control-map-dropdown .dropdown-root.hovering .dropdown-menu {
+        opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto;
+    }
+    .leaflet-control-map-dropdown .dropdown-root.hovering #map-selection-chevron {
+        transform: rotate(180deg);
+    }
+
+    /* --- RADIAL MENU STYLES --- */
+    #radial-menu-container { pointer-events: none; width: 300px; height: 300px; position: fixed; bottom: 0; right: 0; z-index: 9999; }
+    #radial-trigger { pointer-events: auto; }
+    
+    .radial-item {
+        position: absolute;
+        bottom: 7rem; right: 2rem;  
+        width: 3rem; height: 3rem;
+        border-radius: 50%;
+        background-color: white;
+        color: #4f46e5;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        display: flex; align-items: center; justify-content: center;
+        text-decoration: none;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        z-index: 9990;
+        --tx: 0px; --ty: 0px; --lx: 0px; --ly: 0px; --lr: 0deg;
+        transform: translate(0, 0) scale(0.5);
+    }
+    
+    .radial-open .radial-item { opacity: 1; pointer-events: auto; transform: translate(var(--tx), var(--ty)) scale(1); }
+    .radial-open .radial-item:hover { background-color: #e0e7ff; transform: translate(var(--tx), var(--ty)) scale(1.1); z-index: 10005 !important; }
+    
+    .radial-label {
+        position: absolute;
+        left: 50%; top: 50%; 
+        transform: translate(calc(-50% + var(--lx)), calc(-50% + var(--ly))) rotate(var(--lr));
+        transform-origin: center center;
+        background: rgba(255, 255, 255, 0.95); 
+        color: black; 
+        padding: 4px 8px; 
+        border-radius: 6px; 
+        font-size: 12px; font-weight: 700;
+        white-space: nowrap; 
+        opacity: 0; 
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    }
+    
+    .radial-open .radial-label { opacity: 1; }
+
+    #radial-trigger {
+        position: absolute; bottom: 7rem; right: 2rem;
+        width: 4rem; height: 4rem;
+        border-radius: 50%;
+        background-color: #4f46e5;
+        color: white;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        z-index: 10000;
+    }
+    #radial-trigger:hover { transform: scale(1.05); background-color: #4338ca; }
+    .radial-open #radial-trigger { transform: rotate(45deg); background-color: #ef4444; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+  <nav class="bg-white shadow sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-center gap-6 text-sm sm:text-base">
+      <a href="../index.html" class="nav-link border-b-2 border-transparent hover:text-indigo-600 transition-colors">Home</a>
+
+      <div class="relative nav-dropdown-root">
+        <a href="../metrics.html" class="nav-link border-b-2 border-indigo-600 text-indigo-600 font-semibold inline-flex items-center gap-1 cursor-pointer select-none">
+          Metrics
+          <svg xmlns="http://www.w3.org/2000/svg" class="nav-chevron w-4 h-4 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
+          </svg>
+        </a>
+        <div class="nav-dropdown-menu absolute right-0 mt-2 w-64 rounded-xl border border-gray-200 bg-white shadow-lg ring-1 ring-black/5 z-50">
+          <div class="py-2">
+            <a href="../metrics.html" class="block px-4 py-2 hover:bg-gray-50 font-semibold">All Metrics Overview</a>
+            <div class="my-1 border-t border-gray-100"></div>
+            <a href="population.html"     class="block px-4 py-2 hover:bg-gray-50 transition-colors">Population</a>
+            <a href="svi.html"            class="block px-4 py-2 bg-indigo-50 text-indigo-700 font-semibold">Social Vulnerability (SVI)</a>
+            <a href="crime.html"          class="block px-4 py-2 hover:bg-gray-50 transition-colors">Crime & Safety</a>
+            <a href="employment.html"     class="block px-4 py-2 hover:bg-gray-50 transition-colors">Employment Rate</a>
+            <a href="income.html"         class="block px-4 py-2 hover:bg-gray-50 transition-colors">Household Income</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative nav-dropdown-root">
+        <div class="nav-link border-b-2 border-transparent inline-flex items-center gap-1 cursor-pointer select-none hover:text-indigo-600 transition-colors">
+          Dashboards
+          <svg xmlns="http://www.w3.org/2000/svg" class="nav-chevron w-4 h-4 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <div class="nav-dropdown-menu absolute right-0 mt-2 w-64 rounded-xl border border-gray-200 bg-white shadow-lg ring-1 ring-black/5 z-50">
+          <div class="py-2">
+            <a href="../dashboards.html" class="block px-4 py-2 hover:bg-gray-50 font-semibold">Initial Dashboard</a>
+            <div class="my-1 border-t border-gray-100"></div>
+            <a href="../dashboards/socio_economic.html" class="block px-4 py-2 hover:bg-gray-50 transition-colors">Socio-Economic Relationships</a>
+            <a href="#" class="block px-4 py-2 hover:bg-gray-50 transition-colors">Trend Analysis</a>
+          </div>
+        </div>
+      </div>
+
+      <a href="../literature.html" class="nav-link border-b-2 border-transparent hover:text-indigo-600 transition-colors">Literature</a>
+      <a href="../strategy.html"   class="nav-link border-b-2 border-transparent hover:text-indigo-600 transition-colors">Strategy</a>
+      <a href="../about.html"      class="nav-link border-b-2 border-transparent hover:text-indigo-600 transition-colors">About</a>
+    </div>
+  </nav>
+
+  <div id="scale-wrapper">
+    <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+      
+      <header class="card hero p-6 sm:p-8 lg:p-10 relative">
+        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between">
+          <div>
+            <p class="text-sm font-semibold text-gray-500 uppercase tracking-widest">Graduate Capstone Project</p>
+            <h1 class="mt-2 text-4xl sm:text-5xl font-extrabold leading-tight text-gray-900">
+              Social Vulnerability Index (SVI)
+            </h1>
+            <p class="mt-3 text-lg text-gray-700 max-w-3xl">
+              Mapping socioeconomic risk across Puerto Rico (2010–2024). Identify communities most susceptible to the impact of environmental hazards and economic instability through multidimensional indicators.
+            </p>
+            <div class="mt-5">
+              <span class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-50 text-indigo-800 shadow-sm">
+                <span class="inline-flex w-5 h-5 items-center justify-center rounded-full bg-indigo-600 text-white text-xs">i</span>
+                Select a vulnerability metric below to view its distribution across the island
+              </span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="card p-4">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-3">
+          <div class="text-sm text-gray-700 font-bold uppercase tracking-wider">Vulnerability Filters:</div>
+          <div class="flex flex-wrap items-center gap-3">
+            <select id="yearSelect" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2 px-4 shadow-sm">
+                <option>Loading Years...</option>
+            </select>
+
+            <select id="metricSelect" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2 px-4 shadow-sm">
+                </select>
+
+            <button id="clearSel" class="px-4 py-2 text-sm font-semibold rounded-lg border border-gray-200 bg-white hover:bg-gray-50 transition-colors shadow-sm">Clear Selection</button>
+          </div>
+        </div>
+        
+        <div id="map" class="mt-3 border border-gray-100">
+            <div class="leaflet-control-container" id="map-dropdown-container">
+                <div class="leaflet-top leaflet-left">
+                  <div class="leaflet-control leaflet-control-map-dropdown">
+                    <div class="relative dropdown-root" id="map-selection-dropdown-root">
+                      <div class="nav-link inline-flex items-center gap-1 cursor-pointer select-none">
+                        Dashboards
+                        <svg id="map-selection-chevron" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
+                        </svg>
+                      </div>
+                      <div id="map-selection-menu" class="dropdown-menu w-64 rounded-xl border border-gray-200 bg-white shadow-lg ring-1 ring-black/5">
+                        <div class="py-2">
+                          <a href="population.html"     class="block px-4 py-2 hover:bg-gray-50">Population Overview</a>
+                          <a href="svi.html"            class="block px-4 py-2 bg-indigo-50 font-bold text-indigo-700">Social Vulnerability Index</a>
+                          <a href="crime.html"          class="block px-4 py-2 hover:bg-gray-50">Crime & Safety Stats</a>
+                          <a href="employment.html"     class="block px-4 py-2 hover:bg-gray-50">Employment Dynamics</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+      </section>
+
+      <section class="card p-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+            Vulnerability Profile
+        </h2>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          
+          <div class="space-y-6">
+            <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 shadow-inner">
+              <div class="text-xs font-bold text-gray-400 uppercase tracking-tighter mb-1">Municipio Focus</div>
+              <div id="d-name" class="text-2xl font-black text-gray-900 truncate">Puerto Rico</div>
+            </div>
+
+            <div class="space-y-4">
+              <div class="flex flex-col">
+                <div class="text-xs font-bold text-indigo-500 uppercase mb-1">Current <span id="d-sel-metric-name">Metric</span> (<span id="d-sel-year">---</span>)</div>
+                <div id="d-val" class="text-5xl font-black text-indigo-700">---</div>
+              </div>
+              
+              <div class="grid grid-cols-2 gap-4">
+                  <div class="p-3 bg-white border rounded-lg shadow-sm">
+                      <div class="text-[10px] font-bold text-gray-400 uppercase">Island Rank</div>
+                      <div id="d-rank" class="text-lg font-bold text-gray-800">---</div>
+                  </div>
+                  <div class="p-3 bg-white border rounded-lg shadow-sm">
+                      <div class="text-[10px] font-bold text-gray-400 uppercase">Unemployment</div>
+                      <div id="d-unemp" class="text-lg font-bold text-gray-800">---</div>
+                  </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-sm font-bold text-gray-600 mb-3 uppercase tracking-wide">Historical Trend (2010–2024)</h3>
+            <div class="mini bg-gray-50 rounded-xl p-4 border border-gray-100">
+              <canvas id="lineChart"></canvas>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-sm font-bold text-gray-600 mb-3 uppercase tracking-wide">SVI Theme Distribution</h3>
+            <div class="mini bg-gray-50 rounded-xl p-4 border border-gray-100">
+              <canvas id="barChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <hr class="border-gray-200">
+
+      <section class="card p-6 sm:p-10 space-y-8 bg-white">
+        <h2 class="text-2xl font-black text-gray-900">Understanding Social Vulnerability Indices</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div class="space-y-4">
+                <h3 class="text-lg font-bold text-indigo-700 flex items-center gap-2">
+                    <span class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-sm">01</span>
+                    Indicator Methodology
+                </h3>
+                <p class="text-gray-600 leading-relaxed text-sm">
+                    Social vulnerability refers to the resilience of communities when confronted by external stresses. The indicators shown here—ranging from economic strain (`pct_below_poverty`) to demographic factors (`pct_aged_65_plus`)—provide a comprehensive view of which areas require prioritized resource allocation.
+                </p>
+                
+                <h3 class="text-lg font-bold text-indigo-700 flex items-center gap-2 pt-4">
+                    <span class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-sm">02</span>
+                    The 2010–2024 Trajectory
+                </h3>
+                <p class="text-gray-600 leading-relaxed text-sm">
+                    Puerto Rico's trajectory has been marked by extreme external shocks, including debt crises and catastrophic hurricanes. This dashboard visualizes how these events have shifted the vulnerability landscape, with many rural interior municipalities seeing sustained increases in social risk scores.
+                </p>
+            </div>
+
+            <div class="bg-indigo-50/50 rounded-2xl p-6 border border-indigo-100 space-y-4">
+                <h4 class="font-bold text-indigo-900 uppercase text-xs tracking-widest">Research Data Specifications</h4>
+                <ul class="space-y-3">
+                    <li class="flex gap-3 text-sm">
+                        <span class="text-indigo-500 font-bold">●</span>
+                        <span class="text-gray-700"><strong>Data Refresh:</strong> Latest 2024 estimates included in master profile.</span>
+                    </li>
+                    <li class="flex gap-3 text-sm">
+                        <span class="text-indigo-500 font-bold">●</span>
+                        <span class="text-gray-700"><strong>Geography:</strong> Municipio-level aggregation based on ACS 5-Year summaries.</span>
+                    </li>
+                    <li class="flex gap-3 text-sm">
+                        <span class="text-indigo-500 font-bold">●</span>
+                        <span class="text-gray-700"><strong>Source Integrity:</strong> Integrated dataset combines Census Bureau demographics with CDC SVI frameworks.</span>
+                    </li>
+                </ul>
+                <div class="pt-4 border-t border-indigo-100 mt-4">
+                    <p class="text-[11px] text-indigo-400 font-medium italic">
+                        Reference: puerto_rico_master_profile_2010_2024.json
+                    </p>
+                </div>
+            </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div class="fixed bottom-8 right-8 z-[9998]">
+    <a href="../metrics.html" class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-4 rounded-full shadow-2xl transition-all transform hover:scale-110 active:scale-95 font-black text-lg no-underline group">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 group-hover:rotate-12 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+        <span>Metrics Overview</span>
+    </a>
+  </div>
+
+  <div id="radial-menu-container">
+      <button id="radial-trigger" onclick="toggleRadialMenu()" title="Dashboard Shortcuts">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+      </button>
+  </div>
+  
+  <script>
+    // ==========================================
+    // CONFIGURATION & GLOBAL STATE
+    // ==========================================
+    const GEOJSON_URL = '../data/tl_2022_72_cousub/pr_municipalities.geojson'; 
+    const SVI_JSON    = 'data/svi/puerto_rico_master_profile_2010_2024.json'; 
+
+    const fmt = new Intl.NumberFormat('en-US');
+    const CHORO_COLORS = ['#f5f3ff', '#ede9fe', '#ddd6fe', '#c4b5fd', '#a78bfa', '#8b5cf6', '#6d28d9'];
+    
+    let _sviData = [];
+    let _geoData = null;
+    let map, layer, legend;
+    let lockedName = null, selectedLayer = null;
+    let lineChart = null, barChart = null;
+
+    const selectedOutline = { weight: 4, color: '#111827', dashArray: '3', fillOpacity: 0.85 };
+
+    // ==========================================
+    // INITIALIZATION
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', async () => {
+        wireDropdown();
+        initRadialMenu();
+        
+        await loadData();
+        setupControls();
+        initMap();
+        updateMap();
+        wireClearSelection();
+    });
+
+    async function loadData() {
+        try {
+            const [sRes, gRes] = await Promise.all([
+                fetch(SVI_JSON),
+                fetch(GEOJSON_URL)
+            ]);
+            _sviData = await sRes.json();
+            _geoData = await gRes.json();
+            console.log("Master SVI Profile Loaded:", _sviData.length, "records");
+        } catch (e) {
+            console.error("Critical Data Load Error:", e);
+        }
+    }
+
+    function setupControls() {
+        // Populate Years (Sorted Descending)
+        const years = [...new Set(_sviData.map(d => d.year))].sort((a,b) => b-a);
+        const yearSel = document.getElementById('yearSelect');
+        yearSel.innerHTML = '';
+        years.forEach(y => {
+            const opt = document.createElement('option');
+            opt.value = y; opt.innerText = y;
+            yearSel.appendChild(opt);
+        });
+
+        // SVI Metrics Mapping (Keys from JSON)
+        const metrics = [
+            { key: 'pct_below_poverty', label: 'Poverty Rate (%)' },
+            { key: 'unemployment_rate_pct', label: 'Unemployment (%)' },
+            { key: 'pct_no_hs_diploma', label: 'No HS Diploma (%)' },
+            { key: 'pct_aged_65_plus', label: 'Senior Pop (65+) (%)' },
+            { key: 'pct_disability', label: 'Disability Rate (%)' },
+            { key: 'pct_no_vehicle', label: 'No Vehicle (%)' },
+            { key: 'pct_single_parent', label: 'Single Parent (%)' },
+            { key: 'pct_crowding', label: 'Crowded Housing (%)' }
+        ];
+
+        const metricSel = document.getElementById('metricSelect');
+        metricSel.innerHTML = '';
+        metrics.forEach(m => {
+            const opt = document.createElement('option');
+            opt.value = m.key; opt.innerText = m.label;
+            metricSel.appendChild(opt);
+        });
+
+        // Global Event Listeners
+        yearSel.addEventListener('change', () => { updateMap(); updateDashboard(); });
+        metricSel.addEventListener('change', () => { updateMap(); updateDashboard(); });
+    }
+
+    function initMap() {
+        // Centered on Puerto Rico
+        const prBounds = L.latLngBounds([[17.85, -67.45],[18.55, -65.25]]);
+        map = L.map('map', { zoomControl: false, zoomSnap:.25 }).fitBounds(prBounds);
+        
+        L.control.zoom({ position: 'topleft' }).addTo(map);
+        
+        // Carto Positron Basemap (Light Theme)
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; CARTO &copy; OSM'
+        }).addTo(map);
+
+        // Map-internal Dropdown
+        L.Control.MapDropdown = L.Control.extend({
+            onAdd: function(map) {
+                const container = L.DomUtil.get('map-dropdown-container');
+                return container.querySelector('.leaflet-control-map-dropdown');
+            }
+        });
+        new L.Control.MapDropdown({ position: 'topleft' }).addTo(map);
+        wireMapDropdown();
+
+        // Legend Setup
+        legend = L.control({ position:'bottomright' });
+        legend.onAdd = function() {
+            const div = L.DomUtil.create('div', 'info legend');
+            div.style.background = 'white'; 
+            div.style.padding = '10px'; 
+            div.style.borderRadius = '10px';
+            div.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+            div.id = 'map-legend';
+            return div;
+        };
+        legend.addTo(map);
+    }
+
+    // HELPER: Strips " Municipio" from JSON keys to match GeoJSON NAME
+    function cleanMuniName(name) {
+        return name.replace(/ Municipio/g, '').trim();
+    }
+
+    // ==========================================
+    // CORE DASHBOARD UPDATE LOGIC
+    // ==========================================
+    function updateMap() {
+        const year = document.getElementById('yearSelect').value;
+        const metric = document.getElementById('metricSelect').value;
+        const yearData = _sviData.filter(d => d.year == year);
+        
+        const dataMap = {};
+        let maxVal = 0;
+        yearData.forEach(d => {
+            const val = d[metric] || 0;
+            dataMap[cleanMuniName(d.municipio)] = val;
+            if (val > maxVal) maxVal = val;
+        });
+
+        if (layer) map.removeLayer(layer);
+
+        layer = L.geoJSON(_geoData, {
+            style: (f) => {
+                const fName = (f.properties.NAME || f.properties.name || '').replace(/\s*Municipio$/,'');
+                const val = dataMap[fName] || 0;
+                return { 
+                    fillColor: getColor(val, maxVal), 
+                    weight: 1.5, 
+                    color: 'white', 
+                    fillOpacity: 0.75 
+                };
+            },
+            onEachFeature: (f, l) => {
+                const fName = (f.properties.NAME || f.properties.name || '').replace(/\s*Municipio$/,'');
+                l.on({
+                    mouseover: (e) => { 
+                        if (!lockedName) {
+                            e.target.setStyle({ weight: 3, color: '#4f46e5' });
+                            updateDetails(fName); 
+                        }
+                    },
+                    mouseout: (e) => {
+                        if (!lockedName) layer.resetStyle(e.target);
+                    },
+                    click: (e) => {
+                        if (selectedLayer) layer.resetStyle(selectedLayer);
+                        selectedLayer = e.target; 
+                        lockedName = fName;
+                        e.target.setStyle(selectedOutline); 
+                        updateDetails(lockedName);
+                    }
+                });
+            }
+        }).addTo(map);
+
+        updateLegend(maxVal, metric);
+        updateDetails(lockedName || 'Puerto Rico');
+    }
+
+    function getColor(d, max) {
+        const step = max / 6;
+        return d > step * 5 ? CHORO_COLORS[6] : 
+               d > step * 4 ? CHORO_COLORS[5] :
+               d > step * 3 ? CHORO_COLORS[4] : 
+               d > step * 2 ? CHORO_COLORS[3] :
+               d > step * 1 ? CHORO_COLORS[2] : 
+               d > 0        ? CHORO_COLORS[1] : 
+                              CHORO_COLORS[0];
+    }
+
+    function updateLegend(max, metric) {
+        const div = document.getElementById('map-legend');
+        if (!div) return;
+        const labelText = document.querySelector(`#metricSelect option[value="${metric}"]`).innerText;
+        
+        let labels = [`<div class="font-bold text-[11px] uppercase text-gray-500 mb-2">${labelText}</div>`];
+        const step = max / 6;
+
+        for (let i = 0; i < 6; i++) {
+            const c = CHORO_COLORS[i+1];
+            labels.push(`
+                <div class="flex items-center gap-2 text-[10px] mb-1">
+                    <span class="w-3 h-3 rounded-sm" style="background:${c}"></span>
+                    <span>${(step*i).toFixed(1)}% &ndash; ${(step*(i+1)).toFixed(1)}%</span>
+                </div>
+            `);
+        }
+        div.innerHTML = labels.join('');
+    }
+
+    function updateDetails(name) {
+        const year = document.getElementById('yearSelect').value;
+        const metric = document.getElementById('metricSelect').value;
+        const metricLabel = document.querySelector(`#metricSelect option[value="${metric}"]`).innerText;
+
+        document.getElementById('d-name').innerText = name;
+        document.getElementById('d-sel-year').innerText = year;
+        document.getElementById('d-sel-metric-name').innerText = metricLabel;
+
+        let val = 0, unemp = 0, rank = '-';
+        
+        if (name === 'Puerto Rico') {
+            const yData = _sviData.filter(d => d.year == year);
+            val = yData.reduce((acc, c) => acc + (c[metric]||0), 0) / yData.length;
+            unemp = yData.reduce((acc, c) => acc + (c.unemployment_rate_pct||0), 0) / yData.length;
+        } else {
+            const rec = _sviData.find(d => d.year == year && cleanMuniName(d.municipio) === name);
+            if (rec) {
+                val = rec[metric] || 0;
+                unemp = rec.unemployment_rate_pct || 0;
+                
+                // Rank logic
+                const all = _sviData.filter(d => d.year == year).sort((a,b) => b[metric] - a[metric]);
+                const idx = all.findIndex(r => cleanMuniName(r.municipio) === name);
+                rank = idx >= 0 ? `#${idx + 1} of ${all.length}` : '-';
+            }
+        }
+
+        document.getElementById('d-val').innerText = val.toFixed(1) + '%';
+        document.getElementById('d-unemp').innerText = unemp.toFixed(1) + '%';
+        document.getElementById('d-rank').innerText = rank;
+
+        drawCharts(name, metric, year);
+    }
+
+    // ==========================================
+    // CHART GENERATION (Chart.js)
+    // ==========================================
+    function drawCharts(name, metric, currentYear) {
+        const years = [...new Set(_sviData.map(d => d.year))].sort((a,b) => a-b);
+        const trendData = years.map(y => {
+            if (name === 'Puerto Rico') {
+                const yD = _sviData.filter(d => d.year == y);
+                return yD.reduce((acc, c) => acc + (c[metric]||0), 0) / yD.length;
+            } else {
+                const r = _sviData.find(d => d.year == y && cleanMuniName(d.municipio) === name);
+                return r ? (r[metric]||0) : 0;
+            }
+        });
+
+        // 1. Line Chart: Historical Trend
+        if (lineChart) lineChart.destroy();
+        lineChart = new Chart(document.getElementById('lineChart'), {
+            type: 'line',
+            data: { 
+                labels: years, 
+                datasets:[{ 
+                    label: 'Vulnerability (%)', 
+                    data: trendData, 
+                    borderColor: '#4f46e5', 
+                    backgroundColor: 'rgba(79,70,229,0.1)', 
+                    fill: true,
+                    tension: 0.4
+                }] 
+            },
+            options: { 
+                maintainAspectRatio: false, 
+                plugins:{ legend:{display:false} },
+                scales: { y: { beginAtZero: false } }
+            }
+        });
+
+        // 2. Bar Chart: Theme Comparison
+        const themes = ['pct_below_poverty', 'unemployment_rate_pct', 'pct_disability', 'pct_no_vehicle'];
+        const labels = ['Poverty', 'Unemployment', 'Disability', 'No Vehicle'];
+        
+        const compData = themes.map(t => {
+            if (name === 'Puerto Rico') {
+                const yD = _sviData.filter(d => d.year == currentYear);
+                return yD.reduce((acc, c) => acc + (c[t]||0), 0) / yD.length;
+            } else {
+                const r = _sviData.find(d => d.year == currentYear && cleanMuniName(d.municipio) === name);
+                return r ? (r[t]||0) : 0;
+            }
+        });
+
+        if (barChart) barChart.destroy();
+        barChart = new Chart(document.getElementById('barChart'), {
+            type: 'bar',
+            data: { 
+                labels, 
+                datasets:[{ 
+                    data: compData, 
+                    backgroundColor: ['#6366f1', '#818cf8', '#a5b4fc', '#c7d2fe'],
+                    borderRadius: 6
+                }] 
+            },
+            options: { 
+                indexAxis: 'y', 
+                maintainAspectRatio: false, 
+                plugins:{ legend:{display:false} } 
+            }
+        });
+    }
+
+    // ==========================================
+    // UTILITY & UI FUNCTIONS
+    // ==========================================
+    function wireClearSelection(){
+      document.getElementById('clearSel').addEventListener('click', () => {
+        lockedName = null; 
+        if (selectedLayer) { layer.resetStyle(selectedLayer); selectedLayer = null; }
+        map.fitBounds(L.latLngBounds([[17.85, -67.45],[18.55, -65.25]])); 
+        updateDetails('Puerto Rico');
+      });
+    }
+
+    function wireDropdown() {
+      document.querySelectorAll('.nav-dropdown-root').forEach(root => {
+        const menu = root.querySelector('.nav-dropdown-menu');
+        if (!menu) return;
+        let t;
+        const add = () => { clearTimeout(t); root.classList.add('hovering'); };
+        const rem = () => { t = setTimeout(() => { root.classList.remove('hovering'); }, 300); };
+        root.addEventListener('mouseenter', add); root.addEventListener('mouseleave', rem);
+      });
+    }
+    
+    function wireMapDropdown() {
+        const root = document.getElementById('map-selection-dropdown-root');
+        if (!root) return;
+        let t;
+        const add = () => { clearTimeout(t); root.classList.add('hovering'); };
+        const rem = () => { t = setTimeout(() => { root.classList.remove('hovering'); }, 300); };
+        root.addEventListener('mouseenter', add); root.addEventListener('mouseleave', rem);
+    }
+
+    const menuItems = [
+        { label: 'Population', href: 'population.html', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
+        { label: 'SVI', href: 'svi.html', icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' },
+        { label: 'Crime', href: 'crime.html', icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z' }
+    ];
+
+    function initRadialMenu() {
+        const container = document.getElementById('radial-menu-container');
+        const trigger = document.getElementById('radial-trigger');
+        const totalAngle = 100, radius = 180, count = menuItems.length, startAngle = -95, step = totalAngle / (count - 1);
+
+        menuItems.forEach((item, index) => {
+            const angleDeg = startAngle - (step * index), angleRad = angleDeg * (Math.PI / 180);
+            const x = Math.round(radius * Math.cos(angleRad)), y = Math.round(radius * Math.sin(angleRad));
+            const el = document.createElement('a');
+            el.href = item.href; el.className = 'radial-item';
+            el.style.setProperty('--tx', `${x}px`); el.style.setProperty('--ty', `${y}px`);
+            el.style.setProperty('--lx', `${Math.round(75 * Math.cos(angleRad))}px`);
+            el.style.setProperty('--ly', `${Math.round(75 * Math.sin(angleRad))}px`);
+            el.style.setProperty('--lr', `${angleDeg + 180}deg`);
+            el.innerHTML = `<span class=\"radial-label\">${item.label}</span><svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-6 w-6\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"${item.icon}\" /></svg>`;
+            container.insertBefore(el, trigger);
+        });
+    }
+
+    function toggleRadialMenu() { document.getElementById('radial-menu-container').classList.toggle('radial-open'); }
+  </script>
+</body>
+</html>
