@@ -296,6 +296,9 @@
                       <a href="income.html"         class="block px-4 py-2 hover:bg-gray-50">Household Income</a>
                       <a href="housing.html"        class="block px-4 py-2 hover:bg-gray-50">Housing Units</a>
                       <a href="education.html"      class="block px-4 py-2 hover:bg-gray-50">Education</a>
+                      <a href="health.html"         class="block px-4 py-2 hover:bg-gray-50">Health</a>
+                      <a href="disasters_earthquakes.html"      class="block px-4 py-2 hover:bg-gray-50">Earthquakes</a>
+                      <a href="disasters_hurricanes.html"      class="block px-4 py-2 hover:bg-gray-50">Hurricanes</a>
                     </div>
                   </div>
                 </div>
@@ -416,11 +419,14 @@
     // ==========================================
     // CONFIGURATION
     // ==========================================
-    const GEOJSON_URL = '../data/tl_2022_72_cousub/pr_municipalities.geojson'; // Adjust if needed
+    const GEOJSON_URL = '../data/tl_2022_72_cousub/pr_municipalities.geojson'; 
     const CRIME_JSON  = '../data/crime/crime_data.json'; 
 
     const fmt = new Intl.NumberFormat('en-US');
-    const CHORO_COLORS = ['#fef2f2', '#fee2e2', '#fecaca', '#f87171', '#dc2626', '#991b1b', '#7f1d1d'];
+    
+    // Updated Color Palette to match population.html (Green -> Red spectrum)
+    // Ordered Low Crime (Green) to High Crime (Red)
+    const CHORO_COLORS = ['#15803d', '#22c55e', '#bbf7d0', '#f97316', '#b91c1c', '#7f1d1d'];
     
     // Global State
     let _crimeData = [];
@@ -428,6 +434,7 @@
     let map, layer, legend;
     let lockedName = null, selectedLayer = null;
     let lineChart = null, barChart = null;
+    let prBoundsGlobal = null;
 
     const selectedOutline = { weight: 4, color: '#111827', dashArray: '3', fillOpacity: 0.85 };
 
@@ -511,8 +518,10 @@
     // MAP LOGIC
     // ==========================================
     function initMap() {
-        const prBounds = L.latLngBounds([[17.85, -67.45],[18.55, -65.25]]);
-        map = L.map('map', { zoomControl: false, zoomSnap:.25 }).fitBounds(prBounds);
+        // Save these bounds globally for reset logic later
+        prBoundsGlobal = L.latLngBounds([[17.85, -67.45],[18.55, -65.25]]);
+        
+        map = L.map('map', { zoomControl: false, zoomSnap:.25 }).fitBounds(prBoundsGlobal);
 
         L.control.zoom({ position: 'topleft' }).addTo(map);
 
@@ -611,6 +620,10 @@
                         selectedLayer = e.target;
                         lockedName = titleCase(fName);
                         e.target.setStyle(selectedOutline);
+                        
+                        // --- ZOOM LOGIC (MATCHING POPULATION.HTML) ---
+                        map.fitBounds(e.target.getBounds(), { padding: [20, 20] });
+                        
                         updateDetails(lockedName);
                     }
                 });
@@ -632,14 +645,15 @@
     }
 
     function getColor(d, max) {
-        // Linear scale buckets
+        // 6-step Buckets using 6 colors
+        // Low Crime (Green) -> High Crime (Red)
         const step = max / 6;
-        return d > step * 5 ? CHORO_COLORS[6] :
-               d > step * 4 ? CHORO_COLORS[5] :
-               d > step * 3 ? CHORO_COLORS[4] :
-               d > step * 2 ? CHORO_COLORS[3] :
-               d > step * 1 ? CHORO_COLORS[2] :
-               d > 0        ? CHORO_COLORS[1] :
+        return d > step * 5 ? CHORO_COLORS[5] : // Red
+               d > step * 4 ? CHORO_COLORS[4] :
+               d > step * 3 ? CHORO_COLORS[3] :
+               d > step * 2 ? CHORO_COLORS[2] :
+               d > step * 1 ? CHORO_COLORS[1] :
+               d > 0        ? CHORO_COLORS[0] : // Green
                               CHORO_COLORS[0];
     }
 
@@ -647,20 +661,26 @@
         const div = document.getElementById('map-legend');
         if (!div) return;
         
-        const grades = [0, Math.round(max*0.2), Math.round(max*0.4), Math.round(max*0.6), Math.round(max*0.8), Math.round(max)];
-        let labels = [`<strong>${metric}</strong>`];
+        // Create 6 break points
+        const step = max / 6;
+        const grades = [0, step, step*2, step*3, step*4, step*5];
+        
+        let labels = [`<div style="font-weight:600;margin-bottom:.25rem">${metric} Incidents</div>`];
 
-        for (let i = 0; i < grades.length; i++) {
-            // Colors shift from 1 to 6 index
-            const col = CHORO_COLORS[i+1] || CHORO_COLORS[6];
+        // Format Helper
+        const fmtVal = (n) => Math.round(n);
+
+        for (let i = 0; i < 6; i++) {
             const from = grades[i];
-            const to = grades[i+1];
+            const to = grades[i+1] || max;
+            const color = CHORO_COLORS[i]; // 0=Green, 5=Red
             
             labels.push(
                 `<div style="display:flex;align-items:center;gap:.5rem;margin:.2rem 0;">
-                    <span style="display:inline-block;width:14px;height:14px;background:${col};border:1px solid #ccc"></span>
-                    ${from}${to ? '&ndash;' + to : '+'}
-                </div>`
+                   <span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:${color};
+                                border:1px solid rgba(0,0,0,.15)"></span>
+                   <span>${fmtVal(from)}${to ? ' &ndash; ' + fmtVal(to) : '+'}</span>
+                 </div>`
             );
         }
         div.innerHTML = labels.join('');
@@ -787,8 +807,11 @@
       document.getElementById('clearSel').addEventListener('click', () => {
         lockedName = null;
         if (selectedLayer) { layer.resetStyle(selectedLayer); selectedLayer = null; }
-        const prBounds = L.latLngBounds([[17.85, -67.45],[18.55, -65.25]]);
-        map.fitBounds(prBounds);
+        
+        // --- ZOOM LOGIC (MATCHING POPULATION.HTML) ---
+        if (prBoundsGlobal) map.fitBounds(prBoundsGlobal);
+        else map.fitBounds(L.latLngBounds([[17.85, -67.45],[18.55, -65.25]]));
+        
         updateDetails('Puerto Rico');
       });
     }
@@ -833,7 +856,9 @@
         { label: 'Income', href: 'income.html', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
         { label: 'Housing', href: 'housing.html', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
         { label: 'Education', href: 'education.html', icon: 'M12 14l9-5-9-5-9 5 9 5z M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z' },
-        { label: 'Health', href: 'health.html', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z' }
+        { label: 'Health', href: 'health.html', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z' },
+        { label: 'Earthquakes', href: 'disasters_earthquakes.html', icon: 'M13 10V3L4 14h7v7l9-11h-7z' },
+        { label: 'Hurricanes', href: 'disasters_hurricanes.html', icon: 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z' }
     ];
 
     function initRadialMenu() {
