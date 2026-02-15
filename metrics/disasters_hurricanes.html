@@ -362,9 +362,12 @@
   <script>
     // ---------------------- Data Paths ----------------------
     // Ensure this path is correct relative to your HTML file location
-    const HU_JSON = '../data/natural_disasters/caribbean_hurricane_tracks_2015_2025.json'; 
+    const HU_JSON = '../data/natural_disasters/caribbean_hurricane_tracks_2010_2025.json'; 
     
     let hurricaneLayerGroup = null; 
+    let windLayerGroup = null;
+    let windLegendControl = null;
+    let windOverlayEnabled = false;
     let map;
     
     // ---------------------- Hurricane Plotting Logic ----------------------
@@ -424,12 +427,16 @@
 
             // 2. Draw the markers for each point
             pathData.forEach(p => {
-                const wind_knots = p.wind;
+                const wind_knots = (p.wind_knots ?? p.wind ?? p.windKts ?? 0);
+                const status = (p.status ?? (wind_knots >= 64 ? 'HU' : (wind_knots >= 34 ? 'TS' : 'TD')));
                 const color = getTrackColor(wind_knots);
-                const statusLabel = getStatusLabel(wind_knots, p.status);
-                const date = p.date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+                const statusLabel = getStatusLabel(wind_knots, status);
 
-                L.circleMarker([p.lat, p.lon], {
+                // Supports both YYYYMMDD and YYYY-MM-DD
+                const date = (typeof p.date === 'string' && p.date.includes('-'))
+                  ? p.date
+                  : (typeof p.date === 'string' ? p.date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3') : '');
+L.circleMarker([p.lat, p.lon], {
                     radius: 6.0, 
                     fillColor: color, 
                     color: '#000', 
@@ -437,10 +444,10 @@
                     opacity: 0.9,
                     fillOpacity: 0.9
                 }).bindPopup(`
-                    <strong>${stormName} - ${statusLabel} (${p.status})</strong>
+                    <strong>${stormName} - ${statusLabel} (${status})</strong>
                     <br>Date: ${date}
                     <br>Wind: ${wind_knots} knots (${(wind_knots * 1.15078).toFixed(0)} mph)
-                    <br>Location: ${p.lat.toFixed(2)}N, ${p.lon.toFixed(2)}W
+                    <br>Location: ${p.lat.toFixed(2)}N, ${Math.abs(p.lon).toFixed(2)}W
                 `).addTo(hurricaneLayerGroup);
             });
         });
@@ -487,6 +494,148 @@
         });
         
         new L.Control.HurricaneLegend({position: 'bottomright'}).addTo(map);
+
+// ---------------------- Wind Overlay (Optional) ----------------------
+// Uses the wind radii fields (r34/r50/r64) from the hurricane JSON to draw wind swaths.
+// This is an overlay option (OFF by default) so the page layout stays the same.
+function nmToMeters(nm) { return (Number(nm) || 0) * 1852; }
+
+function maxQuadrantRadii(radiiArr){
+    if (!Array.isArray(radiiArr) || radiiArr.length === 0) return 0;
+    return Math.max(...radiiArr.map(v => Number(v) || 0));
+}
+
+function clearWindOverlay(){
+    if (windLayerGroup) windLayerGroup.clearLayers();
+    if (windLegendControl) {
+        try { map.removeControl(windLegendControl); } catch(e) {}
+        windLegendControl = null;
+    }
+}
+
+function renderWindLegend(map){
+    const div = document.createElement('div');
+    div.className = 'leaflet-control leaflet-control-hu-legend';
+    const title = 'Wind Radii (mph)';
+    let html = `<div style="font-weight:600;margin-bottom:5px; border-bottom: 1px solid #ccc;">${title}</div>`;
+    const items = [
+        { label: '34 kt+ (≈ 39 mph) winds', color: 'rgba(209,213,219,0.55)' },
+        { label: '50 kt+ (≈ 58 mph) winds', color: 'rgba(156,163,175,0.55)' },
+        { label: '64 kt+ (≈ 74 mph) winds', color: 'rgba(13,148,136,0.55)' }
+    ];
+    items.forEach(item => {
+        html += `
+            <div style="display:flex;align-items:center;gap:8px;margin:4px 0;">
+                <div style="width:14px;height:10px;border-radius:2px;background:${item.color};border:1px solid #000;box-shadow:0 1px 2px rgba(0,0,0,.1);"></div>
+                <span>${item.label}</span>
+            </div>
+        `;
+    });
+    div.innerHTML = html;
+
+    const Legend = L.Control.extend({
+        onAdd: function(map) {
+            L.DomEvent.disableClickPropagation(div);
+            return div;
+        },
+        onRemove: function(map) {}
+    });
+
+    windLegendControl = new Legend({ position: 'bottomleft' });
+    windLegendControl.addTo(map);
+}
+
+function buildWindOverlay(data, mapInstance){
+    if (!data || data.length === 0) return;
+
+    if (windLayerGroup) {
+        windLayerGroup.clearLayers();
+    } else {
+        windLayerGroup = L.layerGroup().addTo(mapInstance);
+    }
+
+    // Draw from low -> high so strongest winds sit on top
+    data.forEach(storm => {
+        (storm.path || []).forEach(p => {
+            const center = [p.lat, p.lon];
+
+            const r34 = nmToMeters(maxQuadrantRadii(p.r34));
+            const r50 = nmToMeters(maxQuadrantRadii(p.r50));
+            const r64 = nmToMeters(maxQuadrantRadii(p.r64));
+
+            if (r34 > 0) L.circle(center, {
+                radius: r34,
+                stroke: false,
+                fill: true,
+                fillColor: 'rgba(209,213,219,0.55)', // light gray
+                fillOpacity: 0.18
+            }).addTo(windLayerGroup);
+
+            if (r50 > 0) L.circle(center, {
+                radius: r50,
+                stroke: false,
+                fill: true,
+                fillColor: 'rgba(156,163,175,0.55)', // darker gray
+                fillOpacity: 0.20
+            }).addTo(windLayerGroup);
+
+            if (r64 > 0) L.circle(center, {
+                radius: r64,
+                stroke: false,
+                fill: true,
+                fillColor: 'rgba(13,148,136,0.55)', // teal-ish (visual nod to your screenshot)
+                fillOpacity: 0.22
+            }).addTo(windLayerGroup);
+        });
+    });
+
+    windLayerGroup.bringToBack(); // keep storm markers on top
+    renderWindLegend(mapInstance);
+}
+
+function setWindOverlayEnabled(enabled, hurricaneData){
+    windOverlayEnabled = !!enabled;
+    clearWindOverlay();
+    if (windOverlayEnabled) buildWindOverlay(hurricaneData, map);
+}
+
+function addWindOverlayControl(mapInstance, hurricaneData){
+    const Control = L.Control.extend({
+        options: { position: 'topright' },
+        onAdd: function(map) {
+            const container = L.DomUtil.create('div');
+            container.style.background = '#fff';
+            container.style.boxShadow = '0 1px 5px rgba(0,0,0,.65)';
+            container.style.borderRadius = '4px';
+            container.style.padding = '6px 10px';
+            container.style.font = '13px/1.2 system-ui,-apple-system,Segoe UI,Roboto,sans-serif';
+
+            container.innerHTML = `
+                <div style="font-weight:600; margin-bottom:4px;">Wind Layer</div>
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                    <input id="wind-overlay-toggle" type="checkbox" />
+                    <span>Show wind swath</span>
+                </label>
+            `;
+
+            L.DomEvent.disableClickPropagation(container);
+            L.DomEvent.disableScrollPropagation(container);
+
+            // Wire toggle after DOM is attached
+            setTimeout(() => {
+                const cb = container.querySelector('#wind-overlay-toggle');
+                if (!cb) return;
+                cb.checked = windOverlayEnabled;
+                cb.addEventListener('change', () => setWindOverlayEnabled(cb.checked, hurricaneData));
+            }, 0);
+
+            return container;
+        }
+    });
+
+    new Control().addTo(mapInstance);
+}
+
     }
     
     // --- Chart Rendering Logic Removed ---
@@ -658,6 +807,9 @@
       try {
           const huRes = await fetch(HU_JSON);
           fullHurricaneData = await huRes.json();
+          // Wind overlay control (OFF by default)
+          // Toggle to show wind swath based on r34/r50/r64 radii
+          addWindOverlayControl(map, fullHurricaneData);
       } catch (e) {
           console.error("Error loading or processing hurricane data:", HU_JSON, e);
       }
