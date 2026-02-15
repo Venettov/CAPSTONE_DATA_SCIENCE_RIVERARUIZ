@@ -362,7 +362,7 @@
   <script>
     // ---------------------- Data Paths ----------------------
     // Ensure this path is correct relative to your HTML file location
-    const HU_JSON = '../data/natural_disasters/caribbean_hurricane_tracks_2010_2025.json'; 
+    const HU_JSON = '../data/natural_disasters/caribbean_hurricane_tracks_2015_2025.json'; 
     
     let hurricaneLayerGroup = null; 
     let map;
@@ -381,18 +381,14 @@
         return HU_COLORS[5];
     }
     
-    function getStatusLabel(wind_knots) {
-        // HURDAT2-style status isn't present in the 2010–2025 JSON, so infer from wind speed.
-        // Thresholds (knots): TS>=34, HU>=64 with Saffir–Simpson categories.
-        if (wind_knots == null || isNaN(wind_knots)) return 'Unknown';
-        if (wind_knots < 34) return 'Tropical Depression/Disturbance';
-        if (wind_knots < 64) return 'Tropical Storm';
-        if (wind_knots < 83) return 'Hurricane Cat 1';
-        if (wind_knots < 96) return 'Hurricane Cat 2';
-        if (wind_knots < 113) return 'Hurricane Cat 3';
-        if (wind_knots < 137) return 'Hurricane Cat 4';
-        return 'Hurricane Cat 5';
-    }
+    function getStatusLabel(wind, status) {
+        if (status === 'TS') return 'Tropical Storm';
+        if (status === 'HU') {
+            if (wind < 83) return 'Hurricane Cat 1';
+            if (wind < 96) return 'Hurricane Cat 2';
+            if (wind < 113) return 'Hurricane Cat 3';
+            return 'Hurricane Cat 4+';
+        }
         if (status === 'DB') return 'Tropical Disturbance';
         if (status === 'TD') return 'Tropical Depression';
         if (status === 'SS') return 'Subtropical Storm';
@@ -402,236 +398,11 @@
         return 'Other'; 
     }
 
-    
-    // ---------------------- Wind Swath Overlay Logic ----------------------
-    // Radii arrays are in nautical miles [NE, SE, SW, NW] for 34/50/64 kt winds.
-    // We approximate the asymmetric wind field as a polygon built from quadrant radii.
-    function nmToMeters(nm){ return (nm || 0) * 1852; }
-
-    // Destination point from (lat, lon) with bearing (deg) and distance (m)
-    function destinationLatLng(lat, lon, bearingDeg, distanceM){
-        const R = 6371000; // meters
-        const brng = bearingDeg * Math.PI / 180;
-        const φ1 = lat * Math.PI / 180;
-        const λ1 = lon * Math.PI / 180;
-        const δ = distanceM / R;
-
-        const sinφ1 = Math.sin(φ1), cosφ1 = Math.cos(φ1);
-        const sinδ = Math.sin(δ), cosδ = Math.cos(δ);
-
-        const sinφ2 = sinφ1 * cosδ + cosφ1 * sinδ * Math.cos(brng);
-        const φ2 = Math.asin(sinφ2);
-        const y = Math.sin(brng) * sinδ * cosφ1;
-        const x = cosδ - sinφ1 * sinφ2;
-        const λ2 = λ1 + Math.atan2(y, x);
-
-        return [φ2 * 180/Math.PI, λ2 * 180/Math.PI];
-    }
-
-    // Pick quadrant radius for a given bearing:
-    // 0°=N, 90°=E, 180°=S, 270°=W
-    function radiusForBearing(radii, bearingDeg){
-        if (!radii || radii.length !== 4) return 0;
-        const b = ((bearingDeg % 360) + 360) % 360;
-        // Quadrants: NE (0-90), SE (90-180), SW (180-270), NW (270-360)
-        if (b >= 0 && b < 90) return radii[0];
-        if (b >= 90 && b < 180) return radii[1];
-        if (b >= 180 && b < 270) return radii[2];
-        return radii[3];
-    }
-
-    function windPolygon(lat, lon, radiiNm, steps=72){
-        // Build polygon points around the center using quadrant radii
-        const pts = [];
-        for (let i=0; i<=steps; i++){
-            const bearing = (i/steps) * 360.0;
-            const rNm = radiusForBearing(radiiNm, bearing);
-            if (!rNm || rNm <= 0){
-                // If a quadrant is 0, we still add a tiny point to keep polygon valid
-                pts.push([lat, lon]);
-            } else {
-                pts.push(destinationLatLng(lat, lon, bearing, nmToMeters(rNm)));
-            }
-        }
-        return pts;
-    }
-
-    // Global layer groups for overlays
-    let wind34Layer = null;
-    let wind50Layer = null;
-    let wind64Layer = null;
-
-    // Wind legend control (shows only when any wind overlay is enabled)
-    let windLegendControl = null;
-    function ensureWindLegend(map){
-        if (windLegendControl) return;
-        windLegendControl = L.control({ position: 'bottomleft' });
-        windLegendControl.onAdd = function(){
-            const div = L.DomUtil.create('div', 'leaflet-control leaflet-control-hu-legend');
-            div.style.background = 'rgba(255,255,255,0.95)';
-            div.style.padding = '10px 12px';
-            div.style.borderRadius = '10px';
-            div.style.border = '1px solid rgba(0,0,0,0.15)';
-            div.style.boxShadow = '0 2px 10px rgba(0,0,0,0.08)';
-            div.innerHTML = `
-              <div style="font-weight:600;margin-bottom:6px;border-bottom:1px solid #ddd;padding-bottom:4px;">
-                Wind Areas (radius by quadrant)
-              </div>
-              <div style="display:flex;align-items:center;gap:8px;margin:4px 0;">
-                <span style="width:14px;height:14px;background:rgba(16,185,129,0.25);border:1px solid rgba(16,185,129,0.7);display:inline-block;"></span>
-                <span>34 kt (Tropical Storm force)</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:8px;margin:4px 0;">
-                <span style="width:14px;height:14px;background:rgba(59,130,246,0.22);border:1px solid rgba(59,130,246,0.7);display:inline-block;"></span>
-                <span>50 kt</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:8px;margin:4px 0;">
-                <span style="width:14px;height:14px;background:rgba(239,68,68,0.18);border:1px solid rgba(239,68,68,0.7);display:inline-block;"></span>
-                <span>64 kt (Hurricane force)</span>
-              </div>
-            `;
-            return div;
-        };
-    }
-
-    function wireWindLegendVisibility(map){
-        // Show legend only when a wind layer is active
-        function anyWindOn(){
-            return (map.hasLayer(wind34Layer) || map.hasLayer(wind50Layer) || map.hasLayer(wind64Layer));
-        }
-        map.on('overlayadd', () => {
-            if (!windLegendControl) ensureWindLegend(map);
-            if (anyWindOn() && !windLegendControl._map) windLegendControl.addTo(map);
-        });
-        map.on('overlayremove', () => {
-            if (!windLegendControl) return;
-            if (!anyWindOn() && windLegendControl._map) windLegendControl.remove();
-        });
-    }
-
     function plotHurricaneTracks(data, mapInstance) {
         if (!data || data.length === 0) {
             console.warn("Hurricane data is empty or failed to load. Check console for fetch errors (404).");
             return;
         }
-
-        // Create / clear track layer
-        if (hurricaneLayerGroup) {
-            hurricaneLayerGroup.clearLayers();
-        } else {
-            hurricaneLayerGroup = L.layerGroup().addTo(mapInstance);
-        }
-
-        // Create / clear wind layers (overlays)
-        if (!wind34Layer) wind34Layer = L.layerGroup();
-        if (!wind50Layer) wind50Layer = L.layerGroup();
-        if (!wind64Layer) wind64Layer = L.layerGroup();
-        wind34Layer.clearLayers();
-        wind50Layer.clearLayers();
-        wind64Layer.clearLayers();
-
-        // Add overlays to layer control once
-        if (window.__layersControl && !window.__layersControl.__huOverlaysAdded) {
-            window.__layersControl.addOverlay(hurricaneLayerGroup, 'Hurricane Tracks');
-            window.__layersControl.addOverlay(wind34Layer, 'Wind 34 kt');
-            window.__layersControl.addOverlay(wind50Layer, 'Wind 50 kt');
-            window.__layersControl.addOverlay(wind64Layer, 'Wind 64 kt');
-            window.__layersControl.__huOverlaysAdded = true;
-
-            // Wire legend visibility based on overlays
-            wireWindLegendVisibility(mapInstance);
-        }
-
-        // Keep wind layers OFF by default (only tracks show until user enables overlays)
-        // (No addTo(map) here)
-
-        // Bounding box filter to keep performance reasonable around PR/Caribbean
-        const viewBox = { latMin: 8, latMax: 28, lonMin: -90, lonMax: -55 };
-
-        data.forEach(storm => {
-            const pathData = storm.path || [];
-            if (pathData.length === 0) return;
-
-            const latlons = pathData.map(p => [p.lat, p.lon]);
-            const stormName = storm.name || 'Unnamed Storm';
-            const year = storm.year || '';
-
-            // Track polyline
-            L.polyline(latlons, {
-                color: '#333',
-                weight: 3.0,
-                opacity: 0.6
-            }).addTo(hurricaneLayerGroup);
-
-            // Point markers + wind polygons
-            pathData.forEach(p => {
-                const wind_knots = p.wind_knots;
-                const color = getTrackColor(wind_knots);
-                const statusLabel = getStatusLabel(wind_knots);
-                const date = (p.date || '').toString();
-                const time = (p.time || '').toString();
-                const pressure = p.pressure_mb;
-
-                L.circleMarker([p.lat, p.lon], {
-                    radius: 6.0,
-                    fillColor: color,
-                    color: '#000',
-                    weight: 0.5,
-                    opacity: 0.9,
-                    fillOpacity: 0.9
-                }).bindPopup(`
-                    <strong>${stormName} (${year}) - ${statusLabel}</strong>
-                    <br>Date: ${date}${time ? (' ' + time) : ''}
-                    <br>Wind: ${wind_knots} knots (${(wind_knots * 1.15078).toFixed(0)} mph)
-                    ${pressure ? `<br>Pressure: ${pressure} mb` : ''}
-                    <br>Location: ${p.lat.toFixed(2)}N, ${p.lon.toFixed(2)}W
-                `).addTo(hurricaneLayerGroup);
-
-                // Wind areas (optional overlays)
-                // Only render if near Caribbean / PR region to avoid huge DOM cost
-                if (p.lat < viewBox.latMin || p.lat > viewBox.latMax || p.lon < viewBox.lonMin || p.lon > viewBox.lonMax) return;
-
-                // 34 kt
-                if (p.r34 && p.r34.some(v => v > 0)) {
-                    const poly34 = L.polygon(windPolygon(p.lat, p.lon, p.r34), {
-                        stroke: true,
-                        weight: 1,
-                        color: 'rgba(16,185,129,0.70)',
-                        fillColor: 'rgba(16,185,129,0.25)',
-                        fillOpacity: 0.25
-                    });
-                    poly34.addTo(wind34Layer);
-                }
-
-                // 50 kt
-                if (p.r50 && p.r50.some(v => v > 0)) {
-                    const poly50 = L.polygon(windPolygon(p.lat, p.lon, p.r50), {
-                        stroke: true,
-                        weight: 1,
-                        color: 'rgba(59,130,246,0.70)',
-                        fillColor: 'rgba(59,130,246,0.22)',
-                        fillOpacity: 0.22
-                    });
-                    poly50.addTo(wind50Layer);
-                }
-
-                // 64 kt
-                if (p.r64 && p.r64.some(v => v > 0)) {
-                    const poly64 = L.polygon(windPolygon(p.lat, p.lon, p.r64), {
-                        stroke: true,
-                        weight: 1,
-                        color: 'rgba(239,68,68,0.70)',
-                        fillColor: 'rgba(239,68,68,0.18)',
-                        fillOpacity: 0.18
-                    });
-                    poly64.addTo(wind64Layer);
-                }
-            });
-        });
-
-        hurricaneLayerGroup.bringToFront();
-        console.log("✅ Hurricane tracks plotted successfully (2010–2025). Wind overlays available in layer control.");
-    }
 
         if (hurricaneLayerGroup) {
             hurricaneLayerGroup.clearLayers();
@@ -851,29 +622,10 @@
 
       L.control.zoom({ position: 'topleft' }).addTo(map);
 
-      // --- Base map layers (adds a "Water" option without changing page layout) ---
-      const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors',
         minZoom: 7, maxZoom: 19
-      });
-
-      // Water-focused basemap (Esri Ocean)
-      const esriOcean = L.tileLayer(
-        'https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}',
-        { attribution: 'Tiles &copy; Esri' , minZoom: 2, maxZoom: 19 }
-      );
-
-      // Light basemap (optional)
-      const cartoLight = L.tileLayer(
-        'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-        { attribution: '&copy; OpenStreetMap contributors &copy; CARTO', minZoom: 2, maxZoom: 19 }
-      );
-
-      osm.addTo(map);
-
-      // Layer control (base maps + overlays will be added later after hurricane layers exist)
-      window.__baseLayers = { 'OpenStreetMap': osm, 'Water (Ocean)': esriOcean, 'Light': cartoLight };
-      window.__layersControl = L.control.layers(window.__baseLayers, {}, { position: 'topright', collapsed: true }).addTo(map);
+      }).addTo(map);
 
       // Initialize the map dropdown control
       L.Control.MapDropdown = L.Control.extend({
