@@ -601,10 +601,10 @@
 
                 return {
                     fillColor: getColor(val),
-                    weight: 1,
+                    weight: 1.2,        // Slightly thicker for better definition
                     opacity: 1,
-                    color: 'white',
-                    dashArray: '3',
+                    color: '#111827',   // CHANGED: From 'white' to Dark Gray/Black
+                    // dashArray: '3',  // REMOVED: Deleting this makes the line solid
                     fillOpacity: 0.75
                 };
             },
