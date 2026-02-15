@@ -41,7 +41,7 @@
     }
 
     .mini { min-height: 260px; }
-    .chart-container-large { min-height: 350px; }
+    .chart-container-large { height: 400px; } /* Fixed height for the bottom chart */
 
     /* Navigation Dropdown Base Styles */
     .nav-dropdown-menu { 
@@ -198,13 +198,7 @@
             <a href="svi.html"            class="block px-4 py-2 bg-indigo-50 text-indigo-700 font-semibold">Social Vulnerability (SVI)</a>
             <a href="crime.html"          class="block px-4 py-2 hover:bg-gray-50 transition-colors">Crime & Safety</a>
             <a href="employment.html"     class="block px-4 py-2 hover:bg-gray-50 transition-colors">Employment Rate</a>
-            <a href="establishments.html" class="block px-4 py-2 hover:bg-gray-50">Employer Establishments</a>
             <a href="income.html"         class="block px-4 py-2 hover:bg-gray-50 transition-colors">Household Income</a>
-            <a href="housing.html"        class="block px-4 py-2 hover:bg-gray-50">Housing Units</a>
-            <a href="education.html"      class="block px-4 py-2 hover:bg-gray-50">Education</a>
-            <a href="health.html"         class="block px-4 py-2 hover:bg-gray-50">Health</a>
-            <a href="disasters_earthquakes.html"      class="block px-4 py-2 hover:bg-gray-50">Earthquakes</a>
-            <a href="disasters_hurricanes.html"      class="block px-4 py-2 hover:bg-gray-50">Hurricanes</a>
           </div>
         </div>
       </div>
@@ -334,14 +328,14 @@
 
           <div class="col-span-1 lg:col-span-2">
             <h3 class="text-sm font-bold text-gray-600 mb-3 uppercase tracking-wide">Historical Trend (2010–2024)</h3>
-            <div class="mini bg-gray-50 rounded-xl p-4 border border-gray-100 h-full" style="min-height: 280px;">
+            <div class="bg-gray-50 rounded-xl p-4 border border-gray-100" style="height: 320px;">
               <canvas id="lineChart"></canvas>
             </div>
           </div>
         </div>
 
         <div>
-            <h3 class="text-sm font-bold text-gray-600 mb-3 uppercase tracking-wide">Comprehensive SVI Indicator Breakdown</h3>
+            <h3 class="text-sm font-bold text-gray-600 mb-3 uppercase tracking-wide">Comprehensive SVI Indicator Breakdown (Vertical)</h3>
             <div class="chart-container-large bg-gray-50 rounded-xl p-6 border border-gray-100">
               <canvas id="barChart"></canvas>
             </div>
@@ -426,7 +420,10 @@
     const SVI_JSON    = '../data/svi/puerto_rico_master_profile_2010_2024.json'; 
 
     const fmt = new Intl.NumberFormat('en-US');
-    // Updated Green (Low Vulnerability) to Red (High Vulnerability) Scale
+    
+    // RED (High Vulnerability) to GREEN (Low Vulnerability) Spectrum for SVI
+    // Since high SVI is "bad", we usually use Red for High numbers.
+    // Low values (Green) -> High values (Red)
     const CHORO_COLORS = ['#15803d', '#22c55e', '#bbf7d0', '#f97316', '#b91c1c', '#7f1d1d'];
     
     let _sviData = [];
@@ -478,16 +475,26 @@
             yearSel.appendChild(opt);
         });
 
-        // SVI Metrics Mapping (Keys from JSON)
+        // SVI Metrics Mapping
         const metrics = [
             { key: 'pct_below_poverty', label: 'Poverty Rate (%)' },
             { key: 'unemployment_rate_pct', label: 'Unemployment (%)' },
+            { key: 'labor_force_participation_pct', label: 'Labor Force Part. (%)' },
             { key: 'pct_no_hs_diploma', label: 'No HS Diploma (%)' },
             { key: 'pct_aged_65_plus', label: 'Senior Pop (65+) (%)' },
+            { key: 'pct_aged_17_under', label: 'Youth Pop (<18) (%)' },
             { key: 'pct_disability', label: 'Disability Rate (%)' },
             { key: 'pct_no_vehicle', label: 'No Vehicle (%)' },
             { key: 'pct_single_parent', label: 'Single Parent (%)' },
-            { key: 'pct_crowding', label: 'Crowded Housing (%)' }
+            { key: 'pct_lim_english', label: 'Limited English (%)' },
+            { key: 'pct_crowding', label: 'Crowded Housing (%)' },
+            { key: 'pct_multi_unit', label: 'Multi-Unit Housing (%)' },
+            { key: 'pct_mobile_homes', label: 'Mobile Homes (%)' },
+            { key: 'pct_group_quarters', label: 'Group Quarters (%)' },
+            // Non-percentage metrics allowed in Dropdown for mapping, but typically not shared axis charts
+            { key: 'median_income_nominal', label: 'Median Income (Nominal $)' },
+            { key: 'median_income_real', label: 'Median Income (Real $)' },
+            { key: 'total_housing_units', label: 'Total Housing Units' }
         ];
 
         const metricSel = document.getElementById('metricSelect');
@@ -634,8 +641,9 @@
         
         let labels = [`<div class="font-bold text-[11px] uppercase text-gray-500 mb-2">${labelText}</div>`];
         
-        // Helper to format numbers
-        const f = (n) => n.toFixed(1) + '%';
+        // Helper to format numbers (Check if dollar or percent)
+        const isMoney = metric.includes('income');
+        const f = (n) => isMoney ? '$'+(n/1000).toFixed(1)+'k' : n.toFixed(1) + (metric.includes('total') ? '' : '%');
 
         const ranges = [
             { min: 0, max: currentBreaks[0], col: CHORO_COLORS[0] },
@@ -669,6 +677,8 @@
         document.getElementById('d-sel-metric-name').innerText = metricLabel;
 
         let val = 0, unemp = 0, rank = '-';
+        const isMoney = metric.includes('income');
+        const isCount = metric.includes('total');
         
         if (name === 'Puerto Rico') {
             const yData = _sviData.filter(d => d.year == year);
@@ -687,7 +697,11 @@
             }
         }
 
-        document.getElementById('d-val').innerText = val.toFixed(1) + '%';
+        const suffix = isMoney ? '' : (isCount ? '' : '%');
+        const prefix = isMoney ? '$' : '';
+        const displayVal = prefix + fmt.format(val.toFixed(isCount?0:1)) + suffix;
+
+        document.getElementById('d-val').innerText = displayVal;
         document.getElementById('d-unemp').innerText = unemp.toFixed(1) + '%';
         document.getElementById('d-rank').innerText = rank;
 
@@ -716,7 +730,7 @@
             data: { 
                 labels: years, 
                 datasets:[{ 
-                    label: 'Vulnerability (%)', 
+                    label: 'Trend Value', 
                     data: trendData, 
                     borderColor: '#dc2626', // Matching Red from Crime
                     backgroundColor: 'rgba(220,38,38,0.1)', 
@@ -731,27 +745,40 @@
             }
         });
 
-        // 2. Bar Chart: Full Theme Comparison (All 8 Indicators)
+        // 2. Bar Chart: Extended SVI Comparison (Vertical)
+        // We exclude non-percentages (Income/Housing Units) to maintain scale
         const themes = [
             'pct_below_poverty', 
             'unemployment_rate_pct', 
+            'labor_force_participation_pct',
             'pct_no_hs_diploma',
             'pct_aged_65_plus',
+            'pct_aged_17_under',
             'pct_disability', 
-            'pct_no_vehicle', 
             'pct_single_parent', 
-            'pct_crowding'
+            'pct_no_vehicle', 
+            'pct_lim_english', 
+            'pct_crowding',
+            'pct_multi_unit',
+            'pct_mobile_homes',
+            'pct_group_quarters'
         ];
         
         const labels = [
             'Poverty Rate', 
             'Unemployment', 
+            'Labor Force Part.',
             'No High School',
             'Aged 65+',
+            'Youth <18',
             'Disability', 
+            'Single Parent',
             'No Vehicle', 
-            'Single Parent', 
-            'Crowding'
+            'Lim. English',
+            'Crowding',
+            'Multi-Unit Housing',
+            'Mobile Homes',
+            'Group Quarters'
         ];
         
         const compData = themes.map(t => {
@@ -776,10 +803,9 @@
                 }] 
             },
             options: { 
-                indexAxis: 'y', 
                 maintainAspectRatio: false, 
                 plugins:{ legend:{display:false} },
-                scales: { x: { beginAtZero: true, max: 100 } } // Standardize x-axis to 100%
+                scales: { y: { beginAtZero: true, max: 100 } } 
             }
         });
     }
