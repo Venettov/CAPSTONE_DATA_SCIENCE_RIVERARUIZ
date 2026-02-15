@@ -555,22 +555,33 @@
         legend.addTo(map);
     }
 
+    // Global variable to store current breaks
+    let currentBreaks = [];
+
     function updateMap() {
         const year = document.getElementById('yearSelect').value;
         const metric = document.getElementById('metricSelect').value;
 
-        // Filter Data for this year
+        // 1. Filter Data for this year
         const yearData = _crimeData.filter(d => d.Year == year);
         
-        // Create lookup map & find Max for color scaling
+        // 2. Extract values to calculate Quantile Breaks
+        const values = yearData.map(d => d[metric] || 0).sort((a, b) => a - b);
+        
+        // Calculate 5 breakpoints (for 6 color buckets)
+        // We use percentiles: 0%, 20%, 40%, 60%, 80%, 100%
+        currentBreaks = [
+            values[Math.floor(values.length * 0.2)] || 0,
+            values[Math.floor(values.length * 0.4)] || 0,
+            values[Math.floor(values.length * 0.6)] || 0,
+            values[Math.floor(values.length * 0.8)] || 0,
+            values[Math.floor(values.length * 0.95)] || 0 // Top 5% outlier separation
+        ];
+
+        // Create lookup map
         const dataMap = {};
-        let maxVal = 0;
         yearData.forEach(d => {
-            const val = d[metric] || 0;
-            // Clean Name
-            const name = d.Municipio.trim(); 
-            dataMap[name] = val;
-            if (val > maxVal) maxVal = val;
+            dataMap[d.Municipio.trim()] = d[metric] || 0;
         });
 
         // Remove old layer
@@ -579,25 +590,22 @@
         // Add new layer
         layer = L.geoJSON(_geoData, {
             style: (feature) => {
-                // Match Name
                 const props = feature.properties || {};
                 const fName = (props.NAME || props.NAMELSAD || props.name || '').replace(/\s*Municipio$/,'');
-                // Basic Title Case fix if needed
                 const cleanName = titleCase(fName);
                 
                 // Loose match
                 let val = 0;
-                // Try direct match or case insensitive
                 const matchKey = Object.keys(dataMap).find(k => k.toLowerCase() === cleanName.toLowerCase());
                 if (matchKey) val = dataMap[matchKey];
 
                 return {
-                    fillColor: getColor(val, maxVal),
+                    fillColor: getColor(val),
                     weight: 1,
                     opacity: 1,
                     color: 'white',
                     dashArray: '3',
-                    fillOpacity: 0.7
+                    fillOpacity: 0.75
                 };
             },
             onEachFeature: (feature, layer) => {
@@ -608,8 +616,7 @@
                     mouseover: (e) => {
                         if (lockedName) return;
                         e.target.setStyle({ weight:3, color:'#111827', fillOpacity:0.9 });
-                        const cleanName = titleCase(fName);
-                        updateDetails(cleanName);
+                        updateDetails(titleCase(fName));
                     },
                     mouseout: (e) => {
                         if (lockedName) return;
@@ -620,22 +627,61 @@
                         selectedLayer = e.target;
                         lockedName = titleCase(fName);
                         e.target.setStyle(selectedOutline);
-                        
-                        // --- ZOOM LOGIC (MATCHING POPULATION.HTML) ---
-                        map.fitBounds(e.target.getBounds(), { padding: [20, 20] });
-                        
+                        map.fitBounds(e.target.getBounds(), { padding: [20, 20] }); // Zoom logic
                         updateDetails(lockedName);
                     }
                 });
             }
         }).addTo(map);
 
-        updateLegend(maxVal, metric);
+        updateLegend(metric);
         
-        // Update details for "Puerto Rico" (Aggregate) or currently locked muni
         if (lockedName) updateDetails(lockedName);
         else updateDetails('Puerto Rico');
     }
+
+    // Updated to use the calculated quantile breaks
+    function getColor(d) {
+        if (d > currentBreaks[4]) return CHORO_COLORS[5]; // Top 5% (Darkest Red)
+        if (d > currentBreaks[3]) return CHORO_COLORS[4];
+        if (d > currentBreaks[2]) return CHORO_COLORS[3];
+        if (d > currentBreaks[1]) return CHORO_COLORS[2];
+        if (d > currentBreaks[0]) return CHORO_COLORS[1];
+        return CHORO_COLORS[0]; // Bottom 20% (Green)
+    }
+
+    // Updated Legend to show accurate ranges
+    function updateLegend(metric) {
+        const div = document.getElementById('map-legend');
+        if (!div) return;
+        
+        let labels = [`<div style="font-weight:600;margin-bottom:.25rem">${metric}</div>`];
+        
+        // Helper to format numbers nicely (e.g. 1,200)
+        const f = (n) => new Intl.NumberFormat('en-US').format(Math.round(n));
+
+        // Create range labels based on our breaks
+        const ranges = [
+            { min: 0, max: currentBreaks[0], col: CHORO_COLORS[0] },
+            { min: currentBreaks[0], max: currentBreaks[1], col: CHORO_COLORS[1] },
+            { min: currentBreaks[1], max: currentBreaks[2], col: CHORO_COLORS[2] },
+            { min: currentBreaks[2], max: currentBreaks[3], col: CHORO_COLORS[3] },
+            { min: currentBreaks[3], max: currentBreaks[4], col: CHORO_COLORS[4] },
+            { min: currentBreaks[4], max: '+', col: CHORO_COLORS[5] }
+        ];
+
+        ranges.forEach(r => {
+            const txt = r.max === '+' ? `> ${f(r.min)}` : `${f(r.min)} &ndash; ${f(r.max)}`;
+            labels.push(
+                `<div style="display:flex;align-items:center;gap:.5rem;margin:.2rem 0;font-size:12px;">
+                   <span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:${r.col};border:1px solid rgba(0,0,0,.15)"></span>
+                   <span>${txt}</span>
+                 </div>`
+            );
+        });
+
+        div.innerHTML = labels.join('');
+    }    
 
     // ==========================================
     // HELPERS & CHARTS
