@@ -24,99 +24,65 @@
         radial-gradient(1200px 600px at 80% -10%, rgba(37,99,235,.10), transparent 60%),
         linear-gradient(180deg, #fafafa 0%, #f3f4f6 100%);
     }
-    #map { height: 60vh; width: 100%; border-radius: .75rem; background: #111827; }
+    /* Original Map Height */
+    #map { height: 65vh; width: 100%; border-radius: .75rem; background: #e5e7eb; }
     
     .chart-fix-wrapper { position: relative; height: 320px; width: 100%; }
 
     /* Navigation Dropdown Base Styles */
-    .nav-dropdown-menu { 
-        opacity: 0; 
-        visibility: hidden; 
-        transform: translateY(4px); 
-        pointer-events: none; 
-        transition: all .15s ease; 
-        z-index: 50; 
-    }
-    .nav-dropdown-root:hover .nav-dropdown-menu, 
-    .nav-dropdown-root.hovering .nav-dropdown-menu { 
-        opacity: 1; 
-        visibility: visible; 
-        transform: translateY(0); 
-        pointer-events: auto; 
-    }
-    .nav-dropdown-root:hover .nav-chevron, 
-    .nav-dropdown-root.hovering .nav-chevron { 
-        transform: rotate(180deg); 
-    }
+    .nav-dropdown-menu { opacity: 0; visibility: hidden; transform: translateY(4px); pointer-events: none; transition: all .15s ease; z-index: 50; }
+    .nav-dropdown-root:hover .nav-dropdown-menu, .nav-dropdown-root.hovering .nav-dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto; }
+    .nav-dropdown-root:hover .nav-chevron, .nav-dropdown-root.hovering .nav-chevron { transform: rotate(180deg); }
     
-    /* Global Page Scaling */
-    #scale-wrapper { 
-        transform: scale(0.65); 
-        transform-origin: top center; 
-        height: 154%; 
-        padding-bottom: 200px; 
-        margin-bottom: -35%; 
+    /* Scale Wrapper */
+    #scale-wrapper { transform: scale(0.65); transform-origin: top center; height: 154%; padding-bottom: 200px; margin-bottom: -35%; }
+
+    /* LEAFLET CONTROL STYLES */
+    .leaflet-control-map-dropdown { padding: 0; margin-left: 45px; margin-top: 5px; }
+    .leaflet-control-map-dropdown .dropdown-root { background: #fff; box-shadow: 0 1px 5px rgba(0,0,0,.65); border-radius: 4px; position: relative; }
+    .leaflet-control-map-dropdown .nav-link { padding: 6px 10px; color: #333; font-weight: 500; font-size: 13px; line-height: 1.2; display: flex; align-items: center; gap: 4px; cursor: pointer; }
+    .leaflet-control-map-dropdown .dropdown-menu { position: absolute; top: 100%; left: 0; margin-top: 5px; z-index: 1000; opacity: 0; visibility: hidden; transform: translateY(4px); pointer-events: none; transition: opacity .15s ease, transform .15s ease, visibility .15s ease; }
+    .leaflet-control-map-dropdown .dropdown-root.hovering .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto; }
+    .leaflet-control-map-dropdown .dropdown-root.hovering #map-selection-chevron { transform: rotate(180deg); }
+    .leaflet-control-map-dropdown .dropdown-menu a { text-decoration: none; padding: 6px 12px; font-size: 13px; }
+
+    /* Map Filter Card */
+    .map-filter-card { 
+        background: rgba(255, 255, 255, 0.95); padding: 8px 12px; border-radius: 8px; 
+        box-shadow: 0 2px 10px rgba(0,0,0,0.15); border: 1px solid #e5e7eb; 
     }
 
-    /* RADIAL MENU STYLES */
+    /* RADIAL MENU */
     #radial-menu-container { pointer-events: none; width: 300px; height: 300px; position: fixed; bottom: 0; right: 0; z-index: 9999; }
-    #radial-trigger { 
-        pointer-events: auto; 
-        position: absolute; bottom: 7rem; right: 2rem; 
-        width: 4rem; height: 4rem; border-radius: 50%; 
-        background-color: #4f46e5; color: white; 
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2); 
-        display: flex; align-items: center; justify-content: center; 
-        cursor: pointer; transition: transform 0.3s ease; z-index: 10000; 
-    }
+    #radial-trigger { pointer-events: auto; position: absolute; bottom: 7rem; right: 2rem; width: 4rem; height: 4rem; border-radius: 50%; background-color: #4f46e5; color: white; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.3s ease; z-index: 10000; }
     #radial-trigger:hover { transform: scale(1.05); background-color: #4338ca; }
     .radial-open #radial-trigger { transform: rotate(45deg); background-color: #ef4444; }
-    
-    .radial-item { 
-        position: absolute; bottom: 7rem; right: 2rem; 
-        width: 3rem; height: 3rem; border-radius: 50%; 
-        background-color: white; color: #4f46e5; 
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); 
-        display: flex; align-items: center; justify-content: center; 
-        text-decoration: none; opacity: 0; pointer-events: none; 
-        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); 
-        z-index: 9990; --tx: 0px; --ty: 0px; transform: translate(0, 0) scale(0.5); 
-    }
+    .radial-item { position: absolute; bottom: 7rem; right: 2rem; width: 3rem; height: 3rem; border-radius: 50%; background-color: white; color: #4f46e5; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); display: flex; align-items: center; justify-content: center; text-decoration: none; opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); z-index: 9990; --tx: 0px; --ty: 0px; --lx: 0px; --ly: 0px; --lr: 0deg; transform: translate(0, 0) scale(0.5); }
     .radial-open .radial-item { opacity: 1; pointer-events: auto; transform: translate(var(--tx), var(--ty)) scale(1); }
-    .radial-label { 
-        position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); 
-        background: rgba(255, 255, 255, 0.95); color: black; padding: 4px 8px; 
-        border-radius: 6px; font-size: 12px; font-weight: 700; white-space: nowrap; 
-        opacity: 0; transition: opacity 0.3s ease; pointer-events: none; 
-        box-shadow: 0 2px 5px rgba(0,0,0,0.15); 
-    }
-    .radial-open .radial-label { opacity: 1; margin-bottom: 3.5rem; }
-
-    /* Map Controls UI */
-    .map-filter-card { 
-        background: white; padding: 10px; border-radius: 8px; 
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2); 
-    }
+    .radial-open .radial-item:hover { background-color: #e0e7ff; transform: translate(var(--tx), var(--ty)) scale(1.1); z-index: 10005 !important; }
+    .radial-label { position: absolute; left: 50%; top: 50%; transform: translate(calc(-50% + var(--lx)), calc(-50% + var(--ly))) rotate(var(--lr)); transform-origin: center center; background: rgba(255, 255, 255, 0.95); color: black; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; white-space: nowrap; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
+    .radial-open .radial-label { opacity: 1; }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
 
   <nav class="bg-white shadow sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-center gap-6 text-sm sm:text-base">
-      <a href="../index.html" class="nav-link border-b-2 border-transparent hover:text-indigo-600 transition-colors">Home</a>
+      <a href="../index.html" class="nav-link border-b-2 border-transparent">Home</a>
 
-      <div class="relative nav-dropdown-root">
-        <a href="../metrics.html" class="nav-link border-b-2 border-indigo-600 text-indigo-600 font-semibold inline-flex items-center gap-1 cursor-pointer select-none">
+      <div class="relative nav-dropdown-root" id="metrics-dropdown-root">
+        <a href="../metrics.html" class="nav-link inline-flex items-center gap-1 cursor-pointer select-none">
           Metrics
           <svg xmlns="http://www.w3.org/2000/svg" class="nav-chevron w-4 h-4 transition-transform" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
           </svg>
         </a>
         <div class="nav-dropdown-menu absolute right-0 mt-2 w-64 rounded-xl border border-gray-200 bg-white shadow-lg ring-1 ring-black/5 z-50">
-          <div class="py-2">
+          <div class="py-2" id="metrics-menu">
             <a href="../metrics.html" class="block px-4 py-2 hover:bg-gray-50 font-semibold">All Metrics Overview</a>
             <div class="my-1 border-t border-gray-100"></div>
             <a href="population.html"     class="block px-4 py-2 hover:bg-gray-50">Population</a>
+            <a href="svi.html"            class="block px-4 py-2 hover:bg-gray-50">Social Vulnerability (SVI)</a>
             <a href="crime.html"          class="block px-4 py-2 hover:bg-gray-50">Crime & Safety</a>
             <a href="employment.html"     class="block px-4 py-2 hover:bg-gray-50">Employment Rate</a>
             <a href="establishments.html" class="block px-4 py-2 hover:bg-gray-50">Employer Establishments</a>
@@ -147,36 +113,62 @@
             <div class="mt-5">
               <span class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-100 text-slate-800">
                 <span class="inline-flex w-5 h-5 items-center justify-center rounded-full bg-slate-800 text-white text-xs">i</span>
-                Select a category below to filter storm intensity and physical swaths.
+                Hover over storm tracks to see wind swath intensity (2010–2025)
               </span>
             </div>
-            </div>
+          </div>
         </div>
       </header>
 
       <section class="card p-4 relative">
-        <div class="absolute top-6 right-6 z-[1000]">
+        <div class="absolute top-6 right-6 z-[1000] flex flex-col gap-2">
             <div class="map-filter-card">
                 <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Filter by Strength</label>
-                <select id="intensityFilter" class="bg-gray-50 border border-gray-200 text-xs rounded p-1 focus:ring-indigo-500">
-                    <option value="0">All Storms / Depressions</option>
+                <select id="intensityFilter" class="bg-gray-50 border border-gray-200 text-xs rounded p-1 focus:ring-indigo-500 w-full">
+                    <option value="0">All Storms</option>
                     <option value="34">Tropical Storms (34kt+)</option>
                     <option value="64">Hurricane Force (64kt+)</option>
-                    <option value="96">Major Hurricanes (Cat 3+)</option>
+                    <option value="96">Major (Cat 3+)</option>
                 </select>
             </div>
         </div>
-        <div id="map"></div>
+
+        <div id="map" class="mt-3">
+            <div class="leaflet-control-container" id="map-dropdown-container">
+              <div class="leaflet-top leaflet-left">
+                <div class="leaflet-control leaflet-control-map-dropdown">
+                  <div class="relative dropdown-root" id="map-selection-dropdown-root">
+                    <div class="nav-link inline-flex items-center gap-1 cursor-pointer select-none bg-white rounded shadow px-2 py-1">
+                      Navigate Metrics
+                      <svg id="map-selection-chevron" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
+                      </svg>
+                    </div>
+                    <div id="map-selection-menu" class="dropdown-menu w-64 rounded-xl border border-gray-200 bg-white shadow-lg ring-1 ring-black/5">
+                      <div class="py-2">
+                        <a href="population.html"     class="block px-4 py-2 hover:bg-gray-50">Population</a>
+                        <a href="crime.html"          class="block px-4 py-2 hover:bg-gray-50">Crime & Safety</a>
+                        <a href="employment.html"     class="block px-4 py-2 hover:bg-gray-50">Employment Rate</a>
+                        <a href="establishments.html" class="block px-4 py-2 hover:bg-gray-50">Employer Establishments</a>
+                        <a href="income.html"         class="block px-4 py-2 hover:bg-gray-50">Household Income</a>
+                        <a href="housing.html"        class="block px-4 py-2 hover:bg-gray-50">Housing Units</a>
+                        <a href="disasters_hurricanes.html" class="block px-4 py-2 bg-indigo-50 font-bold text-indigo-700">Hurricanes</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
       </section>
 
       <section class="card p-6">
         <div class="flex flex-col lg:flex-row gap-8">
             <div class="lg:w-1/3 space-y-4">
-                <h2 class="text-2xl font-black text-gray-900 leading-tight">Longitudinal Hurricane Frequency</h2>
+                <h2 class="text-2xl font-black text-gray-900 leading-tight">Hurricane Frequency Analysis</h2>
                 <p class="text-gray-600 text-sm leading-relaxed">
-                    This analysis tracks storms passing through the Caribbean basin (2010–2025). The map renders <strong>physical wind swaths</strong> based on Nautical Mile radii, identifying areas of cumulative infrastructure stress and economic shock.
+                    This longitudinal analysis tracks storms passing through the Caribbean basin (2010–2025). The map renders <strong>physical wind swaths</strong> based on NOAA HURDAT2 radii data, helping identify areas of cumulative infrastructure stress and economic shock.
                 </p>
-                
                 <div class="grid grid-cols-2 gap-4 pt-2">
                     <div class="p-3 bg-blue-50 border border-blue-100 rounded-lg">
                         <div class="text-[10px] font-bold text-blue-400 uppercase">Total Events</div>
@@ -188,7 +180,6 @@
                     </div>
                 </div>
             </div>
-            
             <div class="lg:w-2/3">
                 <div class="chart-fix-wrapper">
                     <canvas id="frequencyChart"></canvas>
@@ -209,58 +200,19 @@
   </div>
 
   <script>
-    // CONFIGURATION
-    const DATA_URL = '../data/natural_disasters/caribbean_hurricane_tracks_2010_2025.json';
-    const fmt = new Intl.NumberFormat('en-US');
+    // DATA SOURCES
+    const GEOJSON_URL = '../data/tl_2022_72_cousub/pr_municipalities.geojson';
+    const HURRICANE_JSON = '../data/natural_disasters/caribbean_hurricane_tracks_2010_2025.json';
     
-    let _stormData = [];
     let map, freqChart;
+    let _stormData = [];
+    let geoJsonLayer;
     let trackLayers = L.layerGroup();
 
-    // 1. DATA LOADER
-    async function init() {
-        try {
-            const res = await fetch(DATA_URL);
-            _stormData = await res.json();
-            
-            initMap();
-            plotHurricanes(0); // Initial plot: All
-            renderAnalytics();
-            
-            // Filter Listener
-            document.getElementById('intensityFilter').addEventListener('change', (e) => {
-                plotHurricanes(parseInt(e.target.value));
-            });
-        } catch (e) {
-            console.error("Critical error loading hurricane data:", e);
-        }
-    }
-
-    // 2. MAP INITIALIZATION
-    function initMap() {
-        map = L.map('map', { zoomSnap: 0.25 }).setView([18.2, -66.5], 6);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { 
-            attribution: '&copy; CARTO' 
-        }).addTo(map);
-        trackLayers.addTo(map);
-    }
-
-    // 3. SWATH CALCULATOR (Asymmetrical Polygons)
-    function createSwathPoints(lat, lon, r) {
-        // NM to Degrees approx conversion (1 NM ~= 1/60th deg)
-        const scale = 1.0 / 60.0;
-        return [
-            [lat + (r[0] * scale), lon + (r[0] * scale)], // NE
-            [lat - (r[1] * scale), lon + (r[1] * scale)], // SE
-            [lat - (r[2] * scale), lon - (r[2] * scale)], // SW
-            [lat + (r[3] * scale), lon - (r[3] * scale)], // NW
-            [lat + (r[0] * scale), lon + (r[0] * scale)]  // Close loop
-        ];
-    }
-
+    // COLOR SCALE FOR HURRICANES
     function getHurricaneColor(wind) {
-        if (wind < 34) return '#5ebaff'; // Tropical Depression
-        if (wind < 64) return '#00faf4'; // Tropical Storm
+        if (wind < 34) return '#5ebaff'; // TD
+        if (wind < 64) return '#00faf4'; // TS
         if (wind < 83) return '#ffffcc'; // Cat 1
         if (wind < 96) return '#ffe775'; // Cat 2
         if (wind < 113) return '#ffc140'; // Cat 3
@@ -268,70 +220,123 @@
         return '#ff0000';                // Cat 5
     }
 
-    // 4. PLOTTING LOGIC
+    // SWATH POLYGON GENERATOR
+    function createSwathPoints(lat, lon, r) {
+        const scale = 1.0 / 60.0; // Approx NM to Degrees
+        return [
+            [lat + (r[0] * scale), lon + (r[0] * scale)], // NE
+            [lat - (r[1] * scale), lon + (r[1] * scale)], // SE
+            [lat - (r[2] * scale), lon - (r[2] * scale)], // SW
+            [lat + (r[3] * scale), lon - (r[3] * scale)], // NW
+            [lat + (r[0] * scale), lon + (r[0] * scale)]  
+        ];
+    }
+
+    // MAIN INIT
+    async function init() {
+        try {
+            // 1. Initialize Map centered on PR
+            map = L.map('map', { zoomControl: false, zoomSnap: 0.25 }).setView([18.2, -66.4], 9);
+            L.control.zoom({ position: 'topleft' }).addTo(map);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; CARTO' }).addTo(map);
+
+            // 2. Load PR Municipalities (Background Layer)
+            const geoRes = await fetch(GEOJSON_URL);
+            const geoData = await geoRes.json();
+            
+            geoJsonLayer = L.geoJSON(geoData, {
+                style: { fillColor: '#fff', weight: 1, opacity: 1, color: '#d1d5db', fillOpacity: 0.4 },
+                onEachFeature: (feature, layer) => {
+                    layer.bindTooltip(feature.properties.NAME || feature.properties.name, {
+                        permanent: false, direction: 'center', className: 'leaflet-tooltip'
+                    });
+                }
+            }).addTo(map);
+            
+            // Fix Map Controls Logic
+            L.Control.MapDropdown = L.Control.extend({
+                onAdd: function(map) {
+                    const container = L.DomUtil.get('map-dropdown-container');
+                    L.DomEvent.disableClickPropagation(container);
+                    return container.querySelector('.leaflet-control-map-dropdown');
+                }
+            });
+            new L.Control.MapDropdown({ position: 'topleft' }).addTo(map);
+            wireMapDropdown();
+
+            // 3. Load Hurricane Data
+            const stormRes = await fetch(HURRICANE_JSON);
+            _stormData = await stormRes.json();
+            
+            trackLayers.addTo(map);
+            plotHurricanes(0); // Plot all by default
+            renderFrequencyChart();
+
+            // Filter Listener
+            document.getElementById('intensityFilter').addEventListener('change', (e) => {
+                plotHurricanes(parseInt(e.target.value));
+            });
+
+        } catch (e) {
+            console.error("Error initializing map:", e);
+        }
+    }
+
     function plotHurricanes(minWind) {
         trackLayers.clearLayers();
 
         _stormData.forEach(storm => {
-            // Find max intensity of this specific storm track
-            const maxTrackWind = Math.max(...storm.path.map(p => p.wind_knots));
-            if (maxTrackWind < minWind) return;
+            const maxW = Math.max(...storm.path.map(p => p.wind_knots));
+            if (maxW < minWind) return;
 
-            const coords = storm.path.map(p => [p.lat, p.lon]);
+            const pathCoords = storm.path.map(p => [p.lat, p.lon]);
             
-            // Draw Main Track Line
-            L.polyline(coords, { color: 'white', weight: 1, opacity: 0.15, interactive: false }).addTo(trackLayers);
+            // Track Line
+            L.polyline(pathCoords, { color: 'gray', weight: 1, opacity: 0.5, dashArray: '4' }).addTo(trackLayers);
 
             storm.path.forEach(p => {
-                // Hurricane Core Swath (64kt)
+                // Hurricane Swath (Red)
                 if (p.r64 && p.r64[0] > 0) {
                     L.polygon(createSwathPoints(p.lat, p.lon, p.r64), {
-                        color: 'none', fillColor: '#ef4444', fillOpacity: 0.12, interactive: false
+                        color: 'none', fillColor: '#ef4444', fillOpacity: 0.2
                     }).addTo(trackLayers);
                 }
-
-                // Tropical Storm Swath (34kt)
+                // TS Swath (Blue)
                 if (p.r34 && p.r34[0] > 0) {
                     L.polygon(createSwathPoints(p.lat, p.lon, p.r34), {
-                        color: 'none', fillColor: '#3b82f6', fillOpacity: 0.04, interactive: false
+                        color: 'none', fillColor: '#3b82f6', fillOpacity: 0.05
                     }).addTo(trackLayers);
                 }
-
-                // Interaction Marker
+                
+                // Point Marker
                 L.circleMarker([p.lat, p.lon], {
-                    radius: 2, 
-                    fillColor: getHurricaneColor(p.wind_knots),
-                    color: '#fff', 
-                    weight: 0.5, 
-                    fillOpacity: 0.8
+                    radius: 3, fillColor: getHurricaneColor(p.wind_knots),
+                    color: '#fff', weight: 0.5, fillOpacity: 0.9
                 }).bindPopup(`
-                    <div class="text-xs p-1">
-                        <b class="text-sm text-indigo-700">${storm.name} (${storm.year})</b><hr class="my-1">
-                        <b>Wind:</b> ${p.wind_knots} knots<br>
-                        <b>Pressure:</b> ${p.pressure_mb || 'N/A'} mb<br>
-                        <b>Date:</b> ${p.date}
+                    <div class="font-sans text-xs">
+                        <strong class="text-sm text-indigo-700">${storm.name} (${storm.year})</strong><hr class="my-1 border-gray-200">
+                        Wind: ${p.wind_knots} kt<br>
+                        Pressure: ${p.pressure_mb || 'N/A'} mb<br>
+                        Date: ${p.date}
                     </div>
                 `).addTo(trackLayers);
             });
         });
     }
 
-    // 5. GRAPH LOGIC
-    function renderAnalytics() {
-        const yearCounts = {};
-        let totalMajor = 0;
-        
+    function renderFrequencyChart() {
+        const counts = {};
+        let major = 0;
         _stormData.forEach(s => {
-            yearCounts[s.year] = (yearCounts[s.year] || 0) + 1;
-            const maxW = Math.max(...s.path.map(p => p.wind_knots));
-            if (maxW >= 96) totalMajor++;
+            counts[s.year] = (counts[s.year] || 0) + 1;
+            if (Math.max(...s.path.map(p => p.wind_knots)) >= 96) major++;
         });
 
         document.getElementById('stat-total').innerText = _stormData.length;
-        document.getElementById('stat-major').innerText = totalMajor;
+        document.getElementById('stat-major').innerText = major;
 
         const years = Array.from({length: 16}, (_, i) => 2010 + i);
-        const data = years.map(y => yearCounts[y] || 0);
+        const data = years.map(y => counts[y] || 0);
 
         if (freqChart) freqChart.destroy();
         freqChart = new Chart(document.getElementById('frequencyChart'), {
@@ -339,7 +344,6 @@
             data: {
                 labels: years,
                 datasets: [{
-                    label: 'Storm Frequency',
                     data: data,
                     backgroundColor: data.map(v => v >= 3 ? '#ef4444' : '#6366f1'),
                     borderRadius: 4
@@ -356,19 +360,45 @@
         });
     }
 
-    // RADIAL MENU LOGIC
+    // --- STANDARD UI LOGIC (RESTORED) ---
+    function wireMapDropdown() {
+        const root = document.getElementById('map-selection-dropdown-root');
+        if (!root) return;
+        let t;
+        root.addEventListener('mouseenter', () => { clearTimeout(t); root.classList.add('hovering'); });
+        root.addEventListener('mouseleave', () => { t = setTimeout(() => { root.classList.remove('hovering'); }, 300); });
+    }
+
+    function wireDropdown() {
+      document.querySelectorAll('.nav-dropdown-root').forEach(root => {
+        const menu = root.querySelector('.nav-dropdown-menu');
+        if (!menu) return;
+        let t;
+        root.addEventListener('mouseenter', () => { clearTimeout(t); root.classList.add('hovering'); });
+        root.addEventListener('mouseleave', () => { t = setTimeout(() => { root.classList.remove('hovering'); }, 300); });
+      });
+    }
+
+    // Radial Menu
     const menuItems = [
         { label: 'Population', href: 'population.html', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
+        { label: 'SVI', href: 'svi.html', icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' },
         { label: 'Crime', href: 'crime.html', icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z' },
         { label: 'Employment', href: 'employment.html', icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
         { label: 'Establishments', href: 'establishments.html', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' },
+        { label: 'Income', href: 'income.html', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+        { label: 'Housing', href: 'housing.html', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+        { label: 'Education', href: 'education.html', icon: 'M12 14l9-5-9-5-9 5 9 5z M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z' },
+        { label: 'Health', href: 'health.html', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z' },
+        { label: 'Earthquakes', href: 'disasters_earthquakes.html', icon: 'M13 10V3L4 14h7v7l9-11h-7z' },
         { label: 'Hurricanes', href: 'disasters_hurricanes.html', icon: 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z' }
     ];
 
     function initRadialMenu() {
         const container = document.getElementById('radial-menu-container');
         const trigger = document.getElementById('radial-trigger');
-        const totalAngle = 90, radius = 180, count = menuItems.length, startAngle = -90, step = totalAngle / (count - 1);
+        // Original logic from your saved file
+        const totalAngle = 100, radius = 180, count = menuItems.length, startAngle = -95, step = totalAngle / (count - 1);
 
         menuItems.forEach((item, index) => {
             const angleDeg = startAngle - (step * index), angleRad = angleDeg * (Math.PI / 180);
@@ -376,17 +406,25 @@
             const el = document.createElement('a');
             el.href = item.href; el.className = 'radial-item';
             el.style.setProperty('--tx', `${x}px`); el.style.setProperty('--ty', `${y}px`);
+            el.style.setProperty('--lx', `${Math.round(75 * Math.cos(angleRad))}px`);
+            el.style.setProperty('--ly', `${Math.round(75 * Math.sin(angleRad))}px`);
+            el.style.setProperty('--lr', `${angleDeg + 180}deg`);
             el.innerHTML = `<span class=\"radial-label\">${item.label}</span><svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-6 w-6\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"${item.icon}\" /></svg>`;
             container.insertBefore(el, trigger);
         });
     }
 
     function toggleRadialMenu() { document.getElementById('radial-menu-container').classList.toggle('radial-open'); }
-    
-    // START
+
     document.addEventListener('DOMContentLoaded', () => {
         init();
         initRadialMenu();
+        wireDropdown();
+        
+        // Active Tab Highlighting
+        const currentPath = window.location.pathname.split('/').pop();
+        const activeLink = document.querySelector(`#metrics-menu a[href="${currentPath}"]`);
+        if (activeLink) activeLink.classList.add('bg-indigo-50', 'font-bold', 'text-indigo-700');
     });
   </script>
 </body>
