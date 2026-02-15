@@ -425,6 +425,7 @@
     let map, layer, legend;
     let lockedName = null, selectedLayer = null;
     let lineChart = null, barChart = null;
+    let prBoundsGlobal = null;
 
     const selectedOutline = { weight: 4, color: '#111827', dashArray: '3', fillOpacity: 0.85 };
 
@@ -494,8 +495,10 @@
 
     function initMap() {
         // Centered on Puerto Rico
-        const prBounds = L.latLngBounds([[17.85, -67.45],[18.55, -65.25]]);
-        map = L.map('map', { zoomControl: false, zoomSnap:.25 }).fitBounds(prBounds);
+        // Save these bounds globally for reset logic later
+        prBoundsGlobal = L.latLngBounds([[17.85, -67.45],[18.55, -65.25]]);
+        
+        map = L.map('map', { zoomControl: false, zoomSnap:.25 }).fitBounds(prBoundsGlobal);
         
         L.control.zoom({ position: 'topleft' }).addTo(map);
         
@@ -579,6 +582,10 @@
                         selectedLayer = e.target; 
                         lockedName = fName;
                         e.target.setStyle(selectedOutline); 
+                        
+                        // --- ADDED ZOOM LOGIC ---
+                        map.fitBounds(e.target.getBounds(), { padding: [20, 20] });
+                        
                         updateDetails(lockedName);
                     }
                 });
@@ -732,7 +739,11 @@
       document.getElementById('clearSel').addEventListener('click', () => {
         lockedName = null; 
         if (selectedLayer) { layer.resetStyle(selectedLayer); selectedLayer = null; }
-        map.fitBounds(L.latLngBounds([[17.85, -67.45],[18.55, -65.25]])); 
+        
+        // Reset view to original global bounds
+        if (prBoundsGlobal) map.fitBounds(prBoundsGlobal);
+        else map.fitBounds(L.latLngBounds([[17.85, -67.45],[18.55, -65.25]])); 
+        
         updateDetails('Puerto Rico');
       });
     }
