@@ -435,6 +435,10 @@
     let lineChart = null, barChart = null;
     let prBoundsGlobal = null;
     let currentBreaks = []; // Store dynamic quantile breaks
+    
+    // NEW: Store keys for summation
+    let _crimeKeys = []; 
+    let _totalKey = 'Total';
 
     const selectedOutline = { weight: 4, color: '#111827', dashArray: '3', fillOpacity: 0.85 };
 
@@ -488,6 +492,20 @@
         return isNaN(n) ? 0 : n;
     }
 
+    // NEW HELPER: Get value safely (handles "Total" summation vs. Specific column)
+    function getMetricValue(record, metric) {
+        if (!record) return 0;
+        
+        // If metric is "Total", IGNORE the record's "Total" column and sum the parts
+        // This fixes inconsistencies where the "Total" column in JSON might be wrong or partial
+        if (metric === _totalKey) {
+            return _crimeKeys.reduce((sum, key) => sum + parseVal(record[key]), 0);
+        }
+        
+        // Otherwise, return the specific column value
+        return parseVal(record[metric]);
+    }
+
     function setupControls() {
         // 1. Years
         // Get unique years, sort descending
@@ -509,11 +527,11 @@
         const ignore = ['Municipio', 'Year', 'TOTAL', 'Total']; 
         
         // Find if actual key is "Total" or "TOTAL"
-        let totalKey = 'Total';
-        if ('TOTAL' in sample) totalKey = 'TOTAL';
-        else if ('Total' in sample) totalKey = 'Total';
+        if ('TOTAL' in sample) _totalKey = 'TOTAL';
+        else if ('Total' in sample) _totalKey = 'Total';
 
-        const metrics = Object.keys(sample).filter(k => !ignore.includes(k));
+        // Store all individual crime keys for summation later
+        _crimeKeys = Object.keys(sample).filter(k => !ignore.includes(k));
         
         // Setup dropdown
         const metricSel = document.getElementById('metricSelect');
@@ -521,11 +539,11 @@
         
         // Add Total Option
         const tOpt = document.createElement('option');
-        tOpt.value = totalKey; 
+        tOpt.value = _totalKey; 
         tOpt.innerText = 'Total';
         metricSel.appendChild(tOpt);
 
-        metrics.forEach(m => {
+        _crimeKeys.forEach(m => {
             const opt = document.createElement('option');
             opt.value = m;
             opt.innerText = m;
@@ -581,8 +599,8 @@
 
         const yearData = _crimeData.filter(d => d.Year == year);
         
-        // 1. Calculate Quantile Breaks (using parseVal to handle strings/commas)
-        const values = yearData.map(d => parseVal(d[metric])).sort((a, b) => a - b);
+        // 1. Calculate Quantile Breaks (using getMetricValue to handle summation)
+        const values = yearData.map(d => getMetricValue(d, metric)).sort((a, b) => a - b);
         
         // Percentiles: 0, 20, 40, 60, 80, 95(outlier)
         currentBreaks = [
@@ -596,7 +614,7 @@
         // Lookup Map
         const dataMap = {};
         yearData.forEach(d => {
-            dataMap[d.Municipio.trim()] = parseVal(d[metric]);
+            dataMap[d.Municipio.trim()] = getMetricValue(d, metric);
         });
 
         if (layer) map.removeLayer(layer);
@@ -677,7 +695,7 @@
         if (!div) return;
         
         // Display nice label
-        let displayMetric = metric === 'TOTAL' || metric === 'Total' ? 'Total Incidents' : metric;
+        let displayMetric = metric === _totalKey ? 'Total Incidents' : metric;
         let labels = [`<div style="font-weight:600;margin-bottom:.25rem">${displayMetric}</div>`];
         
         const f = (n) => new Intl.NumberFormat('en-US').format(Math.round(n));
@@ -720,19 +738,19 @@
         
         if (name === 'Puerto Rico') {
             const yData = _crimeData.filter(d => d.Year == year);
-            val = yData.reduce((acc, c) => acc + parseVal(c[metric]), 0);
+            val = yData.reduce((acc, c) => acc + getMetricValue(c, metric), 0);
             
             const pData = _crimeData.filter(d => d.Year == (year - 1));
-            prevVal = pData.reduce((acc, c) => acc + parseVal(c[metric]), 0);
+            prevVal = pData.reduce((acc, c) => acc + getMetricValue(c, metric), 0);
         } else {
             const rec = _crimeData.find(d => d.Year == year && d.Municipio.toLowerCase() === name.toLowerCase());
-            val = rec ? parseVal(rec[metric]) : 0;
+            val = getMetricValue(rec, metric);
             
             const prevRec = _crimeData.find(d => d.Year == (year - 1) && d.Municipio.toLowerCase() === name.toLowerCase());
-            prevVal = prevRec ? parseVal(prevRec[metric]) : 0;
+            prevVal = getMetricValue(prevRec, metric);
 
             const allVals = _crimeData.filter(d => d.Year == year)
-                                      .map(d => ({ n: d.Municipio, v: parseVal(d[metric]) }))
+                                      .map(d => ({ n: d.Municipio, v: getMetricValue(d, metric) }))
                                       .sort((a,b) => b.v - a.v);
             const idx = allVals.findIndex(i => i.n.toLowerCase() === name.toLowerCase());
             if (idx >= 0) rank = `#${idx + 1} of ${allVals.length}`;
@@ -755,10 +773,10 @@
         const years = [...new Set(_crimeData.map(d => d.Year))].sort((a,b) => a-b);
         const trendData = years.map(y => {
             if (name === 'Puerto Rico') {
-                return _crimeData.filter(d => d.Year == y).reduce((acc, c) => acc + parseVal(c[metric]), 0);
+                return _crimeData.filter(d => d.Year == y).reduce((acc, c) => acc + getMetricValue(c, metric), 0);
             } else {
                 const rec = _crimeData.find(d => d.Year == y && d.Municipio.toLowerCase() === name.toLowerCase());
-                return rec ? parseVal(rec[metric]) : 0;
+                return getMetricValue(rec, metric);
             }
         });
 
@@ -774,10 +792,8 @@
         });
 
         // 2. Bar Chart Data (Composition of Crime Types for SELECTED Year)
-        const sample = _crimeData[0];
-        if(!sample) return;
-        const ignore = ['Municipio', 'Year', 'TOTAL', 'Total'];
-        const types = Object.keys(sample).filter(k => !ignore.includes(k));
+        // Always use _crimeKeys to show individual types
+        const types = _crimeKeys;
         
         const compData = types.map(t => {
             if (name === 'Puerto Rico') {
@@ -860,7 +876,7 @@
     const menuItems = [
         { label: 'Population', href: 'population.html', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
         { label: 'Crime', href: 'crime.html', icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z' },
-        { label: 'Employment', href: 'employment.html', icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
+        { label: 'Employment', href: 'employment.html', icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
         { label: 'Establishments', href: 'establishments.html', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' },
         { label: 'Income', href: 'income.html', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
         { label: 'Housing', href: 'housing.html', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
