@@ -41,7 +41,7 @@
 
     .mini { min-height: 260px; }
     
-    /* CRITICAL FIX: Forces chart container to respect height to prevent infinite expansion */
+    /* Chart container wrapper to prevent expansion bugs */
     .chart-fix-wrapper {
         position: relative;
         height: 320px;
@@ -81,111 +81,24 @@
     }
 
     /* --- LEAFLET CONTROL STYLES (Map Dropdown) --- */
-    .leaflet-control-map-dropdown {
-      padding: 0; 
-      margin-left: 45px; 
-      margin-top: 5px; 
-    }
-    .leaflet-control-map-dropdown .dropdown-root {
-      background: #fff;
-      box-shadow: 0 1px 5px rgba(0,0,0,.65);
-      border-radius: 4px;
-      position: relative; 
-    }
-    .leaflet-control-map-dropdown .nav-link {
-        padding: 6px 10px;
-        color: #333;
-        font-weight: 500;
-        font-size: 13px;
-        line-height: 1.2;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        cursor: pointer;
-    }
-    
-    .leaflet-control-map-dropdown .dropdown-menu {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        margin-top: 5px; 
-        z-index: 1000;
-        opacity: 0; visibility: hidden; transform: translateY(4px);
-        pointer-events: none;
-        transition: opacity .15s ease, transform .15s ease, visibility .15s ease;
-    }
-    
-    .leaflet-control-map-dropdown .dropdown-root.hovering .dropdown-menu {
-        opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto;
-    }
-    .leaflet-control-map-dropdown .dropdown-root.hovering #map-selection-chevron {
-        transform: rotate(180deg);
-    }
-    
-    .leaflet-control-map-dropdown .dropdown-menu a {
-        text-decoration: none;
-        padding: 6px 12px;
-        font-size: 13px;
-    }
+    .leaflet-control-map-dropdown { padding: 0; margin-left: 45px; margin-top: 5px; }
+    .leaflet-control-map-dropdown .dropdown-root { background: #fff; box-shadow: 0 1px 5px rgba(0,0,0,.65); border-radius: 4px; position: relative; }
+    .leaflet-control-map-dropdown .nav-link { padding: 6px 10px; color: #333; font-weight: 500; font-size: 13px; line-height: 1.2; display: flex; align-items: center; gap: 4px; cursor: pointer; }
+    .leaflet-control-map-dropdown .dropdown-menu { position: absolute; top: 100%; left: 0; margin-top: 5px; z-index: 1000; opacity: 0; visibility: hidden; transform: translateY(4px); pointer-events: none; transition: opacity .15s ease, transform .15s ease, visibility .15s ease; }
+    .leaflet-control-map-dropdown .dropdown-root.hovering .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto; }
+    .leaflet-control-map-dropdown .dropdown-root.hovering #map-selection-chevron { transform: rotate(180deg); }
+    .leaflet-control-map-dropdown .dropdown-menu a { text-decoration: none; padding: 6px 12px; font-size: 13px; }
 
     /* --- RADIAL MENU STYLES --- */
     #radial-menu-container { pointer-events: none; width: 300px; height: 300px; position: fixed; bottom: 0; right: 0; z-index: 9999; }
-    #radial-trigger { pointer-events: auto; }
-    
-    .radial-item {
-        position: absolute;
-        bottom: 7rem; right: 2rem;  
-        width: 3rem; height: 3rem;
-        border-radius: 50%;
-        background-color: white;
-        color: #4f46e5;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        display: flex; align-items: center; justify-content: center;
-        text-decoration: none;
-        opacity: 0;
-        pointer-events: none;
-        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-        z-index: 9990;
-        --tx: 0px; --ty: 0px; --lx: 0px; --ly: 0px; --lr: 0deg;
-        transform: translate(0, 0) scale(0.5);
-    }
-    
-    .radial-open .radial-item { opacity: 1; pointer-events: auto; transform: translate(var(--tx), var(--ty)) scale(1); }
-    .radial-open .radial-item:hover { background-color: #e0e7ff; transform: translate(var(--tx), var(--ty)) scale(1.1); z-index: 10005 !important; }
-    
-    .radial-label {
-        position: absolute;
-        left: 50%; top: 50%; 
-        transform: translate(calc(-50% + var(--lx)), calc(-50% + var(--ly))) rotate(var(--lr));
-        transform-origin: center center;
-        background: rgba(255, 255, 255, 0.95); 
-        color: black; 
-        padding: 4px 8px; 
-        border-radius: 6px; 
-        font-size: 12px; font-weight: 700;
-        white-space: nowrap; 
-        opacity: 0; 
-        transition: opacity 0.3s ease;
-        pointer-events: none;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-    }
-    
-    .radial-open .radial-label { opacity: 1; }
-
-    #radial-trigger {
-        position: absolute; bottom: 7rem; right: 2rem;
-        width: 4rem; height: 4rem;
-        border-radius: 50%;
-        background-color: #4f46e5;
-        color: white;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
-        display: flex; align-items: center; justify-content: center;
-        cursor: pointer;
-        transition: transform 0.3s ease;
-        z-index: 10000;
-    }
+    #radial-trigger { pointer-events: auto; position: absolute; bottom: 7rem; right: 2rem; width: 4rem; height: 4rem; border-radius: 50%; background-color: #4f46e5; color: white; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.3s ease; z-index: 10000; }
     #radial-trigger:hover { transform: scale(1.05); background-color: #4338ca; }
     .radial-open #radial-trigger { transform: rotate(45deg); background-color: #ef4444; }
+    .radial-item { position: absolute; bottom: 7rem; right: 2rem; width: 3rem; height: 3rem; border-radius: 50%; background-color: white; color: #4f46e5; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); display: flex; align-items: center; justify-content: center; text-decoration: none; opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); z-index: 9990; --tx: 0px; --ty: 0px; --lx: 0px; --ly: 0px; --lr: 0deg; transform: translate(0, 0) scale(0.5); }
+    .radial-open .radial-item { opacity: 1; pointer-events: auto; transform: translate(var(--tx), var(--ty)) scale(1); }
+    .radial-open .radial-item:hover { background-color: #e0e7ff; transform: translate(var(--tx), var(--ty)) scale(1.1); z-index: 10005 !important; }
+    .radial-label { position: absolute; left: 50%; top: 50%; transform: translate(calc(-50% + var(--lx)), calc(-50% + var(--ly))) rotate(var(--lr)); transform-origin: center center; background: rgba(255, 255, 255, 0.95); color: black; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; white-space: nowrap; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
+    .radial-open .radial-label { opacity: 1; }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
@@ -407,6 +320,48 @@
         </div>
       </section>
 
+      <hr class="border-gray-200">
+
+      <section class="card p-6 border-l-4 border-purple-600 bg-white">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <div class="lg:w-1/2 space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-bold uppercase tracking-wide">
+                    Structural Analysis
+                </div>
+                <h2 class="text-2xl font-black text-gray-900 leading-tight">3. The "Solopreneur" Structural Shift</h2>
+                
+                <p class="text-gray-700 leading-relaxed">
+                    Our deep-dive analysis into establishment size and sector confirms that the <em>type</em> of economy is fundamentally changing:
+                </p>
+                
+                <ul class="space-y-4 mt-4 list-disc list-outside ml-4 text-sm text-gray-600">
+                    <li>
+                        <strong class="text-gray-900">Rise of the Micro-Business:</strong> The growth in establishment counts is driven almost entirely by <strong>Micro-Businesses (1-4 Employees)</strong>. This indicates a massive structural shift from "Employment" (working for a big factory) to "Entrepreneurship" (creating an LLC). This is likely driven by necessity (survival entrepreneurship) and the "Gig Economy."
+                    </li>
+                    <li>
+                        <strong class="text-gray-900">Sector Rotation:</strong> We observe a clear rotation in industry dominance:
+                        <ul class="mt-2 space-y-1 ml-4 list-none">
+                            <li>🔻 <strong>Retail Trade (Declining):</strong> Traditional brick-and-mortar shops serving locals are flat or down, mirroring the population loss.</li>
+                            <li>🔺 <strong>Professional Services (Booming):</strong> There is a surge in consulting, technical services, and administrative LLCs. This correlates with the rise of <strong>Act 60</strong> beneficiaries and the remote work revolution.</li>
+                            <li>🔺 <strong>Tourism & Hospitality (Booming):</strong> The "Visitor Economy" is expanding, likely driven by the short-term rental market (Airbnb) turning residential units into commercial "establishments."</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="lg:w-1/2">
+                <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                    <h3 class="text-center text-xs font-bold text-gray-400 uppercase mb-4 tracking-widest">
+                        Sector Growth Index (2012 = 100)
+                    </h3>
+                    <div class="chart-fix-wrapper">
+                        <canvas id="sectorShiftChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </section>
+
     </main>
   </div>
 
@@ -432,8 +387,8 @@
     // CONFIGURATION
     // ==========================================
     const GEOJSON_URL = '../data/tl_2022_72_cousub/pr_municipalities.geojson'; 
-    const EST_JSON    = '../data/employment_establishments/establishments_with_sectors.json'; // NEW JSON FILE
-    const POP_JSON    = '../data/population/prm-est2010_2024.json'; // Needed for Paradox Chart
+    const EST_JSON    = '../data/employment_establishments/establishments_with_sectors.json'; 
+    const POP_JSON    = '../data/population/prm-est2010_2024.json'; 
 
     const fmt = new Intl.NumberFormat('en-US');
     
@@ -445,7 +400,7 @@
     let _geoData = null;
     let map, layer, legend;
     let lockedName = null, selectedLayer = null;
-    let lineChart = null, barChart = null, paradoxChart = null;
+    let lineChart = null, barChart = null, paradoxChart = null, sectorShiftChart = null;
     let prBoundsGlobal = null;
     let currentBreaks = [];
 
@@ -636,7 +591,8 @@
         document.getElementById('d-change').innerText = (diff>0?'+':'') + fmt.format(diff);
 
         drawCharts(name, year);
-        drawParadoxChart(name); // NEW
+        drawParadoxChart(name); 
+        drawSectorShiftChart(name); // NEW CHART
     }
 
     function drawCharts(name, currentYear) {
@@ -668,7 +624,7 @@
             }
         });
 
-        // 2. Bar Chart (Sectors) - UPDATED to include Micro Businesses
+        // 2. Bar Chart (Sectors)
         const sectors = [
             'Retail_Trade', 
             'Tourism_Hospitality', 
@@ -683,7 +639,7 @@
             'Prof. Services', 
             'Healthcare', 
             'Construction', 
-            'Micro-Biz (1-4 Emp)'
+            'Micro-Biz (1-4)'
         ];
         
         let sectorData = [0,0,0,0,0,0];
@@ -721,28 +677,20 @@
     // PARADOX CHART (DUAL AXIS)
     // ==========================================
     function drawParadoxChart(name) {
-        // Years intersection (Population usually goes to 2024, Establishments might stop at 2022/2023)
-        // We'll use 2012-2022 as the safe overlap for the paradox demo
         const years = ['2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022'];
-        
         let popValues = [];
         let estValues = [];
 
         if (name === 'Puerto Rico') {
-            // Aggregate Island Wide
             years.forEach(y => {
-                // Population Agg
                 const totalPop = _popData.reduce((acc, r) => acc + (Number(r[y])||0), 0);
                 popValues.push(totalPop);
-                // Est Agg
                 const totalEst = _estData.reduce((acc, r) => acc + (r[y]||0), 0);
                 estValues.push(totalEst);
             });
         } else {
-            // Specific Muni
             const popRec = _popData.find(r => cleanMuniName(r.Municipio) === name);
             const estRec = _estData.find(r => r.Municipio === name);
-            
             years.forEach(y => {
                 popValues.push(popRec ? (Number(popRec[y])||0) : 0);
                 estValues.push(estRec ? (estRec[y]||0) : 0);
@@ -756,18 +704,18 @@
                 labels: years,
                 datasets: [
                     {
-                        label: 'Population (Declining)',
+                        label: 'Population (Left)',
                         data: popValues,
-                        borderColor: '#ef4444', // Red
+                        borderColor: '#ef4444', 
                         backgroundColor: '#ef4444',
                         yAxisID: 'y',
                         tension: 0.3,
                         pointRadius: 2
                     },
                     {
-                        label: 'Establishments (Growing)',
+                        label: 'Establishments (Right)',
                         data: estValues,
-                        borderColor: '#3b82f6', // Blue
+                        borderColor: '#3b82f6',
                         backgroundColor: '#3b82f6',
                         yAxisID: 'y1',
                         tension: 0.3,
@@ -780,26 +728,73 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 interaction: { mode: 'index', intersect: false },
+                plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: (c) => c.dataset.label + ': ' + fmt.format(c.raw) } } },
+                scales: {
+                    y: { type: 'linear', display: true, position: 'left', title: { display: true, text: 'Total Population' }, grid: { color: 'rgba(0,0,0,0.05)' } },
+                    y1: { type: 'linear', display: true, position: 'right', title: { display: true, text: 'Business Establishments' }, grid: { drawOnChartArea: false } }
+                }
+            }
+        });
+    }
+
+    // ==========================================
+    // SECTOR SHIFT CHART (Growth Index)
+    // ==========================================
+    function drawSectorShiftChart(name) {
+        const years = ['2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022'];
+        
+        let idxProf = [], idxTour = [], idxRetail = [];
+        
+        // Helper to get raw value for a sector/year
+        const getVal = (y, sector) => {
+            if (name === 'Puerto Rico') {
+                return _estData.reduce((acc, r) => acc + (r[`${y}_${sector}`]||0), 0);
+            } else {
+                const r = _estData.find(d => d.Municipio === name);
+                return r ? (r[`${y}_${sector}`]||0) : 0;
+            }
+        };
+
+        // Get Base 2012 values
+        const baseProf = getVal('2012', 'Professional_Services');
+        const baseTour = getVal('2012', 'Tourism_Hospitality');
+        const baseRetail = getVal('2012', 'Retail_Trade');
+
+        years.forEach(y => {
+            const vProf = getVal(y, 'Professional_Services');
+            const vTour = getVal(y, 'Tourism_Hospitality');
+            const vRetail = getVal(y, 'Retail_Trade');
+
+            // Calculate Index: (Current / Base) * 100. Handle Divide by Zero.
+            idxProf.push(baseProf > 0 ? (vProf / baseProf) * 100 : 0);
+            idxTour.push(baseTour > 0 ? (vTour / baseTour) * 100 : 0);
+            idxRetail.push(baseRetail > 0 ? (vRetail / baseRetail) * 100 : 0);
+        });
+
+        if (sectorShiftChart) sectorShiftChart.destroy();
+        sectorShiftChart = new Chart(document.getElementById('sectorShiftChart'), {
+            type: 'line',
+            data: {
+                labels: years,
+                datasets: [
+                    { label: 'Prof. Services', data: idxProf, borderColor: '#8b5cf6', borderWidth: 3, pointRadius: 2, tension: 0.3 }, // Purple
+                    { label: 'Tourism', data: idxTour, borderColor: '#f97316', borderWidth: 3, pointRadius: 2, tension: 0.3 }, // Orange
+                    { label: 'Retail Trade', data: idxRetail, borderColor: '#6b7280', borderWidth: 3, borderDash: [5,5], pointRadius: 2, tension: 0.3 } // Gray Dashed
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: { position: 'top' },
                     tooltip: {
-                        callbacks: { label: (c) => c.dataset.label + ': ' + fmt.format(c.raw) }
+                        callbacks: { label: (c) => `${c.dataset.label}: ${c.raw.toFixed(1)}` }
                     }
                 },
                 scales: {
                     y: {
-                        type: 'linear',
-                        display: true,
-                        position: 'left',
-                        title: { display: true, text: 'Total Population' },
+                        title: { display: true, text: 'Growth Index (100 = No Change)' },
                         grid: { color: 'rgba(0,0,0,0.05)' }
-                    },
-                    y1: {
-                        type: 'linear',
-                        display: true,
-                        position: 'right',
-                        title: { display: true, text: 'Business Establishments' },
-                        grid: { drawOnChartArea: false } // only want the grid lines for one axis to show up
                     }
                 }
             }
