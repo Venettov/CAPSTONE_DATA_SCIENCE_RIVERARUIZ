@@ -24,8 +24,8 @@
         radial-gradient(1200px 600px at 80% -10%, rgba(37,99,235,.10), transparent 60%),
         linear-gradient(180deg, #fafafa 0%, #f3f4f6 100%);
     }
-    /* Fixed Map Height & Light Background */
-    #map { height: 65vh; width: 100%; border-radius: .75rem; background: #f3f4f6; }
+    /* Fixed Map Height */
+    #map { height: 60vh; width: 100%; border-radius: .75rem; background: #e5e7eb; }
     
     .chart-fix-wrapper { position: relative; height: 320px; width: 100%; }
 
@@ -52,7 +52,7 @@
         box-shadow: 0 2px 10px rgba(0,0,0,0.15); border: 1px solid #e5e7eb; 
     }
 
-    /* RADIAL MENU (Restored to Original Style) */
+    /* RADIAL MENU (Original Style) */
     #radial-menu-container { pointer-events: none; width: 300px; height: 300px; position: fixed; bottom: 0; right: 0; z-index: 9999; }
     #radial-trigger { pointer-events: auto; position: absolute; bottom: 7rem; right: 2rem; width: 4rem; height: 4rem; border-radius: 50%; background-color: #4f46e5; color: white; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.3s ease; z-index: 10000; }
     #radial-trigger:hover { transform: scale(1.05); background-color: #4338ca; }
@@ -68,7 +68,7 @@
 
   <nav class="bg-white shadow sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-center gap-6 text-sm sm:text-base">
-      <a href="../index.html" class="nav-link border-b-2 border-transparent">Home</a>
+      <a href="../index.html" class="nav-link border-b-2 border-transparent hover:text-indigo-600 transition-colors">Home</a>
 
       <div class="relative nav-dropdown-root" id="metrics-dropdown-root">
         <a href="../metrics.html" class="nav-link inline-flex items-center gap-1 cursor-pointer select-none">
@@ -91,9 +91,9 @@
         </div>
       </div>
 
-      <a href="../literature.html" class="nav-link border-b-2 border-transparent">Literature</a>
-      <a href="../strategy.html"   class="nav-link border-b-2 border-transparent">Strategy</a>
-      <a href="../about.html"      class="nav-link border-b-2 border-transparent">About</a>
+      <a href="../literature.html" class="nav-link border-b-2 border-transparent hover:text-indigo-600 transition-colors">Literature</a>
+      <a href="../strategy.html"   class="nav-link border-b-2 border-transparent hover:text-indigo-600 transition-colors">Strategy</a>
+      <a href="../about.html"      class="nav-link border-b-2 border-transparent hover:text-indigo-600 transition-colors">About</a>
     </div>
   </nav>
 
@@ -121,6 +121,7 @@
       </header>
 
       <section class="card p-4 relative">
+        
         <div class="absolute top-6 right-6 z-[1000] flex flex-col gap-2">
             <div class="map-filter-card">
                 <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Filter by Strength</label>
@@ -200,7 +201,7 @@
   </div>
 
   <script>
-    // DATA SOURCES
+    // --- 1. CONFIGURATION ---
     const GEOJSON_URL = '../data/tl_2022_72_cousub/pr_municipalities.geojson';
     const HURRICANE_JSON = '../data/natural_disasters/caribbean_hurricane_tracks_2010_2025.json';
     
@@ -209,7 +210,7 @@
     let geoJsonLayer;
     let trackLayers = L.layerGroup();
 
-    // COLOR SCALE FOR HURRICANES
+    // --- 2. HELPERS ---
     function getHurricaneColor(wind) {
         if (wind < 34) return '#5ebaff'; // TD
         if (wind < 64) return '#00faf4'; // TS
@@ -220,9 +221,9 @@
         return '#ff0000';                // Cat 5
     }
 
-    // SWATH POLYGON GENERATOR
+    // Creates the Polygon for the wind swath based on Nautical Mile radii
     function createSwathPoints(lat, lon, r) {
-        const scale = 1.0 / 60.0; // Approx NM to Degrees
+        const scale = 1.0 / 60.0; // Approx 1 NM = 1/60 degrees latitude
         return [
             [lat + (r[0] * scale), lon + (r[0] * scale)], // NE
             [lat - (r[1] * scale), lon + (r[1] * scale)], // SE
@@ -232,25 +233,23 @@
         ];
     }
 
-    // MAIN INIT
+    // --- 3. MAIN INITIALIZATION ---
     async function init() {
         try {
-            // 1. Initialize Map centered on PR (Using Light Tiles for visibility)
+            // A. Init Map (Carto Light for visibility)
             map = L.map('map', { zoomControl: false, zoomSnap: 0.25 }).setView([18.2, -66.4], 9);
             L.control.zoom({ position: 'topleft' }).addTo(map);
-            
-            // Reverted to Light tiles so municipalities are visible
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { 
                 attribution: '&copy; CARTO' 
             }).addTo(map);
 
-            // 2. Load PR Municipalities (Background Layer)
+            // B. Load PR Municipalities (Background)
             const geoRes = await fetch(GEOJSON_URL);
             const geoData = await geoRes.json();
             
             geoJsonLayer = L.geoJSON(geoData, {
-                // Style set for good contrast against light map
-                style: { fillColor: '#fff', weight: 1.5, opacity: 1, color: '#6b7280', fillOpacity: 0.3 },
+                // Style: White fill, Gray border. Visible but subtle.
+                style: { fillColor: '#fff', weight: 1.5, opacity: 1, color: '#6b7280', fillOpacity: 0.2 },
                 onEachFeature: (feature, layer) => {
                     layer.bindTooltip(feature.properties.NAME || feature.properties.name, {
                         permanent: false, direction: 'center', className: 'leaflet-tooltip'
@@ -258,7 +257,7 @@
                 }
             }).addTo(map);
             
-            // Map Controls Logic
+            // Map Dropdown Control
             L.Control.MapDropdown = L.Control.extend({
                 onAdd: function(map) {
                     const container = L.DomUtil.get('map-dropdown-container');
@@ -269,15 +268,15 @@
             new L.Control.MapDropdown({ position: 'topleft' }).addTo(map);
             wireMapDropdown();
 
-            // 3. Load Hurricane Data
+            // C. Load & Plot Hurricane Data
             const stormRes = await fetch(HURRICANE_JSON);
             _stormData = await stormRes.json();
             
             trackLayers.addTo(map);
-            plotHurricanes(0); // Plot all by default
+            plotHurricanes(0); 
             renderFrequencyChart();
 
-            // Filter Listener
+            // D. Wire Filters
             document.getElementById('intensityFilter').addEventListener('change', (e) => {
                 plotHurricanes(parseInt(e.target.value));
             });
@@ -294,28 +293,25 @@
             const maxW = Math.max(...storm.path.map(p => p.wind_knots));
             if (maxW < minWind) return;
 
+            // Draw Track Line (Non-interactive)
             const pathCoords = storm.path.map(p => [p.lat, p.lon]);
-            
-            // Track Line
-            L.polyline(pathCoords, { color: 'gray', weight: 1, opacity: 0.5, dashArray: '4' }).addTo(trackLayers);
+            L.polyline(pathCoords, { color: 'gray', weight: 1, opacity: 0.5, dashArray: '4', interactive: false }).addTo(trackLayers);
 
             storm.path.forEach(p => {
-                // Hurricane Swath (Red)
+                // Hurricane Swath (Red) - INTERACTIVE: FALSE (Click-through)
                 if (p.r64 && p.r64[0] > 0) {
                     L.polygon(createSwathPoints(p.lat, p.lon, p.r64), {
-                        // INTERACTIVE FALSE FIX: Allows clicking through to municipalities
-                        color: 'none', fillColor: '#ef4444', fillOpacity: 0.2, interactive: false 
+                        color: 'none', fillColor: '#ef4444', fillOpacity: 0.15, interactive: false 
                     }).addTo(trackLayers);
                 }
-                // TS Swath (Blue)
+                // TS Swath (Blue) - INTERACTIVE: FALSE (Click-through)
                 if (p.r34 && p.r34[0] > 0) {
                     L.polygon(createSwathPoints(p.lat, p.lon, p.r34), {
-                        // INTERACTIVE FALSE FIX
                         color: 'none', fillColor: '#3b82f6', fillOpacity: 0.05, interactive: false
                     }).addTo(trackLayers);
                 }
                 
-                // Point Marker (Keep this clickable)
+                // Storm Center Dot - INTERACTIVE: TRUE (Clickable)
                 L.circleMarker([p.lat, p.lon], {
                     radius: 3, fillColor: getHurricaneColor(p.wind_knots),
                     color: '#fff', weight: 0.5, fillOpacity: 0.9
@@ -367,7 +363,7 @@
         });
     }
 
-    // --- STANDARD UI LOGIC (RESTORED) ---
+    // --- 4. STANDARD UI LOGIC ---
     function wireMapDropdown() {
         const root = document.getElementById('map-selection-dropdown-root');
         if (!root) return;
@@ -386,7 +382,7 @@
       });
     }
 
-    // Radial Menu
+    // Radial Menu Items
     const menuItems = [
         { label: 'Population', href: 'population.html', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
         { label: 'SVI', href: 'svi.html', icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' },
