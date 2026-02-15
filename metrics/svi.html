@@ -41,6 +41,7 @@
     }
 
     .mini { min-height: 260px; }
+    .chart-container-large { min-height: 350px; }
 
     /* Navigation Dropdown Base Styles */
     .nav-dropdown-menu { 
@@ -197,7 +198,13 @@
             <a href="svi.html"            class="block px-4 py-2 bg-indigo-50 text-indigo-700 font-semibold">Social Vulnerability (SVI)</a>
             <a href="crime.html"          class="block px-4 py-2 hover:bg-gray-50 transition-colors">Crime & Safety</a>
             <a href="employment.html"     class="block px-4 py-2 hover:bg-gray-50 transition-colors">Employment Rate</a>
+            <a href="establishments.html" class="block px-4 py-2 hover:bg-gray-50">Employer Establishments</a>
             <a href="income.html"         class="block px-4 py-2 hover:bg-gray-50 transition-colors">Household Income</a>
+            <a href="housing.html"        class="block px-4 py-2 hover:bg-gray-50">Housing Units</a>
+            <a href="education.html"      class="block px-4 py-2 hover:bg-gray-50">Education</a>
+            <a href="health.html"         class="block px-4 py-2 hover:bg-gray-50">Health</a>
+            <a href="disasters_earthquakes.html"      class="block px-4 py-2 hover:bg-gray-50">Earthquakes</a>
+            <a href="disasters_hurricanes.html"      class="block px-4 py-2 hover:bg-gray-50">Hurricanes</a>
           </div>
         </div>
       </div>
@@ -298,9 +305,9 @@
             Vulnerability Profile
         </h2>
         
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
           
-          <div class="space-y-6">
+          <div class="space-y-6 col-span-1">
             <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 shadow-inner">
               <div class="text-xs font-bold text-gray-400 uppercase tracking-tighter mb-1">Municipio Focus</div>
               <div id="d-name" class="text-2xl font-black text-gray-900 truncate">Puerto Rico</div>
@@ -325,20 +332,21 @@
             </div>
           </div>
 
-          <div>
+          <div class="col-span-1 lg:col-span-2">
             <h3 class="text-sm font-bold text-gray-600 mb-3 uppercase tracking-wide">Historical Trend (2010–2024)</h3>
-            <div class="mini bg-gray-50 rounded-xl p-4 border border-gray-100">
+            <div class="mini bg-gray-50 rounded-xl p-4 border border-gray-100 h-full" style="min-height: 280px;">
               <canvas id="lineChart"></canvas>
             </div>
           </div>
+        </div>
 
-          <div>
-            <h3 class="text-sm font-bold text-gray-600 mb-3 uppercase tracking-wide">SVI Theme Distribution</h3>
-            <div class="mini bg-gray-50 rounded-xl p-4 border border-gray-100">
+        <div>
+            <h3 class="text-sm font-bold text-gray-600 mb-3 uppercase tracking-wide">Comprehensive SVI Indicator Breakdown</h3>
+            <div class="chart-container-large bg-gray-50 rounded-xl p-6 border border-gray-100">
               <canvas id="barChart"></canvas>
             </div>
-          </div>
         </div>
+
       </section>
       
       <hr class="border-gray-200">
@@ -418,7 +426,8 @@
     const SVI_JSON    = '../data/svi/puerto_rico_master_profile_2010_2024.json'; 
 
     const fmt = new Intl.NumberFormat('en-US');
-    const CHORO_COLORS = ['#f5f3ff', '#ede9fe', '#ddd6fe', '#c4b5fd', '#a78bfa', '#8b5cf6', '#6d28d9'];
+    // Updated Green (Low Vulnerability) to Red (High Vulnerability) Scale
+    const CHORO_COLORS = ['#15803d', '#22c55e', '#bbf7d0', '#f97316', '#b91c1c', '#7f1d1d'];
     
     let _sviData = [];
     let _geoData = null;
@@ -426,6 +435,7 @@
     let lockedName = null, selectedLayer = null;
     let lineChart = null, barChart = null;
     let prBoundsGlobal = null;
+    let currentBreaks = []; // Dynamic Quantile Breaks
 
     const selectedOutline = { weight: 4, color: '#111827', dashArray: '3', fillOpacity: 0.85 };
 
@@ -544,30 +554,41 @@
         const metric = document.getElementById('metricSelect').value;
         const yearData = _sviData.filter(d => d.year == year);
         
+        // 1. Calculate Quantile Breaks
+        const values = yearData.map(d => d[metric] || 0).sort((a, b) => a - b);
+        
+        // Percentiles: 0%, 20%, 40%, 60%, 80%, 95%
+        currentBreaks = [
+            values[Math.floor(values.length * 0.2)] || 0,
+            values[Math.floor(values.length * 0.4)] || 0,
+            values[Math.floor(values.length * 0.6)] || 0,
+            values[Math.floor(values.length * 0.8)] || 0,
+            values[Math.floor(values.length * 0.95)] || 0 
+        ];
+
         const dataMap = {};
-        let maxVal = 0;
         yearData.forEach(d => {
             const val = d[metric] || 0;
             dataMap[cleanMuniName(d.municipio)] = val;
-            if (val > maxVal) maxVal = val;
         });
 
         if (layer) map.removeLayer(layer);
 
+        // NOTE: Use 'lyr' to avoid shadowing global 'layer'
         layer = L.geoJSON(_geoData, {
             style: (f) => {
                 const fName = (f.properties.NAME || f.properties.name || '').replace(/\s*Municipio$/,'');
                 const val = dataMap[fName] || 0;
                 return { 
-                    fillColor: getColor(val, maxVal), 
-                    weight: 1.5, 
-                    color: 'white', 
+                    fillColor: getColor(val), 
+                    weight: 1.2, 
+                    color: '#111827', // Dark Border 
                     fillOpacity: 0.75 
                 };
             },
-            onEachFeature: (f, l) => {
+            onEachFeature: (f, lyr) => {
                 const fName = (f.properties.NAME || f.properties.name || '').replace(/\s*Municipio$/,'');
-                l.on({
+                lyr.on({
                     mouseover: (e) => { 
                         if (!lockedName) {
                             e.target.setStyle({ weight: 3, color: '#4f46e5' });
@@ -583,7 +604,7 @@
                         lockedName = fName;
                         e.target.setStyle(selectedOutline); 
                         
-                        // --- ADDED ZOOM LOGIC ---
+                        // Zoom Logic
                         map.fitBounds(e.target.getBounds(), { padding: [20, 20] });
                         
                         updateDetails(lockedName);
@@ -592,38 +613,49 @@
             }
         }).addTo(map);
 
-        updateLegend(maxVal, metric);
+        updateLegend(metric);
         updateDetails(lockedName || 'Puerto Rico');
     }
 
-    function getColor(d, max) {
-        const step = max / 6;
-        return d > step * 5 ? CHORO_COLORS[6] : 
-               d > step * 4 ? CHORO_COLORS[5] :
-               d > step * 3 ? CHORO_COLORS[4] : 
-               d > step * 2 ? CHORO_COLORS[3] :
-               d > step * 1 ? CHORO_COLORS[2] : 
-               d > 0        ? CHORO_COLORS[1] : 
-                              CHORO_COLORS[0];
+    function getColor(d) {
+        // Dynamic Green -> Red Scale based on Quantiles
+        if (d > currentBreaks[4]) return CHORO_COLORS[5]; 
+        if (d > currentBreaks[3]) return CHORO_COLORS[4];
+        if (d > currentBreaks[2]) return CHORO_COLORS[3];
+        if (d > currentBreaks[1]) return CHORO_COLORS[2];
+        if (d > currentBreaks[0]) return CHORO_COLORS[1];
+        return CHORO_COLORS[0]; 
     }
 
-    function updateLegend(max, metric) {
+    function updateLegend(metric) {
         const div = document.getElementById('map-legend');
         if (!div) return;
         const labelText = document.querySelector(`#metricSelect option[value="${metric}"]`).innerText;
         
         let labels = [`<div class="font-bold text-[11px] uppercase text-gray-500 mb-2">${labelText}</div>`];
-        const step = max / 6;
+        
+        // Helper to format numbers
+        const f = (n) => n.toFixed(1) + '%';
 
-        for (let i = 0; i < 6; i++) {
-            const c = CHORO_COLORS[i+1];
-            labels.push(`
-                <div class="flex items-center gap-2 text-[10px] mb-1">
-                    <span class="w-3 h-3 rounded-sm" style="background:${c}"></span>
-                    <span>${(step*i).toFixed(1)}% &ndash; ${(step*(i+1)).toFixed(1)}%</span>
-                </div>
-            `);
-        }
+        const ranges = [
+            { min: 0, max: currentBreaks[0], col: CHORO_COLORS[0] },
+            { min: currentBreaks[0], max: currentBreaks[1], col: CHORO_COLORS[1] },
+            { min: currentBreaks[1], max: currentBreaks[2], col: CHORO_COLORS[2] },
+            { min: currentBreaks[2], max: currentBreaks[3], col: CHORO_COLORS[3] },
+            { min: currentBreaks[3], max: currentBreaks[4], col: CHORO_COLORS[4] },
+            { min: currentBreaks[4], max: '+', col: CHORO_COLORS[5] }
+        ];
+
+        ranges.forEach(r => {
+            const txt = r.max === '+' ? `> ${f(r.min)}` : `${f(r.min)} &ndash; ${f(r.max)}`;
+            labels.push(
+                `<div style="display:flex;align-items:center;gap:.5rem;margin:.2rem 0;font-size:12px;">
+                   <span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:${r.col};border:1px solid rgba(0,0,0,.15)"></span>
+                   <span>${txt}</span>
+                 </div>`
+            );
+        });
+        
         div.innerHTML = labels.join('');
     }
 
@@ -686,8 +718,8 @@
                 datasets:[{ 
                     label: 'Vulnerability (%)', 
                     data: trendData, 
-                    borderColor: '#4f46e5', 
-                    backgroundColor: 'rgba(79,70,229,0.1)', 
+                    borderColor: '#dc2626', // Matching Red from Crime
+                    backgroundColor: 'rgba(220,38,38,0.1)', 
                     fill: true,
                     tension: 0.4
                 }] 
@@ -699,9 +731,28 @@
             }
         });
 
-        // 2. Bar Chart: Theme Comparison
-        const themes = ['pct_below_poverty', 'unemployment_rate_pct', 'pct_disability', 'pct_no_vehicle'];
-        const labels = ['Poverty', 'Unemployment', 'Disability', 'No Vehicle'];
+        // 2. Bar Chart: Full Theme Comparison (All 8 Indicators)
+        const themes = [
+            'pct_below_poverty', 
+            'unemployment_rate_pct', 
+            'pct_no_hs_diploma',
+            'pct_aged_65_plus',
+            'pct_disability', 
+            'pct_no_vehicle', 
+            'pct_single_parent', 
+            'pct_crowding'
+        ];
+        
+        const labels = [
+            'Poverty Rate', 
+            'Unemployment', 
+            'No High School',
+            'Aged 65+',
+            'Disability', 
+            'No Vehicle', 
+            'Single Parent', 
+            'Crowding'
+        ];
         
         const compData = themes.map(t => {
             if (name === 'Puerto Rico') {
@@ -720,14 +771,15 @@
                 labels, 
                 datasets:[{ 
                     data: compData, 
-                    backgroundColor: ['#6366f1', '#818cf8', '#a5b4fc', '#c7d2fe'],
-                    borderRadius: 6
+                    backgroundColor: '#4f46e5', // Indigo bars
+                    borderRadius: 4
                 }] 
             },
             options: { 
                 indexAxis: 'y', 
                 maintainAspectRatio: false, 
-                plugins:{ legend:{display:false} } 
+                plugins:{ legend:{display:false} },
+                scales: { x: { beginAtZero: true, max: 100 } } // Standardize x-axis to 100%
             }
         });
     }
@@ -740,7 +792,6 @@
         lockedName = null; 
         if (selectedLayer) { layer.resetStyle(selectedLayer); selectedLayer = null; }
         
-        // Reset view to original global bounds
         if (prBoundsGlobal) map.fitBounds(prBoundsGlobal);
         else map.fitBounds(L.latLngBounds([[17.85, -67.45],[18.55, -65.25]])); 
         
@@ -771,7 +822,15 @@
     const menuItems = [
         { label: 'Population', href: 'population.html', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
         { label: 'SVI', href: 'svi.html', icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' },
-        { label: 'Crime', href: 'crime.html', icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z' }
+        { label: 'Crime', href: 'crime.html', icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z' },
+        { label: 'Employment', href: 'employment.html', icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
+        { label: 'Establishments', href: 'establishments.html', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' },
+        { label: 'Income', href: 'income.html', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+        { label: 'Housing', href: 'housing.html', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+        { label: 'Education', href: 'education.html', icon: 'M12 14l9-5-9-5-9 5 9 5z M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z' },
+        { label: 'Health', href: 'health.html', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z' },
+        { label: 'Earthquakes', href: 'disasters_earthquakes.html', icon: 'M13 10V3L4 14h7v7l9-11h-7z' },
+        { label: 'Hurricanes', href: 'disasters_hurricanes.html', icon: 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z' }
     ];
 
     function initRadialMenu() {
