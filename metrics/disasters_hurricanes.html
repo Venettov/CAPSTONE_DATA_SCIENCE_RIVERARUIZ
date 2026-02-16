@@ -462,9 +462,10 @@
     }
 
     function selectStorm(storm) {
-        const zoomBuffer = 20; // Set your preferred zoom distance here
+        // --- THE ADJUSTMENT KNOB ---
+        const zoomBuffer = 20; // Lower = tighter zoom around PR. Try 10 or 5.
 
-        // 1. Update UI Text
+        // 1. Update UI Text elements
         document.getElementById('info-storm-name').innerText = storm.name;
         document.getElementById('info-storm-year').innerText = storm.year;
         
@@ -474,20 +475,21 @@
         document.getElementById('info-max-wind').innerText = maxW;
         document.getElementById('info-pressure').innerText = minP;
         document.getElementById('info-summary').innerText = 
-            `Isolating ${storm.name}. All other tracks hidden for clarity.`;
+            `Isolating ${storm.name}. View centered on Puerto Rico to show localized impact.`;
 
-        // 2. Redraw map - this now hides all other storms
+        // 2. Redraw map - this hides all other storms and shows swaths for this one
         plotStorms(0, storm.id); 
 
-        // 3. Zoom to the selected track
-        const coords = storm.path.map(p => [p.lat, p.lon]);
-        const bounds = L.latLngBounds(coords);
-        
-        map.fitBounds(bounds, { 
-            padding: [zoomBuffer, zoomBuffer], 
-            animate: true, 
-            duration: 1.2 
-        });
+        // 3. TARGETED ZOOM: Zoom to Puerto Rico instead of the full trajectory
+        // We use the municipalityLayer bounds to ensure we stay focused on the island
+        if (municipalityLayer) {
+            const prBounds = municipalityLayer.getBounds();
+            map.fitBounds(prBounds, { 
+                padding: [zoomBuffer, zoomBuffer], 
+                animate: true, 
+                duration: 1.2 
+            });
+        }
 
         updateChartProfile(storm);
     }
