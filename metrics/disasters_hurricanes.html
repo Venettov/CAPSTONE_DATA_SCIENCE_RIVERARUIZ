@@ -18,7 +18,7 @@
       background: #fff;
       border-radius: 1rem;
       box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05);
-      overflow: visible; /* Allows dropdowns to spill over */
+      overflow: visible; 
     }
     
     .hero {
@@ -28,12 +28,12 @@
         linear-gradient(180deg, #fafafa 0%, #f3f4f6 100%);
     }
 
-    /* MAP CONTAINER - Fixed Height */
+    /* MAP CONTAINER */
     #map { 
         height: 65vh; 
         width: 100%; 
         border-radius: .75rem; 
-        background: #e5e7eb; /* Neutral background for oceans */
+        background: #e5e7eb; 
         z-index: 1;
     }
     @media (min-width: 1280px) { #map { height: 60vh; } }
@@ -41,20 +41,20 @@
 
     /* TOOLTIPS */
     .leaflet-tooltip {
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.95);
       border: 1px solid #333;
       color: #111827;
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 13px;
+      font-weight: 700;
       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-      padding: 2px 6px;
+      padding: 3px 8px;
       border-radius: 4px;
     }
 
-    /* CHART WRAPPERS */
+    /* CHART WRAPPER (Now Larger) */
     .chart-fix-wrapper {
         position: relative;
-        height: 300px;
+        height: 350px; /* Increased Height */
         width: 100%;
     }
 
@@ -79,7 +79,7 @@
         transform: rotate(180deg); 
     }
     
-    /* SCALE WRAPPER (Global Page Zoom Effect) */
+    /* SCALE WRAPPER */
     #scale-wrapper { 
         transform: scale(0.65); 
         transform-origin: top center; 
@@ -107,7 +107,7 @@
         min-width: 160px;
     }
 
-    /* --- RADIAL MENU STYLES (Preserved) --- */
+    /* --- RADIAL MENU STYLES --- */
     #radial-menu-container { pointer-events: none; width: 300px; height: 300px; position: fixed; bottom: 0; right: 0; z-index: 9999; }
     #radial-trigger { pointer-events: auto; position: absolute; bottom: 7rem; right: 2rem; width: 4rem; height: 4rem; border-radius: 50%; background-color: #4f46e5; color: white; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.3s ease; z-index: 10000; }
     #radial-trigger:hover { transform: scale(1.05); background-color: #4338ca; }
@@ -173,7 +173,7 @@
             <div class="mt-5">
               <span class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-100 text-slate-800">
                 <span class="inline-flex w-5 h-5 items-center justify-center rounded-full bg-slate-800 text-white text-xs">i</span>
-                Historical Hurricane Tracks (2010–2025). Click any storm track to see wind profile.
+                Hover over storm tracks to see wind swath intensity (2010–2025). The map shows all 78 municipalities.
               </span>
             </div>
           </div>
@@ -181,7 +181,6 @@
       </header>
 
       <section class="card p-4 relative">
-        
         <div class="absolute top-6 right-6 z-[1000] flex flex-col gap-2">
             <div class="map-filter-card">
                 <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Filter Strength</label>
@@ -214,6 +213,9 @@
                         <a href="population.html"     class="block px-4 py-2 bg-indigo-50 font-bold text-indigo-700">Population Map</a>
                         <a href="crime.html"          class="block px-4 py-2 hover:bg-gray-50">Crime & Safety</a>
                         <a href="employment.html"     class="block px-4 py-2 hover:bg-gray-50">Employment Rate</a>
+                        <a href="establishments.html" class="block px-4 py-2 hover:bg-gray-50">Employer Establishments</a>
+                        <a href="income.html"         class="block px-4 py-2 hover:bg-gray-50">Household Income</a>
+                        <a href="housing.html"        class="block px-4 py-2 hover:bg-gray-50">Housing Units</a>
                         <a href="disasters_hurricanes.html" class="block px-4 py-2 hover:bg-gray-50">Hurricanes</a>
                       </div>
                     </div>
@@ -227,37 +229,37 @@
       <section class="card p-6">
         <h2 class="text-lg font-semibold mb-4 text-gray-800">Storm Details & Analysis</h2>
         
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="flex flex-col space-y-6">
           
-          <div class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 shadow-inner">
                 <div class="text-xs font-bold text-gray-400 uppercase tracking-tighter mb-1">Selected Storm</div>
                 <div id="info-storm-name" class="text-2xl font-black text-gray-900 truncate">Select a Track</div>
                 <div id="info-storm-year" class="text-sm font-semibold text-indigo-600">--</div>
             </div>
 
-            <div class="space-y-4">
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="p-3 bg-white border rounded-lg shadow-sm">
-                        <div class="text-[10px] font-bold text-gray-400 uppercase">Max Wind (Knots)</div>
-                        <div id="info-max-wind" class="text-xl font-bold text-gray-800">--</div>
-                    </div>
-                    <div class="p-3 bg-white border rounded-lg shadow-sm">
-                        <div class="text-[10px] font-bold text-gray-400 uppercase">Min Pressure</div>
-                        <div id="info-pressure" class="text-xl font-bold text-gray-800">--</div>
-                    </div>
-                </div>
-                
+            <div class="grid grid-cols-2 gap-4">
                 <div class="p-3 bg-white border rounded-lg shadow-sm">
+                    <div class="text-[10px] font-bold text-gray-400 uppercase">Max Wind (Knots)</div>
+                    <div id="info-max-wind" class="text-xl font-bold text-gray-800">--</div>
+                </div>
+                <div class="p-3 bg-white border rounded-lg shadow-sm">
+                    <div class="text-[10px] font-bold text-gray-400 uppercase">Min Pressure</div>
+                    <div id="info-pressure" class="text-xl font-bold text-gray-800">--</div>
+                </div>
+            </div>
+            
+            <div class="p-3 bg-white border rounded-lg shadow-sm flex items-center">
+                <div>
                    <div class="text-[10px] font-bold text-gray-400 uppercase">Impact Summary</div>
-                   <div id="info-summary" class="text-sm text-gray-600 mt-1">
-                       Click on any storm track line to view its intensity profile over time.
+                   <div id="info-summary" class="text-sm text-gray-600 mt-1 leading-tight">
+                       Click on any storm track line on the map to view its intensity profile over time.
                    </div>
                 </div>
             </div>
           </div>
 
-          <div class="col-span-1 lg:col-span-2 space-y-6">
+          <div class="w-full">
             <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 chart-fix-wrapper">
                 <h3 id="chart-title" class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 absolute top-4 left-4">Annual Storm Frequency (2010-2025)</h3>
                 <canvas id="analysisChart"></canvas>
@@ -290,6 +292,15 @@
     </main>
   </div>
 
+  <div class="fixed bottom-8 right-8 z-[9998]">
+    <a href="../metrics.html" class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-4 rounded-full shadow-2xl transition transform hover:scale-105 font-bold text-lg no-underline">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+        Metrics Overview
+    </a>
+  </div>
+
   <div id="radial-menu-container">
       <button id="radial-trigger" onclick="toggleRadialMenu()">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -301,7 +312,7 @@
   <script>
     // --- CONFIGURATION ---
     const GEOJSON_URL = '../data/tl_2022_72_cousub/pr_municipalities.geojson';
-    const STORMS_JSON = '../data/natural_disasters/caribbean_hurricane_tracks_2010_2025.json'; // New Data Source
+    const STORMS_JSON = '../data/natural_disasters/caribbean_hurricane_tracks_2010_2025.json'; 
 
     let map, analysisChart;
     let _stormData = [];
@@ -322,12 +333,10 @@
 
     // --- INITIALIZATION ---
     document.addEventListener('DOMContentLoaded', async () => {
-        // Load Data
         await loadData();
         
-        // Setup UI
         initMap();
-        initChart(); // Default frequency chart
+        initChart(); 
         initRadialMenu();
         wireDropdown();
         
@@ -363,29 +372,24 @@
 
     // --- MAP LOGIC ---
     function initMap() {
-        // Center on Puerto Rico with fixed zoom as requested
         map = L.map('map', { zoomControl: false, zoomSnap: 0.25 }).setView([18.25, -66.45], 9);
-        
-        // Add Zoom Control top-left
         L.control.zoom({ position: 'topleft' }).addTo(map);
 
-        // Simple Light Tile Layer for neutral background
         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { 
             attribution: '&copy; CARTO',
             opacity: 1
         }).addTo(map);
 
-        // 1. Draw Municipalities (Neutral Background)
+        // Municipalities Layer
         municipalityLayer = L.geoJSON(_geoData, {
             style: {
                 fillColor: '#ffffff',
                 weight: 1.5,
                 opacity: 1,
-                color: '#9ca3af', // Gray-400 borders
+                color: '#9ca3af', 
                 fillOpacity: 0.1
             },
             onEachFeature: (feature, layer) => {
-                // Tooltip for Town Name
                 const name = feature.properties.NAME || feature.properties.name;
                 layer.bindTooltip(name, {
                     permanent: false,
@@ -395,7 +399,7 @@
             }
         }).addTo(map);
 
-        // 2. Add Dropdown Control (Custom Leaflet Control)
+        // Custom Controls
         L.Control.MapDropdown = L.Control.extend({
             onAdd: function(map) {
                 const container = L.DomUtil.get('map-dropdown-container');
@@ -406,20 +410,18 @@
         new L.Control.MapDropdown({ position: 'topleft' }).addTo(map);
         wireMapDropdown();
 
-        // 3. Plot Initial Storms
         trackLayers.addTo(map);
         plotStorms(0);
     }
 
     // --- STORM PLOTTING ---
     function createSwathPoints(lat, lon, r) {
-        // Helper to draw polygons from radii data (approx conversion)
         const scale = 1.0 / 60.0; 
         return [
-            [lat + (r[0] * scale), lon + (r[0] * scale)], // NE
-            [lat - (r[1] * scale), lon + (r[1] * scale)], // SE
-            [lat - (r[2] * scale), lon - (r[2] * scale)], // SW
-            [lat + (r[3] * scale), lon - (r[3] * scale)], // NW
+            [lat + (r[0] * scale), lon + (r[0] * scale)], 
+            [lat - (r[1] * scale), lon + (r[1] * scale)], 
+            [lat - (r[2] * scale), lon - (r[2] * scale)], 
+            [lat + (r[3] * scale), lon - (r[3] * scale)], 
             [lat + (r[0] * scale), lon + (r[0] * scale)]  
         ];
     }
@@ -428,44 +430,37 @@
         trackLayers.clearLayers();
 
         _stormData.forEach(storm => {
-            // Check if storm meets filter criteria (based on max wind in track)
             const maxW = Math.max(...storm.path.map(p => p.wind_knots));
             if (maxW < minWind) return;
 
-            // 1. Draw Polyline (Track)
+            // 1. Draw Polyline (Track) - THICKER LINES (Weight 3)
             const coords = storm.path.map(p => [p.lat, p.lon]);
             const line = L.polyline(coords, {
                 color: 'gray',
-                weight: 2,
-                opacity: 0.6,
+                weight: 3, 
+                opacity: 0.7,
                 dashArray: '4'
             }).addTo(trackLayers);
 
-            // Click event for the Line
             line.on('click', () => selectStorm(storm));
 
             // 2. Draw Points & Swaths
             storm.path.forEach(p => {
-                // Only draw points near PR to save performance, or draw all? 
-                // Drawing all for accuracy as requested.
-                
-                // Hurricane Swath (Red)
                 if (p.r64 && p.r64.some(x=>x>0)) {
                     L.polygon(createSwathPoints(p.lat, p.lon, p.r64), {
                         color: 'none', fillColor: '#ef4444', fillOpacity: 0.1, interactive: false
                     }).addTo(trackLayers);
                 }
                 
-                // Point Marker
+                // Point Marker - LARGER DOTS (Radius 6)
                 const marker = L.circleMarker([p.lat, p.lon], {
-                    radius: 4,
+                    radius: 6,
                     fillColor: getStormColor(p.wind_knots),
                     color: '#fff',
                     weight: 1,
                     fillOpacity: 0.9
                 }).addTo(trackLayers);
 
-                // Tooltip
                 marker.bindPopup(`
                     <div class="font-sans text-xs">
                         <strong class="text-indigo-700">${storm.name} (${storm.year})</strong><br>
@@ -474,7 +469,6 @@
                     </div>
                 `);
                 
-                // Click event for markers
                 marker.on('click', () => selectStorm(storm));
             });
         });
@@ -482,7 +476,6 @@
 
     // --- INTERACTION & CHARTS ---
     function selectStorm(storm) {
-        // 1. Update Details Panel
         document.getElementById('info-storm-name').innerText = storm.name;
         document.getElementById('info-storm-year').innerText = storm.year;
         
@@ -494,12 +487,10 @@
         document.getElementById('info-summary').innerText = 
             `Tracking data selected. Chart updated to show intensity profile.`;
 
-        // 2. Update Chart
         updateChartProfile(storm);
     }
 
     function initChart() {
-        // Initialize with Frequency Data
         updateChartFrequency();
     }
 
@@ -536,7 +527,7 @@
     }
 
     function updateChartProfile(storm) {
-        const labels = storm.path.map(p => p.date.substring(5)); // MM-DD
+        const labels = storm.path.map(p => p.date.substring(5)); 
         const data = storm.path.map(p => p.wind_knots);
 
         const ctx = document.getElementById('analysisChart');
@@ -554,7 +545,8 @@
                     borderColor: '#ef4444',
                     backgroundColor: 'rgba(239, 68, 68, 0.1)',
                     fill: true,
-                    tension: 0.3
+                    tension: 0.3,
+                    pointRadius: 4
                 }]
             },
             options: {
@@ -566,8 +558,7 @@
         });
     }
 
-
-    // --- UI HELPERS (Standard) ---
+    // --- UI HELPERS ---
     function wireMapDropdown() {
         const root = document.getElementById('map-selection-dropdown-root');
         if (!root) return;
@@ -586,7 +577,6 @@
       });
     }
 
-    // Radial Menu Logic
     const menuItems = [
         { label: 'Population', href: 'population.html', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
         { label: 'SVI', href: 'svi.html', icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' },
