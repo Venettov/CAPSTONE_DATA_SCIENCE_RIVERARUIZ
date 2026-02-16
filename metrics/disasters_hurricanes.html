@@ -462,7 +462,7 @@
     }
 
     function selectStorm(storm) {
-        // 1. Update UI Text
+        // 1. Update UI Text elements
         document.getElementById('info-storm-name').innerText = storm.name;
         document.getElementById('info-storm-year').innerText = storm.year;
         
@@ -472,9 +472,9 @@
         document.getElementById('info-max-wind').innerText = maxW;
         document.getElementById('info-pressure').innerText = minP;
         document.getElementById('info-summary').innerText = 
-            `Displaying intensity footprint for ${storm.name}. Large wind swaths are now visible.`;
+            `Displaying intensity footprint for ${storm.name}. Wind swaths are now visible.`;
 
-        // 2. Redraw map to show colors for THIS storm only
+        // 2. Redraw map to show swaths for THIS storm only, but with colors for ALL
         const currentMinWind = parseInt(document.getElementById('intensityFilter').value);
         plotStorms(currentMinWind, storm.id); 
 
@@ -485,17 +485,19 @@
         trackLayers.clearLayers();
 
         _stormData.forEach(storm => {
-            const maxW = Math.max(...storm.path.map(p => p.wind_knots));
-            if (maxW < minWind) return;
+            // Calculate max wind in this track to determine line color and filter
+            const maxTrackWind = Math.max(...storm.path.map(p => p.wind_knots));
+            if (maxTrackWind < minWind) return;
 
             const isSelected = selectedStormId === storm.id;
             const coords = storm.path.map(p => [p.lat, p.lon]);
+            const trackColor = getStormColor(maxTrackWind); // Line color based on peak intensity
 
-            // 1. Draw Polyline (Track) - INCREASED THICKNESS
+            // 1. Draw Polyline (Track) - DYNAMIC COLOR
             const line = L.polyline(coords, {
-                color: isSelected ? '#4f46e5' : '#9ca3af', 
-                weight: isSelected ? 8 : 5, // Much thicker lines for easy selection
-                opacity: isSelected ? 1 : 0.5,
+                color: trackColor, 
+                weight: isSelected ? 10 : 6, // Thick and prominent
+                opacity: isSelected ? 1 : 0.4, // Unselected tracks are slightly faded
                 dashArray: isSelected ? null : '5, 10'
             }).addTo(trackLayers);
 
@@ -506,26 +508,34 @@
 
             // 2. Draw Points & Swaths
             storm.path.forEach(p => {
+                const pointColor = getStormColor(p.wind_knots); // Color based on wind at that specific point
+
                 if (isSelected) {
-                    // Hurricane Swath (64kt)
+                    // Hurricane Swath (64kt) - High Visibility Red
                     if (p.r64 && p.r64.some(x => x > 0)) {
                         L.polygon(createSwathPoints(p.lat, p.lon, p.r64), {
-                            color: 'none', fillColor: '#b91c1c', fillOpacity: 0.3, interactive: false
+                            color: 'none', 
+                            fillColor: '#b91c1c', 
+                            fillOpacity: 0.3, 
+                            interactive: false
                         }).addTo(trackLayers);
                     }
                     
-                    // Tropical Storm Swath (34kt)
+                    // Tropical Storm Swath (34kt) - High Visibility Amber
                     if (p.r34 && p.r34.some(x => x > 0)) {
                         L.polygon(createSwathPoints(p.lat, p.lon, p.r34), {
-                            color: 'none', fillColor: '#f59e0b', fillOpacity: 0.2, interactive: false
+                            color: 'none', 
+                            fillColor: '#f59e0b', 
+                            fillOpacity: 0.2, 
+                            interactive: false
                         }).addTo(trackLayers);
                     }
                 }
                 
-                // Draw Point Markers - SIGNIFICANTLY ENLARGED
+                // 3. Draw Point Markers - DYNAMIC COLORS & ENLARGED
                 const marker = L.circleMarker([p.lat, p.lon], {
-                    radius: isSelected ? 10 : 7, // Large dots for accessibility
-                    fillColor: isSelected ? getStormColor(p.wind_knots) : '#9ca3af',
+                    radius: isSelected ? 12 : 8, // Very large and clickable
+                    fillColor: pointColor,
                     color: '#fff',
                     weight: 2,
                     fillOpacity: isSelected ? 1 : 0.7
@@ -534,8 +544,8 @@
                 marker.bindPopup(`
                     <div class="font-sans text-sm">
                         <strong class="text-indigo-700">${storm.name} (${storm.year})</strong><br>
-                        Wind: ${p.wind_knots} kt<br>
-                        ${p.date}
+                        <b>Wind:</b> ${p.wind_knots} kt<br>
+                        <b>Date:</b> ${p.date}
                     </div>
                 `);
                 
@@ -545,7 +555,7 @@
                 });
             });
         });
-    } 
+    }    
 
     function initChart() {
         updateChartFrequency();
