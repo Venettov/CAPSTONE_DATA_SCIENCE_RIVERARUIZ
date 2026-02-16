@@ -453,39 +453,81 @@
         ];
     }
 
-    function plotStorms(minWind) {
+    function selectStorm(storm) {
+        // 1. Update the UI text elements
+        document.getElementById('info-storm-name').innerText = storm.name;
+        document.getElementById('info-storm-year').innerText = storm.year;
+        
+        const maxW = Math.max(...storm.path.map(p => p.wind_knots));
+        const minP = Math.min(...storm.path.map(p => p.pressure_mb || 1013));
+        
+        document.getElementById('info-max-wind').innerText = maxW;
+        document.getElementById('info-pressure').innerText = minP;
+        document.getElementById('info-summary').innerText = 
+            `Displaying intensity footprint for ${storm.name}. Wind swaths are now visible on the map.`;
+
+        // 2. Trigger the map update to show colors for THIS storm only
+        const currentMinWind = parseInt(document.getElementById('intensityFilter').value);
+        plotStorms(currentMinWind, storm.id); 
+
+        // 3. Update the chart
+        updateChartProfile(storm);
+    }
+
+    function plotStorms(minWind, selectedStormId = null) {
         trackLayers.clearLayers();
 
         _stormData.forEach(storm => {
             const maxW = Math.max(...storm.path.map(p => p.wind_knots));
             if (maxW < minWind) return;
 
-            // 1. Draw Polyline (Track) - THICKER LINES (Weight 3)
+            const isSelected = selectedStormId === storm.id;
             const coords = storm.path.map(p => [p.lat, p.lon]);
+
+            // 1. Draw Polyline (Track)
+            // If selected, it becomes a solid colored line. If not, it's a subtle dotted gray line.
             const line = L.polyline(coords, {
-                color: 'gray',
-                weight: 3, 
-                opacity: 0.7,
-                dashArray: '4'
+                color: isSelected ? '#4f46e5' : '#9ca3af', 
+                weight: isSelected ? 4 : 2,
+                opacity: isSelected ? 1 : 0.4,
+                dashArray: isSelected ? null : '4'
             }).addTo(trackLayers);
 
             line.on('click', () => selectStorm(storm));
 
             // 2. Draw Points & Swaths
             storm.path.forEach(p => {
-                if (p.r64 && p.r64.some(x=>x>0)) {
-                    L.polygon(createSwathPoints(p.lat, p.lon, p.r64), {
-                        color: 'none', fillColor: '#ef4444', fillOpacity: 0.1, interactive: false
-                    }).addTo(trackLayers);
+                // ONLY draw the red/amber swaths if this specific storm is the one selected
+                if (isSelected) {
+                    // Hurricane Swath (64kt) - Deep Red
+                    if (p.r64 && p.r64.some(x => x > 0)) {
+                        L.polygon(createSwathPoints(p.lat, p.lon, p.r64), {
+                            color: 'none', 
+                            fillColor: '#b91c1c', 
+                            fillOpacity: 0.2, 
+                            interactive: false
+                        }).addTo(trackLayers);
+                    }
+                    
+                    // Tropical Storm Swath (34kt) - Warm Amber
+                    if (p.r34 && p.r34.some(x => x > 0)) {
+                        L.polygon(createSwathPoints(p.lat, p.lon, p.r34), {
+                            color: 'none', 
+                            fillColor: '#f59e0b', 
+                            fillOpacity: 0.1, 
+                            interactive: false
+                        }).addTo(trackLayers);
+                    }
                 }
                 
-                // Point Marker - LARGER DOTS (Radius 6)
+                // Draw Point Markers
+                // If selected, they show intensity colors. If not, they stay subtle gray.
                 const marker = L.circleMarker([p.lat, p.lon], {
-                    radius: 6,
-                    fillColor: getStormColor(p.wind_knots),
-                    color: '#fff',
+                    radius: isSelected ? 6 : 3,
+                    fillColor: isSelected ? getStormColor(p.wind_knots) : '#d1d5db',
+                    color: isSelected ? '#fff' : '#9ca3af',
                     weight: 1,
-                    fillOpacity: 0.9
+                    fillOpacity: isSelected ? 0.9 : 0.5
                 }).addTo(trackLayers);
 
                 marker.bindPopup(`
@@ -499,22 +541,6 @@
                 marker.on('click', () => selectStorm(storm));
             });
         });
-    }
-
-    // --- INTERACTION & CHARTS ---
-    function selectStorm(storm) {
-        document.getElementById('info-storm-name').innerText = storm.name;
-        document.getElementById('info-storm-year').innerText = storm.year;
-        
-        const maxW = Math.max(...storm.path.map(p => p.wind_knots));
-        const minP = Math.min(...storm.path.map(p => p.pressure_mb || 1013));
-        
-        document.getElementById('info-max-wind').innerText = maxW;
-        document.getElementById('info-pressure').innerText = minP;
-        document.getElementById('info-summary').innerText = 
-            `Tracking data selected. Chart updated to show intensity profile.`;
-
-        updateChartProfile(storm);
     }
 
     function initChart() {
