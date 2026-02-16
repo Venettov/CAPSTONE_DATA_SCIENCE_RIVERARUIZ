@@ -380,13 +380,18 @@
         initRadialMenu();
         wireDropdown();
         
-        // --- DEFAULT SELECTION: MARIA 2017 ---
+        // 1. Initial Map View: Show ALL storms (Reset View state)
+        // We pass 0 to show all intensities and null to ensure no isolation occurs
+        plotStorms(0, null);
+        updateChartFrequency(); // Ensure the bar chart is visible at the bottom
+
+        // 2. Initial Data Focus: Populate Maria's stats and profile chart
         const maria = _stormData.find(s => s.name === "MARIA" && s.year === 2017);
         if (maria) {
-            selectStorm(maria);
-        } else {
-            plotStorms(0);
-            updateChartFrequency();
+            // We manually update the UI/Chart without calling selectStorm(maria)
+            // to avoid triggering the map isolation and zoom-out logic on load.
+            updateUIDetails(maria);
+            updateChartProfile(maria);
         }
 
         // Active Link Highlighting
@@ -405,14 +410,46 @@
             plotStorms(0, null); 
             updateChartFrequency(); 
             
-            document.getElementById('info-storm-name').innerText = "Select a Track";
-            document.getElementById('info-storm-year').innerText = "--";
-            document.getElementById('info-max-wind').innerText = "--";
-            document.getElementById('info-pressure').innerText = "--";
-            document.getElementById('chart-title').innerText = "Intensity Profile: Select a Storm";
-            if (analysisChart) analysisChart.destroy();
+            // Return details and chart to Maria (our default) on reset
+            if (maria) {
+                updateUIDetails(maria);
+                updateChartProfile(maria);
+            }
         });
     });
+
+    // --- HELPER FUNCTION FOR UI ---
+    // This allows us to update the text panel without moving the map camera
+    function updateUIDetails(storm) {
+        document.getElementById('info-storm-name').innerText = storm.name;
+        document.getElementById('info-storm-year').innerText = storm.year;
+        
+        const maxW = Math.max(...storm.path.map(p => p.wind_knots));
+        const minP = Math.min(...storm.path.map(p => p.pressure_mb || 1013));
+        
+        document.getElementById('info-max-wind').innerText = maxW;
+        document.getElementById('info-pressure').innerText = minP;
+        document.getElementById('info-summary').innerText = 
+            `Data focus: ${storm.name}. Select any other track on the map to isolate its trajectory.`;
+    }
+
+    // --- UPDATED SELECTSTORM ---
+    // Now this function is only triggered when a user explicitly clicks a track
+    function selectStorm(storm) {
+        const zoomBuffer = 180; 
+
+        updateUIDetails(storm);
+        updateChartProfile(storm);
+        updateChartFrequency();
+
+        // Isolate the clicked storm on the map
+        plotStorms(0, storm.id); 
+
+        if (municipalityLayer) {
+            const prBounds = municipalityLayer.getBounds();
+            map.fitBounds(prBounds, { padding: [zoomBuffer, zoomBuffer], animate: true, duration: 1.2 });
+        }
+    }
 
     async function loadData() {
         try {
@@ -466,31 +503,6 @@
             [lat + (r[3] * scale), lon - (r[3] * scale)], 
             [lat + (r[0] * scale), lon + (r[0] * scale)]  
         ];
-    }
-
-    function selectStorm(storm) {
-        const zoomBuffer = 230; 
-
-        document.getElementById('info-storm-name').innerText = storm.name;
-        document.getElementById('info-storm-year').innerText = storm.year;
-        
-        const maxW = Math.max(...storm.path.map(p => p.wind_knots));
-        const minP = Math.min(...storm.path.map(p => p.pressure_mb || 1013));
-        
-        document.getElementById('info-max-wind').innerText = maxW;
-        document.getElementById('info-pressure').innerText = minP;
-        document.getElementById('info-summary').innerText = 
-            `Isolating ${storm.name}. View centered on Puerto Rico with custom buffer.`;
-
-        plotStorms(0, storm.id); 
-
-        if (municipalityLayer) {
-            const prBounds = municipalityLayer.getBounds();
-            map.fitBounds(prBounds, { padding: [zoomBuffer, zoomBuffer], animate: true, duration: 1.2 });
-        }
-
-        updateChartProfile(storm);
-        updateChartFrequency(); // Ensure frequency chart stays below
     }
 
     function plotStorms(minWind, selectedStormId = null) {
