@@ -51,17 +51,17 @@
       border-radius: 4px;
     }
 
-    /* CHART WRAPPER */
+    /* CHART WRAPPER (Now Larger) */
     .chart-fix-wrapper {
         position: relative;
-        height: 350px; 
+        height: 350px; /* Increased Height */
         width: 100%;
     }
 
     #chart-title {
-        position: relative; 
-        display: block;
-        z-index: 10;
+    position: relative; /* This keeps it in the layout flow */
+    margin-bottom: 1rem; /* Adds space between text and graph */
+    z-index: 10;
     }
 
     /* --- NAVIGATION DROPDOWN --- */
@@ -164,6 +164,7 @@
             <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
           </svg>
         </div>
+
         <div class="nav-dropdown-menu absolute right-0 mt-2 w-64 rounded-xl border border-gray-200 bg-white shadow-lg ring-1 ring-black/5 z-50">
           <div class="py-2">
             <a href="../dashboards.html" class="block px-4 py-2 hover:bg-gray-50 font-semibold">Initial Dashboard</a>
@@ -211,7 +212,7 @@
                     <option value="0">All Storms</option>
                     <option value="34">Tropical Storms (34kt+)</option>
                     <option value="64">Hurricanes (64kt+)</option>
-                    <option value="96" selected>Major Hurricanes (Cat 3+)</option>
+                    <option value="96">Major Hurricanes (Cat 3+)</option>
                 </select>
             </div>
             
@@ -348,13 +349,13 @@
 
     // --- COLOR SCALES ---
     function getStormColor(wind) {
-        if (wind < 34) return '#60a5fa'; // TD (Blue)
-        if (wind < 64) return '#f59e0b'; // TS (Amber)
-        if (wind < 83) return '#ea580c'; // Cat 1 (Orange)
-        if (wind < 96) return '#dc2626'; // Cat 2 (Red)
-        if (wind < 113) return '#b91c1c'; // Cat 3 (Dark Red)
-        if (wind < 137) return '#991b1b'; // Cat 4 (Maroon)
-        return '#7f1d1d';                // Cat 5 (Deep Maroon)
+        if (wind < 34) return '#60a5fa'; // TD (Blue-400)
+        if (wind < 64) return '#22d3ee'; // TS (Cyan-400)
+        if (wind < 83) return '#facc15'; // Cat 1 (Yellow-400)
+        if (wind < 96) return '#fbbf24'; // Cat 2 (Amber-400)
+        if (wind < 113) return '#fb923c'; // Cat 3 (Orange-400)
+        if (wind < 137) return '#f87171'; // Cat 4 (Red-400)
+        return '#ef4444';                // Cat 5 (Red-500)
     }
 
     // --- INITIALIZATION ---
@@ -377,9 +378,8 @@
         });
         document.getElementById('resetMapBtn').addEventListener('click', () => {
              map.setView([18.25, -66.45], 9);
-             document.getElementById('intensityFilter').value = "96"; 
-             plotStorms(96);
-             updateChartFrequency(); 
+             plotStorms(0);
+             updateChartFrequency(); // Reset chart
         });
     });
 
@@ -413,8 +413,8 @@
                 fillColor: '#ffffff',
                 weight: 1.5,
                 opacity: 1,
-                color: '#6b7280', 
-                fillOpacity: 0.8 
+                color: '#9ca3af', 
+                fillOpacity: 0.1
             },
             onEachFeature: (feature, layer) => {
                 const name = feature.properties.NAME || feature.properties.name;
@@ -438,7 +438,7 @@
         wireMapDropdown();
 
         trackLayers.addTo(map);
-        plotStorms(96); // DEFAULT: Major Hurricanes (Cat 3+)
+        plotStorms(0);
     }
 
     // --- STORM PLOTTING ---
@@ -460,7 +460,7 @@
             const maxW = Math.max(...storm.path.map(p => p.wind_knots));
             if (maxW < minWind) return;
 
-            // 1. Draw Polyline (Track) - Weight 3
+            // 1. Draw Polyline (Track) - THICKER LINES (Weight 3)
             const coords = storm.path.map(p => [p.lat, p.lon]);
             const line = L.polyline(coords, {
                 color: 'gray',
@@ -475,16 +475,11 @@
             storm.path.forEach(p => {
                 if (p.r64 && p.r64.some(x=>x>0)) {
                     L.polygon(createSwathPoints(p.lat, p.lon, p.r64), {
-                        color: 'none', fillColor: '#b91c1c', fillOpacity: 0.25, interactive: false
+                        color: 'none', fillColor: '#ef4444', fillOpacity: 0.1, interactive: false
                     }).addTo(trackLayers);
                 }
                 
-                if (p.r34 && p.r34.some(x=>x>0)) {
-                    L.polygon(createSwathPoints(p.lat, p.lon, p.r34), {
-                        color: 'none', fillColor: '#f59e0b', fillOpacity: 0.15, interactive: false
-                    }).addTo(trackLayers);
-                }
-                
+                // Point Marker - LARGER DOTS (Radius 6)
                 const marker = L.circleMarker([p.lat, p.lon], {
                     radius: 6,
                     fillColor: getStormColor(p.wind_knots),
@@ -528,10 +523,13 @@
 
     function updateChartFrequency() {
         const counts = {};
+        
+        // Ensure we count every year from the data
         _stormData.forEach(s => { 
             counts[s.year] = (counts[s.year] || 0) + 1; 
         });
         
+        // Create an array explicitly including 2024 and 2025
         const years = [];
         for (let i = 2010; i <= 2025; i++) {
             years.push(i);
