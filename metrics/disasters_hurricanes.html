@@ -481,11 +481,10 @@
         // 3. AUTO-ZOOM LOGIC: Fit the map to the storm's path with 35% padding
         const coords = storm.path.map(p => [p.lat, p.lon]);
         const bounds = L.latLngBounds(coords);
-        
-        // fitBounds uses a 'padding' or 'paddingTopLeft' option to effectively zoom out
-        // 'padding: [100, 100]' provides the ~35% visual buffer you're looking for
+        const zoomBuffer = 50; 
+
         map.fitBounds(bounds, { 
-            padding: [100, 100], 
+            padding: [zoomBuffer, zoomBuffer], 
             animate: true, 
             duration: 1.5 
         });
