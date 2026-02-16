@@ -51,17 +51,17 @@
       border-radius: 4px;
     }
 
-    /* CHART WRAPPER (Now Larger) */
+    /* CHART WRAPPERS */
     .chart-fix-wrapper {
         position: relative;
-        height: 350px; /* Increased Height */
+        height: 300px; 
         width: 100%;
     }
 
-    #chart-title {
-    position: relative; /* This keeps it in the layout flow */
-    margin-bottom: 1rem; /* Adds space between text and graph */
-    z-index: 10;
+    #chart-title, #freq-chart-title {
+        position: relative;
+        margin-bottom: 1rem;
+        z-index: 10;
     }
 
     /* --- NAVIGATION DROPDOWN --- */
@@ -283,14 +283,28 @@
             </div>
           </div>
 
-          <div class="bg-gray-50 rounded-xl p-6 border border-gray-100">
-              <h3 id="chart-title" class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-4">
-                  Annual Storm Frequency (2010-2025)
-              </h3>
+          <div class="bg-gray-50 rounded-xl p-6 border border-gray-100 space-y-8">
               
-              <div class="chart-fix-wrapper">
-                  <canvas id="analysisChart"></canvas>
+              <div>
+                  <h3 id="chart-title" class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-4">
+                      Intensity Profile: Select a Storm
+                  </h3>
+                  <div class="chart-fix-wrapper">
+                      <canvas id="analysisChart"></canvas>
+                  </div>
               </div>
+
+              <hr class="border-gray-200">
+
+              <div>
+                  <h3 id="freq-chart-title" class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-4">
+                      Annual Storm Frequency (2010-2025)
+                  </h3>
+                  <div class="chart-fix-wrapper">
+                      <canvas id="frequencyChart"></canvas>
+                  </div>
+              </div>
+
           </div>
           
         </div>
@@ -341,7 +355,7 @@
     const GEOJSON_URL = '../data/tl_2022_72_cousub/pr_municipalities.geojson';
     const STORMS_JSON = '../data/natural_disasters/caribbean_hurricane_tracks_2010_2025.json'; 
 
-    let map, analysisChart;
+    let map, analysisChart, frequencyChart;
     let _stormData = [];
     let _geoData = [];
     let trackLayers = L.layerGroup();
@@ -349,13 +363,13 @@
 
     // --- COLOR SCALES ---
     function getStormColor(wind) {
-        if (wind < 34) return '#60a5fa'; // TD (Blue-400)
-        if (wind < 64) return '#22d3ee'; // TS (Cyan-400)
-        if (wind < 83) return '#facc15'; // Cat 1 (Yellow-400)
-        if (wind < 96) return '#fbbf24'; // Cat 2 (Amber-400)
-        if (wind < 113) return '#fb923c'; // Cat 3 (Orange-400)
-        if (wind < 137) return '#f87171'; // Cat 4 (Red-400)
-        return '#ef4444';                // Cat 5 (Red-500)
+        if (wind < 34) return '#60a5fa'; // TD
+        if (wind < 64) return '#22d3ee'; // TS
+        if (wind < 83) return '#facc15'; // Cat 1
+        if (wind < 96) return '#fbbf24'; // Cat 2
+        if (wind < 113) return '#fb923c'; // Cat 3
+        if (wind < 137) return '#f87171'; // Cat 4
+        return '#ef4444';                // Cat 5
     }
 
     // --- INITIALIZATION ---
@@ -363,10 +377,18 @@
         await loadData();
         
         initMap();
-        initChart(); 
         initRadialMenu();
         wireDropdown();
         
+        // --- DEFAULT SELECTION: MARIA 2017 ---
+        const maria = _stormData.find(s => s.name === "MARIA" && s.year === 2017);
+        if (maria) {
+            selectStorm(maria);
+        } else {
+            plotStorms(0);
+            updateChartFrequency();
+        }
+
         // Active Link Highlighting
         const currentPath = window.location.pathname.split('/').pop();
         const subPageLink = document.querySelector(`#metrics-menu a[href="${currentPath}"]`);
@@ -376,18 +398,19 @@
         document.getElementById('intensityFilter').addEventListener('change', (e) => {
             plotStorms(parseInt(e.target.value));
         });
-        // Update the Reset Button listener in your DOMContentLoaded section
+
         document.getElementById('resetMapBtn').addEventListener('click', () => {
             map.setView([18.25, -66.45], 9);
-            document.getElementById('intensityFilter').value = "96"; 
-            plotStorms(96, null); // Passing null clears the selection and hides swaths
+            document.getElementById('intensityFilter').value = "0"; 
+            plotStorms(0, null); 
             updateChartFrequency(); 
             
-            // Reset info panel
             document.getElementById('info-storm-name').innerText = "Select a Track";
             document.getElementById('info-storm-year').innerText = "--";
             document.getElementById('info-max-wind').innerText = "--";
             document.getElementById('info-pressure').innerText = "--";
+            document.getElementById('chart-title').innerText = "Intensity Profile: Select a Storm";
+            if (analysisChart) analysisChart.destroy();
         });
     });
 
@@ -399,7 +422,6 @@
             ]);
             _geoData = await geoRes.json();
             _stormData = await stormRes.json();
-            console.log("Data Loaded. Storms:", _stormData.length);
         } catch (e) {
             console.error("Error loading data:", e);
         }
@@ -411,30 +433,17 @@
         L.control.zoom({ position: 'topleft' }).addTo(map);
 
         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { 
-            attribution: '&copy; CARTO',
-            opacity: 1
+            attribution: '&copy; CARTO'
         }).addTo(map);
 
-        // Municipalities Layer
         municipalityLayer = L.geoJSON(_geoData, {
-            style: {
-                fillColor: '#ffffff',
-                weight: 1.5,
-                opacity: 1,
-                color: '#9ca3af', 
-                fillOpacity: 0.1
-            },
+            style: { fillColor: '#ffffff', weight: 1.5, opacity: 1, color: '#9ca3af', fillOpacity: 0.1 },
             onEachFeature: (feature, layer) => {
                 const name = feature.properties.NAME || feature.properties.name;
-                layer.bindTooltip(name, {
-                    permanent: false,
-                    direction: 'center',
-                    className: 'leaflet-tooltip'
-                });
+                layer.bindTooltip(name, { permanent: false, direction: 'center', className: 'leaflet-tooltip' });
             }
         }).addTo(map);
 
-        // Custom Controls
         L.Control.MapDropdown = L.Control.extend({
             onAdd: function(map) {
                 const container = L.DomUtil.get('map-dropdown-container');
@@ -446,10 +455,8 @@
         wireMapDropdown();
 
         trackLayers.addTo(map);
-        plotStorms(0);
     }
 
-    // --- STORM PLOTTING ---
     function createSwathPoints(lat, lon, r) {
         const scale = 1.0 / 60.0; 
         return [
@@ -462,171 +469,84 @@
     }
 
     function selectStorm(storm) {
-        // Higher numbers (like 80 or 100) zoom the map out more.
-        // Lower numbers (like 10 or 20) zoom the map in closer.
         const zoomBuffer = 230; 
 
-        // 1. Update UI Text elements in the Statistics Panel
         document.getElementById('info-storm-name').innerText = storm.name;
         document.getElementById('info-storm-year').innerText = storm.year;
         
-        // Calculate peak intensity metrics for the stats display
         const maxW = Math.max(...storm.path.map(p => p.wind_knots));
         const minP = Math.min(...storm.path.map(p => p.pressure_mb || 1013));
         
         document.getElementById('info-max-wind').innerText = maxW;
         document.getElementById('info-pressure').innerText = minP;
         document.getElementById('info-summary').innerText = 
-            `Isolating ${storm.name}. View centered on Puerto Rico with a wider buffer to show localized impact.`;
+            `Isolating ${storm.name}. View centered on Puerto Rico with custom buffer.`;
 
-        // 2. Redraw map - this hides all other storms and shows wind swaths for this one
-        // Passing storm.id tells plotStorms to hide all other tracks
         plotStorms(0, storm.id); 
 
-        // 3. TARGETED ZOOM: Centers on the island's boundaries
-        // We use the municipalityLayer bounds to ensure we stay focused on Puerto Rico
         if (municipalityLayer) {
             const prBounds = municipalityLayer.getBounds();
-            map.fitBounds(prBounds, { 
-                padding: [zoomBuffer, zoomBuffer], 
-                animate: true, 
-                duration: 1.2 
-            });
+            map.fitBounds(prBounds, { padding: [zoomBuffer, zoomBuffer], animate: true, duration: 1.2 });
         }
 
-        // 4. Update the Analysis Chart to show this storm's wind speed profile
         updateChartProfile(storm);
+        updateChartFrequency(); // Ensure frequency chart stays below
     }
 
     function plotStorms(minWind, selectedStormId = null) {
         trackLayers.clearLayers();
 
         _stormData.forEach(storm => {
-            // --- ISOLATION LOGIC ---
-            // If a storm is selected, only draw THAT specific storm.
-            // If no storm is selected (null), draw all storms that meet the wind filter.
-            if (selectedStormId !== null && storm.id !== selectedStormId) {
-                return; // Skip this storm
-            }
+            if (selectedStormId !== null && storm.id !== selectedStormId) return;
 
             const maxTrackWind = Math.max(...storm.path.map(p => p.wind_knots));
-            
-            // Only apply the intensity filter if we are looking at the "All Storms" view
             if (selectedStormId === null && maxTrackWind < minWind) return;
 
             const isSelected = selectedStormId === storm.id;
             const coords = storm.path.map(p => [p.lat, p.lon]);
             const trackColor = getStormColor(maxTrackWind);
 
-            // 1. Draw Polyline (Track)
             const line = L.polyline(coords, {
-                color: trackColor, 
-                weight: isSelected ? 10 : 6, 
-                opacity: isSelected ? 1 : 0.4,
-                dashArray: isSelected ? null : '5, 10'
+                color: trackColor, weight: isSelected ? 10 : 6, opacity: isSelected ? 1 : 0.4, dashArray: isSelected ? null : '5, 10'
             }).addTo(trackLayers);
 
-            line.on('click', (e) => {
-                L.DomEvent.stopPropagation(e);
-                selectStorm(storm);
-            });
+            line.on('click', (e) => { L.DomEvent.stopPropagation(e); selectStorm(storm); });
 
-            // 2. Draw Points & Swaths
             storm.path.forEach(p => {
                 const pointColor = getStormColor(p.wind_knots);
-
                 if (isSelected) {
-                    // Hurricane Swath (64kt)
                     if (p.r64 && p.r64.some(x => x > 0)) {
-                        L.polygon(createSwathPoints(p.lat, p.lon, p.r64), {
-                            color: 'none', 
-                            fillColor: '#b91c1c', 
-                            fillOpacity: 0.3, 
-                            interactive: false
-                        }).addTo(trackLayers);
+                        L.polygon(createSwathPoints(p.lat, p.lon, p.r64), { color: 'none', fillColor: '#b91c1c', fillOpacity: 0.3, interactive: false }).addTo(trackLayers);
                     }
-                    
-                    // Tropical Storm Swath (34kt)
                     if (p.r34 && p.r34.some(x => x > 0)) {
-                        L.polygon(createSwathPoints(p.lat, p.lon, p.r34), {
-                            color: 'none', 
-                            fillColor: '#f59e0b', 
-                            fillOpacity: 0.2, 
-                            interactive: false
-                        }).addTo(trackLayers);
+                        L.polygon(createSwathPoints(p.lat, p.lon, p.r34), { color: 'none', fillColor: '#f59e0b', fillOpacity: 0.2, interactive: false }).addTo(trackLayers);
                     }
                 }
-                
-                // 3. Draw Point Markers
-                const marker = L.circleMarker([p.lat, p.lon], {
-                    radius: isSelected ? 12 : 8,
-                    fillColor: pointColor,
-                    color: '#fff',
-                    weight: 2,
-                    fillOpacity: isSelected ? 1 : 0.7
-                }).addTo(trackLayers);
-
-                marker.bindPopup(`
-                    <div class="font-sans text-sm">
-                        <strong class="text-indigo-700">${storm.name} (${storm.year})</strong><br>
-                        <b>Wind:</b> ${p.wind_knots} kt<br>
-                        <b>Date:</b> ${p.date}
-                    </div>
-                `);
-                
-                marker.on('click', (e) => {
-                    L.DomEvent.stopPropagation(e);
-                    selectStorm(storm);
-                });
+                const marker = L.circleMarker([p.lat, p.lon], { radius: isSelected ? 12 : 8, fillColor: pointColor, color: '#fff', weight: 2, fillOpacity: isSelected ? 1 : 0.7 }).addTo(trackLayers);
+                marker.bindPopup(`<div class="font-sans text-sm"><strong>${storm.name} (${storm.year})</strong><br>Wind: ${p.wind_knots} kt</div>`);
+                marker.on('click', (e) => { L.DomEvent.stopPropagation(e); selectStorm(storm); });
             });
         });
     }    
 
-    function initChart() {
-        updateChartFrequency();
-    }
-
     function updateChartFrequency() {
         const counts = {};
-        
-        // Ensure we count every year from the data
-        _stormData.forEach(s => { 
-            counts[s.year] = (counts[s.year] || 0) + 1; 
-        });
-        
-        // Create an array explicitly including 2024 and 2025
-        const years = [];
-        for (let i = 2010; i <= 2025; i++) {
-            years.push(i);
-        }
-
+        _stormData.forEach(s => { counts[s.year] = (counts[s.year] || 0) + 1; });
+        const years = Array.from({length: 16}, (_, i) => 2010 + i);
         const data = years.map(y => counts[y] || 0);
 
-        const ctx = document.getElementById('analysisChart');
-        if (analysisChart) analysisChart.destroy();
+        const ctx = document.getElementById('frequencyChart');
+        if (frequencyChart) frequencyChart.destroy();
 
-        document.getElementById('chart-title').innerText = "Annual Storm Frequency (2010-2025)";
-
-        analysisChart = new Chart(ctx, {
+        frequencyChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: years,
-                datasets: [{
-                    label: 'Storms',
-                    data: data,
-                    backgroundColor: '#6366f1',
-                    borderRadius: 4
-                }]
+                datasets: [{ label: 'Storms', data: data, backgroundColor: '#6366f1', borderRadius: 4 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: { 
-                    y: { 
-                        beginAtZero: true,
-                        ticks: { stepSize: 1 }
-                    } 
-                },
+                responsive: true, maintainAspectRatio: false,
+                scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } },
                 plugins: { legend: { display: false } }
             }
         });
@@ -645,19 +565,10 @@
             type: 'line',
             data: {
                 labels: labels,
-                datasets: [{
-                    label: 'Wind Speed (knots)',
-                    data: data,
-                    borderColor: '#ef4444',
-                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                    fill: true,
-                    tension: 0.3,
-                    pointRadius: 4
-                }]
+                datasets: [{ label: 'Wind Speed (kt)', data: data, borderColor: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', fill: true, tension: 0.3, pointRadius: 4 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                responsive: true, maintainAspectRatio: false,
                 scales: { y: { beginAtZero: true } },
                 plugins: { legend: { display: false } }
             }
@@ -701,7 +612,6 @@
         const container = document.getElementById('radial-menu-container');
         const trigger = document.getElementById('radial-trigger');
         const totalAngle = 100, radius = 180, count = menuItems.length, startAngle = -95, step = totalAngle / (count - 1);
-
         menuItems.forEach((item, index) => {
             const angleDeg = startAngle - (step * index), angleRad = angleDeg * (Math.PI / 180);
             const x = Math.round(radius * Math.cos(angleRad)), y = Math.round(radius * Math.sin(angleRad));
@@ -711,7 +621,7 @@
             el.style.setProperty('--lx', `${Math.round(75 * Math.cos(angleRad))}px`);
             el.style.setProperty('--ly', `${Math.round(75 * Math.sin(angleRad))}px`);
             el.style.setProperty('--lr', `${angleDeg + 180}deg`);
-            el.innerHTML = `<span class=\"radial-label\">${item.label}</span><svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-6 w-6\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"${item.icon}\" /></svg>`;
+            el.innerHTML = `<span class="radial-label">${item.label}</span><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${item.icon}" /></svg>`;
             container.insertBefore(el, trigger);
         });
     }
