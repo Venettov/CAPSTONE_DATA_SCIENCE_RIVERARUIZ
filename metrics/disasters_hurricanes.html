@@ -462,7 +462,10 @@
     }
 
     function selectStorm(storm) {
-        // 1. Update UI Text elements
+        // --- THE ADJUSTMENT KNOB ---
+        const zoomBuffer = 20; // Lower = closer view. Try 10 or 5 if 20 is still too far.
+
+        // 1. Update UI Text
         document.getElementById('info-storm-name').innerText = storm.name;
         document.getElementById('info-storm-year').innerText = storm.year;
         
@@ -472,22 +475,27 @@
         document.getElementById('info-max-wind').innerText = maxW;
         document.getElementById('info-pressure').innerText = minP;
         document.getElementById('info-summary').innerText = 
-            `Displaying full trajectory for ${storm.name}. Map has been auto-zoomed to fit the footprint.`;
+            `Displaying trajectory for ${storm.name}. Using zoom buffer: ${zoomBuffer}.`;
 
-        // 2. Redraw map to show swaths for THIS storm
+        // 2. Redraw map to show swaths
         const currentMinWind = parseInt(document.getElementById('intensityFilter').value);
         plotStorms(currentMinWind, storm.id); 
 
-        // 3. AUTO-ZOOM LOGIC: Fit the map to the storm's path with 35% padding
+        // 3. TARGETED ZOOM
         const coords = storm.path.map(p => [p.lat, p.lon]);
         const bounds = L.latLngBounds(coords);
-        const zoomBuffer = 60; 
-
+        
+        // fitBounds uses your zoomBuffer here
         map.fitBounds(bounds, { 
             padding: [zoomBuffer, zoomBuffer], 
             animate: true, 
-            duration: 1.5 
+            duration: 1.2 
         });
+
+        // 4. THE NUDGE (Optional)
+        // If the map still feels too far out after fitting the bounds, 
+        // this line manually steps the camera 1 level closer.
+        // setTimeout(() => { map.zoomIn(1); }, 1300);
 
         updateChartProfile(storm);
     }
