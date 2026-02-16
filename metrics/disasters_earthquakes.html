@@ -775,19 +775,43 @@
     function initRadialMenu() {
         const container = document.getElementById('radial-menu-container');
         const trigger = document.getElementById('radial-trigger');
-        const totalAngle = 100, radius = 180, count = menuItems.length, startAngle = -95, step = totalAngle / (count - 1);
+        
+        // Safety check: if the elements aren't found, don't run.
+        if (!container || !trigger) return;
+
+        const totalAngle = 100;
+        const radius = 180;
+        const count = menuItems.length;
+        const startAngle = -95;
+        const step = totalAngle / (count - 1);
+
         menuItems.forEach((item, index) => {
-            const angleDeg = startAngle - (step * index), angleRad = angleDeg * (Math.PI / 180);
-            const x = Math.round(radius * Math.cos(angleRad)), y = Math.round(radius * Math.sin(angleRad));
+            const angleDeg = startAngle - (step * index);
+            const angleRad = angleDeg * (Math.PI / 180);
+            const x = Math.round(radius * Math.cos(angleRad));
+            const y = Math.round(radius * Math.sin(angleRad));
+            
             const el = document.createElement('a');
-            el.href = item.href; el.className = 'radial-item';
-            el.style.setProperty('--tx', `${x}px`); el.style.setProperty('--ty', `${y}px`);
+            el.href = item.href;
+            el.className = 'radial-item';
+            el.style.setProperty('--tx', `${x}px`);
+            el.style.setProperty('--ty', `${y}px`);
             el.style.setProperty('--lx', `${Math.round(75 * Math.cos(angleRad))}px`);
             el.style.setProperty('--ly', `${Math.round(75 * Math.sin(angleRad))}px`);
             el.style.setProperty('--lr', `${angleDeg + 180}deg`);
-            el.innerHTML = `<span class="radial-label">${item.label}</span><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${item.icon}" /></svg>`;
-            container.insertBefore(el, trigger);
+            
+            el.innerHTML = `
+                <span class="radial-label">${item.label}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${item.icon}" />
+                </svg>`;
+            
+            // Use appendChild instead of insertBefore to avoid reference errors
+            container.appendChild(el);
         });
+        
+        // Ensure trigger stays on top of the items
+        container.appendChild(trigger);
     }
 
     function toggleRadialMenu() { document.getElementById('radial-menu-container').classList.toggle('radial-open'); }
@@ -908,19 +932,12 @@
     })();
 
     document.addEventListener('DOMContentLoaded', () => {
-        const metricsLink = document.querySelector('#metrics-dropdown-root > a'); const isMetricsSubPage = window.location.pathname.includes('/metrics/');
-        if (isMetricsSubPage) { metricsLink.classList.add('border-b-2', 'border-blue-600', 'text-blue-600', 'font-semibold'); metricsLink.setAttribute('aria-current', 'page');
-            const currentPathname = window.location.pathname.split('/').pop(); const subPageLink = document.querySelector(`#metrics-menu a[href="${currentPathname}"]`);
-            if (subPageLink) { subPageLink.classList.add('bg-gray-100', 'font-semibold'); }
-        } else {
-            document.querySelectorAll('.nav-link[href]').forEach(a => { if (a.href.endsWith(window.location.pathname)) { a.classList.add('border-b-2', 'border-blue-600', 'text-blue-600', 'font-semibold'); a.setAttribute('aria-current', 'page'); } });
-        }
-        wireMapDropdown(); 
-        
-        // ADDED: Init Radial Menu here for reliability
-        initRadialMenu(); 
         wireDropdown();
+        wireMapDropdown();
+        // Small delay to ensure the DOM has settled from the async data fetches
+        setTimeout(initRadialMenu, 100);
     });
+
   </script>
 </body>
 </html>
