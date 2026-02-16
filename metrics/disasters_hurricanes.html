@@ -463,25 +463,29 @@
 
     function selectStorm(storm) {
         // --- THE ADJUSTMENT KNOB ---
-        const zoomBuffer = 20; // Lower = tighter zoom around PR. Try 10 or 5.
+        // Higher numbers (like 80 or 100) zoom the map out more.
+        // Lower numbers (like 10 or 20) zoom the map in closer.
+        const zoomBuffer = 80; 
 
-        // 1. Update UI Text elements
+        // 1. Update UI Text elements in the Statistics Panel
         document.getElementById('info-storm-name').innerText = storm.name;
         document.getElementById('info-storm-year').innerText = storm.year;
         
+        // Calculate peak intensity metrics for the stats display
         const maxW = Math.max(...storm.path.map(p => p.wind_knots));
         const minP = Math.min(...storm.path.map(p => p.pressure_mb || 1013));
         
         document.getElementById('info-max-wind').innerText = maxW;
         document.getElementById('info-pressure').innerText = minP;
         document.getElementById('info-summary').innerText = 
-            `Isolating ${storm.name}. View centered on Puerto Rico to show localized impact.`;
+            `Isolating ${storm.name}. View centered on Puerto Rico with a wider buffer to show localized impact.`;
 
-        // 2. Redraw map - this hides all other storms and shows swaths for this one
+        // 2. Redraw map - this hides all other storms and shows wind swaths for this one
+        // Passing storm.id tells plotStorms to hide all other tracks
         plotStorms(0, storm.id); 
 
-        // 3. TARGETED ZOOM: Zoom to Puerto Rico instead of the full trajectory
-        // We use the municipalityLayer bounds to ensure we stay focused on the island
+        // 3. TARGETED ZOOM: Centers on the island's boundaries
+        // We use the municipalityLayer bounds to ensure we stay focused on Puerto Rico
         if (municipalityLayer) {
             const prBounds = municipalityLayer.getBounds();
             map.fitBounds(prBounds, { 
@@ -491,6 +495,7 @@
             });
         }
 
+        // 4. Update the Analysis Chart to show this storm's wind speed profile
         updateChartProfile(storm);
     }
 
