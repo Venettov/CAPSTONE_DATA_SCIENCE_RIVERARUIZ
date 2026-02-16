@@ -523,9 +523,18 @@
 
     function updateChartFrequency() {
         const counts = {};
-        _stormData.forEach(s => { counts[s.year] = (counts[s.year]||0) + 1; });
         
-        const years = Array.from({length: 16}, (_, i) => 2010 + i);
+        // Ensure we count every year from the data
+        _stormData.forEach(s => { 
+            counts[s.year] = (counts[s.year] || 0) + 1; 
+        });
+        
+        // Create an array explicitly including 2024 and 2025
+        const years = [];
+        for (let i = 2010; i <= 2025; i++) {
+            years.push(i);
+        }
+
         const data = years.map(y => counts[y] || 0);
 
         const ctx = document.getElementById('analysisChart');
@@ -547,11 +556,16 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                scales: { y: { beginAtZero: true } },
+                scales: { 
+                    y: { 
+                        beginAtZero: true,
+                        ticks: { stepSize: 1 }
+                    } 
+                },
                 plugins: { legend: { display: false } }
             }
         });
-    }
+    }    
 
     function updateChartProfile(storm) {
         const labels = storm.path.map(p => p.date.substring(5)); 
