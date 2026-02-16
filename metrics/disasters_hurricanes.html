@@ -504,8 +504,17 @@
         trackLayers.clearLayers();
 
         _stormData.forEach(storm => {
+            // --- ISOLATION LOGIC ---
+            // If a storm is selected, only draw THAT specific storm.
+            // If no storm is selected (null), draw all storms that meet the wind filter.
+            if (selectedStormId !== null && storm.id !== selectedStormId) {
+                return; // Skip this storm
+            }
+
             const maxTrackWind = Math.max(...storm.path.map(p => p.wind_knots));
-            if (maxTrackWind < minWind) return;
+            
+            // Only apply the intensity filter if we are looking at the "All Storms" view
+            if (selectedStormId === null && maxTrackWind < minWind) return;
 
             const isSelected = selectedStormId === storm.id;
             const coords = storm.path.map(p => [p.lat, p.lon]);
