@@ -58,6 +58,12 @@
         width: 100%;
     }
 
+    #chart-title {
+    position: relative; /* This keeps it in the layout flow */
+    margin-bottom: 1rem; /* Adds space between text and graph */
+    z-index: 10;
+    }
+
     /* --- NAVIGATION DROPDOWN --- */
     .nav-dropdown-menu { 
         opacity: 0; 
@@ -259,11 +265,14 @@
             </div>
           </div>
 
-          <div class="w-full">
-            <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 chart-fix-wrapper">
-                <h3 id="chart-title" class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 absolute top-4 left-4">Annual Storm Frequency (2010-2025)</h3>
-                <canvas id="analysisChart"></canvas>
-            </div>
+          <div class="bg-gray-50 rounded-xl p-6 border border-gray-100">
+              <h3 id="chart-title" class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-4">
+                  Annual Storm Frequency (2010-2025)
+              </h3>
+              
+              <div class="chart-fix-wrapper">
+                  <canvas id="analysisChart"></canvas>
+              </div>
           </div>
           
         </div>
