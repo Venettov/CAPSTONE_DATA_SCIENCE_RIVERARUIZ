@@ -1,0 +1,16 @@
+Series Name,Series Code,Country Name,Country Code,2009 [YR2009],2010 [YR2010],2011 [YR2011],2012 [YR2012],2013 [YR2013],2014 [YR2014],2015 [YR2015],2016 [YR2016],2017 [YR2017],2018 [YR2018],2019 [YR2019],2020 [YR2020],2021 [YR2021],2022 [YR2022],2023 [YR2023],2024 [YR2024]
+"Death rate, crude (per 1,000 people)",SP.DYN.CDRT.IN,Puerto Rico (US),PRI,7.78,7.833,8,8.1,8.1,8.5,8.084,8.86,9.222,9.063,9.194,10.131,10.2,11,10.7,..
+Number of deaths ages 10-14 years,SH.DTH.1014,Puerto Rico (US),PRI,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..
+Number of deaths ages 15-19 years,SH.DTH.1519,Puerto Rico (US),PRI,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..
+Number of deaths ages 20-24 years,SH.DTH.2024,Puerto Rico (US),PRI,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..
+Number of deaths ages 5-9 years,SH.DTH.0509,Puerto Rico (US),PRI,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..
+"Cause of death, by injury (% of total)",SH.DTH.INJR.ZS,Puerto Rico (US),PRI,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..
+"Cause of death, by communicable diseases and maternal, prenatal and nutrition conditions (% of total)",SH.DTH.COMM.ZS,Puerto Rico (US),PRI,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..
+"Cause of death, by non-communicable diseases (% of total)",SH.DTH.NCOM.ZS,Puerto Rico (US),PRI,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..
+Completeness of death registration with cause-of-death information (%),SP.REG.DTHS.ZS,Puerto Rico (US),PRI,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..
+"Birth rate, crude (per 1,000 people)",SP.DYN.CBRT.IN,Puerto Rico (US),PRI,11.72,11.3,11.1,10.6,10.1,9.7,9,8.3,7.3,6.7,6.4,6,5.9,5.9,5.8,..
+,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,
+Data from database: World Development Indicators,,,,,,,,,,,,,,,,,,,
+Last Updated: 01/28/2026,,,,,,,,,,,,,,,,,,,
