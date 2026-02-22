@@ -381,6 +381,40 @@
           </div>
         </div>
       </section>
+      <section class="card p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-semibold text-gray-800">Island-Wide Vital Statistics Trends (2010–2025)</h2>
+          <span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full uppercase">Macro Context</span>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div>
+            <div class="flex items-center gap-2 mb-3">
+              <h3 class="font-semibold text-sm text-gray-700">Birth Rate vs. Death Rate</h3>
+              <span class="text-xs text-gray-500">(Per 1,000 People)</span>
+            </div>
+            <div class="mini bg-gray-50 rounded-xl p-4 border border-gray-100">
+              <canvas id="vitalsChart"></canvas>
+            </div>
+            <p class="mt-3 text-xs text-gray-500 italic">
+              Note the "Crossover Point" where the death rate officially exceeds the birth rate, signaling structural population decline.
+            </p>
+          </div>
+
+          <div>
+            <div class="flex items-center gap-2 mb-3">
+              <h3 class="font-semibold text-sm text-gray-700">Natural Change Rate</h3>
+              <span class="text-xs text-gray-500">(Birth Rate - Death Rate)</span>
+            </div>
+            <div class="mini bg-gray-50 rounded-xl p-4 border border-gray-100">
+              <canvas id="naturalChangeChart"></canvas>
+            </div>
+            <p class="mt-3 text-xs text-gray-500 italic">
+              A value below zero indicate a "Natural Decrease," where deaths outnumber births regardless of migration.
+            </p>
+          </div>
+        </div>
+      </section>
       
       <hr class="border-gray-300">
 
@@ -449,9 +483,10 @@
       </button>
   </div>
   
-  <script>
+<script>
     const GEOJSON_URL = '../data/tl_2022_72_cousub/pr_municipalities.geojson';
     const POP_JSON    = '../data/population/prm-est2010_2024.json';
+    const VITALS_CSV  = '../data/overall_population_info/death_birth_rates/pr_islandwide_vital_rates.csv';
 
     const YEARS = [2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024];
 
@@ -483,8 +518,6 @@
 
     // Placeholder function to simulate extracting area from GeoJSON features.
     function buildAreaMap(features) {
-        // --- SIMULATION START ---
-        // Real PR area: 3515.1 sq mi. Average density: ~911/sq mi
         const simAreas = {
             'Puerto Rico': 3515.1, 
             'San Juan': 47.7,
@@ -572,9 +605,7 @@
             const area = simAreas[name] || 50; 
             _areaData[name] = area;
         });
-        // --- SIMULATION END ---
     }
-
 
     function statsForMunicipio(name){
       const key = sanitizeName(name).replace(/\s*Municipio$/,'');
@@ -594,7 +625,6 @@
         pctYear.push(((vals[i]-vals[i-1]) / vals[i-1]) * 100);
       }
       
-      // Calculate Density (using area data extracted/simulated from GeoJSON)
       const area = _areaData[key];
       const popDensity = Number.isFinite(area) && area > 0 ? pop2024 / area : NaN;
 
@@ -662,7 +692,6 @@
     const selectedOutline = { weight: 4, color: '#111827', dashArray: '3', fillOpacity: 0.85 };
     let prBoundsGlobal = null;
 
-    // New function to pre-calculate global min/max for the current metric
     function calculateExtremeValues() {
         _extremeValues = { min: Infinity, max: -Infinity };
         let valueKey;
@@ -671,7 +700,6 @@
         else if (currentMode === 'density') valueKey = 'popDensity';
         else return;
 
-        // Iterate through all municipalities to find the global min and max value
         (fc.features || []).forEach(f => {
             const p = f.properties || {};
             const name = (p.NAME || p.NAMELSAD || p.name || 'Unknown').replace(/\s*Municipio$/,'');
@@ -684,11 +712,9 @@
             }
         });
         
-        // Handle floating point precision for comparison
         _extremeValues.min = parseFloat(_extremeValues.min.toFixed(2));
         _extremeValues.max = parseFloat(_extremeValues.max.toFixed(2));
     }
-
 
     (async function init(){
       const res = await fetch(POP_JSON, { cache:'no-store' });
@@ -696,9 +722,8 @@
 
       const prBounds = L.latLngBounds([[17.85, -67.45],[18.55, -65.25]]);
       prBoundsGlobal = prBounds;
-      map = L.map('map', { zoomControl: false, zoomSnap:.25 }).fitBounds(prBounds); // Hide default zoom control
+      map = L.map('map', { zoomControl: false, zoomSnap:.25 }).fitBounds(prBounds); 
 
-      // Add zoom controls back as a separate control so we can position the dropdown relative to it
       L.control.zoom({ position: 'topleft' }).addTo(map);
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -706,7 +731,6 @@
         minZoom: 7, maxZoom: 19
       }).addTo(map);
       
-      // Initialize the map dropdown control
       L.Control.MapDropdown = L.Control.extend({
           onAdd: function(map) {
               const container = L.DomUtil.get('map-dropdown-container');
@@ -718,16 +742,11 @@
       });
       new L.Control.MapDropdown({ position: 'topleft' }).addTo(map);
       
-
       const gjRes = await fetch(GEOJSON_URL + (GEOJSON_URL.includes('?')?'&':'?') + 'cb=' + Date.now());
       fc = await gjRes.json();
       
-      // STEP 1: Process GeoJSON to build Area Map
       buildAreaMap(fc.features);
-
       const hiStyle = { weight:3, color:'#111827', fillOpacity:0.9 };
-      
-      // Calculate initial extremes
       calculateExtremeValues();
 
       layer = L.geoJSON(fc, {
@@ -803,9 +822,10 @@
 
       wireMetricToggle();
       wireClearSelection();
-      wireDropdown(); // Main nav dropdown
-      wireMapDropdown(); // NEW map dropdown
-      initRadialMenu(); // Init Radial Menu
+      wireDropdown(); 
+      wireMapDropdown(); 
+      initRadialMenu(); 
+      loadIslandVitals(); // Initialize the new vital statistics charts
     })();
 
     function wireMetricToggle(){
@@ -828,7 +848,6 @@
         btnDensity.classList.toggle('text-white', mode==='density');
         btnDensity.classList.toggle('hover:bg-gray-50', mode!=='density');
 
-        // RE-CALCULATE EXTREMES BEFORE RESTYLING
         calculateExtremeValues(); 
 
         layer.eachLayer(l => l.setStyle(styleForFeature(l.feature)));
@@ -874,32 +893,25 @@
       
       const col = colorFor(value, breaks);
       
-      // Default style based on color
       let style = { fillColor: col, weight: 1.2, color:'#111827', fillOpacity:.75 };
 
-      // >>> START: Custom logic to highlight only the single min and max values (Thicker Yellow Line) <<<
       if (Number.isFinite(value) && _extremeValues.min !== Infinity) {
-          // Compare value to the globally calculated min and max, accounting for floating point
           const valRounded = parseFloat(value.toFixed(2));
           const isExtreme = valRounded === _extremeValues.min || valRounded === _extremeValues.max;
           
-          // Only highlight if min is not equal to max (i.e., not all values are the same)
           if (isExtreme && _extremeValues.min !== _extremeValues.max) { 
-              style.weight = 5;            // Thicker border
-              style.color = '#facc15';     // Yellow border (tailwind yellow-400)
-              style.dashArray = '';        // Solid line
-              style.fillOpacity = 0.95;    // Max fill opacity to make the interior color stand out
+              style.weight = 5;            
+              style.color = '#facc15';     
+              style.dashArray = '';        
+              style.fillOpacity = 0.95;    
           }
       }
-      // >>> END: Custom logic to highlight only the single min and max values (Thicker Yellow Line) <<<
-
       return style;
     }
 
     function colorFor(value, breaks) {
       if (!Number.isFinite(value)) return '#93c5fd';
       
-      // Density: High Density = Dark Red (CHORO_COLORS[0]), Low Density = Dark Green (CHORO_COLORS[5])
       if (currentMode === 'density') {
         if (value <= breaks[0]) return CHORO_COLORS[5]; 
         if (value <= breaks[1]) return CHORO_COLORS[4]; 
@@ -909,7 +921,6 @@
         return CHORO_COLORS[0]; 
       }
       
-      // Pct/Abs Change: Negative/Low Change = Dark Red (CHORO_COLORS[0]), High Change = Dark Green (CHORO_COLORS[5])
       if (value <= breaks[0]) return CHORO_COLORS[0];
       if (value <= breaks[1]) return CHORO_COLORS[1];
       if (value <= breaks[2]) return CHORO_COLORS[2];
@@ -940,7 +951,6 @@
         fmtRange = (a,b) => `${fmtValue(a)} to ${fmtValue(b)}`;
       }
       
-
       const labels = [];
       const row = (color, label) =>
         `<div style="display:flex;align-items:center;gap:.5rem;margin:.2rem 0;">
@@ -951,7 +961,6 @@
 
       labels.push(`<div style="font-weight:600;margin-bottom:.25rem">${title}</div>`);
       
-      // Density legend is reversed (Low Density=Green/CHORO_COLORS[5], High Density=Red/CHORO_COLORS[0])
       if (currentMode === 'density') {
         labels.push(row(CHORO_COLORS[5], `≤ ${fmtValue(breaks[0])}`)); 
         labels.push(row(CHORO_COLORS[4], fmtRange(breaks[0], breaks[1])));
@@ -960,7 +969,6 @@
         labels.push(row(CHORO_COLORS[1], fmtRange(breaks[3], breaks[4])));
         labels.push(row(CHORO_COLORS[0], `> ${fmtValue(breaks[4])}`)); 
       } else {
-        // Pct and Abs Change 
         labels.push(row(CHORO_COLORS[0], `≤ ${fmtValue(breaks[0])}`));
         labels.push(row(CHORO_COLORS[1], fmtRange(breaks[0], breaks[1])));
         labels.push(row(CHORO_COLORS[2], fmtRange(breaks[1], breaks[2])));
@@ -974,7 +982,6 @@
 
     function computeAbsBreaks(){
       const values = [];
-      // Use fc (GeoJSON feature collection) which is now available globally
       (fc.features || []).forEach(f => {
         const p = f.properties || {};
         const name = (p.NAME || p.NAMELSAD || p.name || 'Unknown').replace(/\s*Municipio$/,'');
@@ -997,10 +1004,7 @@
       ABS_BREAKS = [n1, n2, n3, 0, p1];
     }
 
-    // --- Dropdown Wiring Functions ---
-
     function wireDropdown() {
-      // Wires all navigation dropdowns (top of page) using class selection
       const dropdownRoots = document.querySelectorAll('.nav-dropdown-root');
       
       dropdownRoots.forEach(root => {
@@ -1019,7 +1023,6 @@
     }
 
     function wireMapDropdown() {
-        // Wires the new map selection dropdown (top left of map)
         const root = document.getElementById('map-selection-dropdown-root');
         if (!root) return;
         let hoverTimeout;
@@ -1043,7 +1046,6 @@
         }
     }
 
-    // --- RADIAL MENU LOGIC ---
     const menuItems = [
         { label: 'Population', href: 'population.html', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
         { label: 'SVI', href: 'svi.html', icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' },
@@ -1062,22 +1064,20 @@
         const container = document.getElementById('radial-menu-container');
         const trigger = document.getElementById('radial-trigger');
         
-        const totalAngle = 100; // Degrees of spread
-        const radius = 180; // Distance from center
+        const totalAngle = 100; 
+        const radius = 180; 
         const count = menuItems.length;
-        const startAngle = -95; // Top (12 o'clock ish)
+        const startAngle = -95; 
         const step = totalAngle / (count - 1);
 
         menuItems.forEach((item, index) => {
             const angleDeg = startAngle - (step * index); 
             const angleRad = angleDeg * (Math.PI / 180);
             
-            // Icon coordinates
             const x = Math.round(radius * Math.cos(angleRad));
             const y = Math.round(radius * Math.sin(angleRad));
 
-            // Label coordinates (offset further out for "red line" effect)
-            const textGap = 75; // Distance from icon center to text
+            const textGap = 75; 
             const lx = Math.round(textGap * Math.cos(angleRad));
             const ly = Math.round(textGap * Math.sin(angleRad));
 
@@ -1086,12 +1086,11 @@
             el.className = 'radial-item';
             el.style.transitionDelay = `${index * 0.03}s`;
             
-            // Store coordinates in CSS variables on the element
             el.style.setProperty('--tx', `${x}px`);
             el.style.setProperty('--ty', `${y}px`);
             el.style.setProperty('--lx', `${lx}px`);
             el.style.setProperty('--ly', `${ly}px`);
-            el.style.setProperty('--lr', `${angleDeg + 180}deg`); // Rotate text
+            el.style.setProperty('--lr', `${angleDeg + 180}deg`); 
 
             el.innerHTML = `
                 <span class="radial-label">${item.label}</span>
@@ -1105,19 +1104,103 @@
 
     function toggleRadialMenu() {
         const container = document.getElementById('radial-menu-container');
-        // Simply toggle class - CSS variables handle the positioning now
         container.classList.toggle('radial-open');
+    }
+
+    // --- NEW: ISLAND-WIDE VITAL RATES LOGIC ---
+    async function loadIslandVitals() {
+      try {
+        const response = await fetch(VITALS_CSV);
+        const csvText = await response.text();
+        
+        const lines = csvText.trim().split('\n');
+        // Parse CSV assuming headers are on line 0
+        const data = lines.slice(1).map(line => {
+          // Handle potential carriage returns from the CSV format
+          const values = line.replace('\r', '').split(',');
+          return {
+            year: parseInt(values[0]),
+            birthRate: parseFloat(values[1]),
+            deathRate: parseFloat(values[2]),
+            naturalChange: parseFloat(values[3])
+          };
+        }).sort((a, b) => a.year - b.year); 
+
+        const labels = data.map(d => d.year);
+
+        // Vitals Chart (Birth vs Death)
+        const ctxV = document.getElementById('vitalsChart').getContext('2d');
+        new Chart(ctxV, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: 'Birth Rate',
+                data: data.map(d => d.birthRate),
+                borderColor: '#2563eb', 
+                backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                fill: true,
+                tension: 0.3
+              },
+              {
+                label: 'Death Rate',
+                data: data.map(d => d.deathRate),
+                borderColor: '#dc2626', 
+                backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                fill: true,
+                tension: 0.3
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } },
+            scales: { y: { title: { display: true, text: 'Rate per 1,000' } } }
+          }
+        });
+
+        // Natural Change Chart
+        const ctxN = document.getElementById('naturalChangeChart').getContext('2d');
+        new Chart(ctxN, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Natural Change Rate',
+              data: data.map(d => d.naturalChange),
+              borderColor: '#4f46e5', 
+              borderWidth: 3,
+              fill: false,
+              tension: 0.3,
+              segment: {
+                borderColor: ctx => ctx.p0.parsed.y < 0 ? '#ef4444' : '#4f46e5'
+              }
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              y: {
+                title: { display: true, text: 'Rate' },
+                grid: { color: (context) => context.tick.value === 0 ? '#000' : '#e5e7eb' } 
+              }
+            }
+          }
+        });
+
+      } catch (error) {
+        console.error("Error loading vital rates:", error);
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       const currentPathname = window.location.pathname.split('/').pop();
       const subPageLink = document.querySelector(`#metrics-menu a[href="${currentPathname}"]`);
       if (subPageLink) subPageLink.classList.add('bg-gray-100','font-semibold');
-
-      // Initialize the map dropdown handler
-      wireMapDropdown();
-      // Init Radial Menu
-      initRadialMenu();
     });
   </script>
 </body>
