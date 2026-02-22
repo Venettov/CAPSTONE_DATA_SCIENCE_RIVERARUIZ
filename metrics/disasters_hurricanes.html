@@ -358,7 +358,7 @@
     let map, analysisChart, frequencyChart;
     let _stormData = [];
     let _geoData = [];
-    let trackLayers = L.layerGroup();
+    let trackLayers = L.featureGroup();
     let municipalityLayer;
 
     // --- COLOR SCALES ---
@@ -436,8 +436,6 @@
     // --- UPDATED SELECTSTORM ---
     // Now this function is only triggered when a user explicitly clicks a track
     function selectStorm(storm) {
-        const zoomBuffer = 230; 
-
         updateUIDetails(storm);
         updateChartProfile(storm);
         updateChartFrequency();
@@ -445,11 +443,23 @@
         // Isolate the clicked storm on the map
         plotStorms(0, storm.id); 
 
+        // 1. Calculate the bounds of the storm's actual path
+        const pathCoords = storm.path.map(p => [p.lat, p.lon]);
+        const stormBounds = L.latLngBounds(pathCoords);
+        
+        // 2. Optional: Include Puerto Rico in the bounds so it's always in context
         if (municipalityLayer) {
-            const prBounds = municipalityLayer.getBounds();
-            map.fitBounds(prBounds, { padding: [zoomBuffer, zoomBuffer], animate: true, duration: 1.2 });
+            stormBounds.extend(municipalityLayer.getBounds());
         }
-    }
+
+        // 3. Fit the map to the STORM's bounds, not just PR's bounds
+        // We use a smaller padding (50px) because the bounds already include the path
+        map.fitBounds(stormBounds, { 
+            padding: [50, 50], 
+            animate: true, 
+            duration: 1.5 
+        });
+    }   
 
     async function loadData() {
         try {
