@@ -461,13 +461,15 @@
     // MAP LOGIC
     // ==========================================
     function initMap() {
-        prBoundsGlobal = L.latLngBounds([[17.85, -67.45],[18.55, -65.25]]);
-        map = L.map('map', { zoomControl: false, zoomSnap:.25 }).fitBounds(prBoundsGlobal);
+        const prBounds = L.latLngBounds([[17.85, -67.45],[18.55, -65.25]]);
+        prBoundsGlobal = prBounds;
+        map = L.map('map', { zoomControl: false, zoomSnap:.25 }).fitBounds(prBounds); 
+
         L.control.zoom({ position: 'topleft' }).addTo(map);
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors',
-            minZoom: 7, 
-            maxZoom: 19
+            minZoom: 7, maxZoom: 19
         }).addTo(map);
 
         L.Control.MapDropdown = L.Control.extend({
