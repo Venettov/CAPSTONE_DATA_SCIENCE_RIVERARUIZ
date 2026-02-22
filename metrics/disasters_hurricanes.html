@@ -436,31 +436,30 @@
     // --- UPDATED SELECTSTORM ---
     // Now this function is only triggered when a user explicitly clicks a track
     function selectStorm(storm) {
+        // 1. Update UI and Charts as usual
         updateUIDetails(storm);
         updateChartProfile(storm);
         updateChartFrequency();
 
-        // Isolate the clicked storm on the map
+        // 2. Isolate the clicked storm on the map
         plotStorms(0, storm.id); 
 
-        // 1. Calculate the bounds of the storm's actual path
-        const pathCoords = storm.path.map(p => [p.lat, p.lon]);
-        const stormBounds = L.latLngBounds(pathCoords);
+        // 3. SET REGIONAL VIEW: Centered on PR, Zoomed out for context
+        // Coordinates for the center of Puerto Rico
+        const prCenter = [18.2208, -66.5901]; 
         
-        // 2. Optional: Include Puerto Rico in the bounds so it's always in context
-        if (municipalityLayer) {
-            stormBounds.extend(municipalityLayer.getBounds());
-        }
+        // Zoom Level 7 is usually the "sweet spot" to show the 
+        // Virgin Islands, DR, and the trajectory from the east.
+        const regionalZoom = 7; 
 
-        // 3. Fit the map to the STORM's bounds, not just PR's bounds
-        // We use a smaller padding (50px) because the bounds already include the path
-        map.fitBounds(stormBounds, { 
-            padding: [50, 50], 
-            animate: true, 
-            duration: 1.5 
+        // Apply the view with a smooth flyTo animation
+        map.flyTo(prCenter, regionalZoom, {
+            animate: true,
+            duration: 1.5,
+            easeLinearity: 0.25
         });
-    }   
-
+    }
+    
     async function loadData() {
         try {
             const [geoRes, stormRes] = await Promise.all([
