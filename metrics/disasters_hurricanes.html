@@ -466,11 +466,15 @@
 
     // --- MAP LOGIC ---
     function initMap() {
-        map = L.map('map', { zoomControl: false, zoomSnap: 0.25 }).setView([18.25, -66.45], 9);
+        const prBounds = L.latLngBounds([[17.85, -67.45],[18.55, -65.25]]);
+        prBoundsGlobal = prBounds;
+        map = L.map('map', { zoomControl: false, zoomSnap:.25 }).fitBounds(prBounds); 
+
         L.control.zoom({ position: 'topleft' }).addTo(map);
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { 
-            attribution: '&copy; CARTO'
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors',
+            minZoom: 7, maxZoom: 19
         }).addTo(map);
 
         municipalityLayer = L.geoJSON(_geoData, {
