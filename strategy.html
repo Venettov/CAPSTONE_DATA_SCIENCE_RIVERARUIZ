@@ -97,6 +97,10 @@
     /* ===== Framework Diagram (Predictive Population Modeling Pipeline) ===== */
     .framework-wrap {
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+
+      /* OPTIONAL: slightly shrink the whole diagram without changing proportions */
+      /* transform: scale(0.95);
+      transform-origin: top center; */
     }
 
     .framework-title {
@@ -114,24 +118,25 @@
 
     .pipeline-row {
       display: flex;
-      gap: 22px;
+      gap: 12px;           /* was 22px */
       align-items: center;
       justify-content: center;
-      margin-top: 22px;
+      margin-top: 18px;    /* was 22px */
     }
 
     .pipe-col {
       background: #8fb7d6;            /* outer blue panel */
       border: 2px solid #2b4d66;
       border-radius: 12px;
-      padding: 14px;
+      padding: 10px;                  /* was 14px */
       box-shadow: 0 3px 0 rgba(0,0,0,0.05);
     }
 
-    .pipe-col.inputs { width: 310px; }
-    .pipe-col.methods { width: 340px; }
-    .pipe-col.outputs { width: 300px; }
-    .pipe-col.goal { width: 270px; }
+    /* Tighter widths to reduce whitespace between main columns */
+    .pipe-col.inputs  { width: 270px; }  /* was 310px */
+    .pipe-col.methods { width: 300px; }  /* was 340px */
+    .pipe-col.outputs { width: 260px; }  /* was 300px */
+    .pipe-col.goal    { width: 230px; }  /* was 270px */
 
     .pipe-col h3 {
       text-align: center;
@@ -161,7 +166,7 @@
       align-items: flex-start;
     }
 
-    .pipe-block + .pipe-block { margin-top: 12px; }
+    .pipe-block + .pipe-block { margin-top: 8px; } /* was 12px */
 
     .pipe-ico {
       width: 44px;
@@ -201,8 +206,8 @@
     }
 
     .pipe-arrow {
-      width: 54px;
-      height: 54px;
+      width: 36px;       /* was 54px */
+      height: 36px;      /* was 54px */
       display: grid;
       place-items: center;
       filter: drop-shadow(0 0 10px rgba(71, 193, 115, 0.55));
