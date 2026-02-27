@@ -93,6 +93,162 @@
     }
     #radial-trigger:hover { transform: scale(1.05); background-color: #4338ca; }
     .radial-open #radial-trigger { transform: rotate(45deg); background-color: #ef4444; }
+
+    /* ===== Framework Diagram (Predictive Population Modeling Pipeline) ===== */
+    .framework-wrap {
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+    }
+
+    .framework-title {
+      font-family: Georgia, "Times New Roman", Times, serif;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .framework-hr {
+      height: 3px;
+      background: #1f5f8b;
+      border: 0;
+      margin-top: 10px;
+    }
+
+    .pipeline-row {
+      display: flex;
+      gap: 22px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 22px;
+    }
+
+    .pipe-col {
+      background: #8fb7d6;            /* outer blue panel */
+      border: 2px solid #2b4d66;
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: 0 3px 0 rgba(0,0,0,0.05);
+    }
+
+    .pipe-col.inputs { width: 310px; }
+    .pipe-col.methods { width: 340px; }
+    .pipe-col.outputs { width: 300px; }
+    .pipe-col.goal { width: 270px; }
+
+    .pipe-col h3 {
+      text-align: center;
+      font-weight: 800;
+      font-size: 26px;
+      color: #0f2940;
+      margin-bottom: 10px;
+    }
+
+    .pipe-col h3 em { font-style: italic; }
+    .pipe-col h3 .sub { font-weight: 700; font-size: 18px; opacity: 0.95; }
+
+    .pipe-inner {
+      background: #ffffff;
+      border: 2px solid #2b4d66;
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .pipe-block {
+      border: 2px solid #2b4d66;
+      border-radius: 10px;
+      padding: 14px 14px;
+      background: #fff;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .pipe-block + .pipe-block { margin-top: 12px; }
+
+    .pipe-ico {
+      width: 44px;
+      min-width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: #eef6ff;
+      border: 1px solid #cfe2f5;
+      display: grid;
+      place-items: center;
+      color: #1f5f8b;
+      font-size: 20px;
+    }
+
+    .pipe-block b {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
+    .pipe-block .txt {
+      font-size: 18px;
+      line-height: 1.2;
+      color: #0f2940;
+    }
+
+    .pipe-small {
+      font-size: 17px;
+      line-height: 1.25;
+      color: #0f2940;
+    }
+
+    .pipe-subtitle {
+      font-weight: 800;
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    .pipe-arrow {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      filter: drop-shadow(0 0 10px rgba(71, 193, 115, 0.55));
+    }
+
+    .pipe-arrow svg { display: block; }
+
+    .pipe-arrow-vert {
+      height: 30px;
+      display: grid;
+      place-items: center;
+      margin: 10px 0;
+      filter: drop-shadow(0 0 10px rgba(71, 193, 115, 0.55));
+    }
+
+    .goal-box {
+      display: grid;
+      place-items: center;
+      text-align: center;
+      gap: 10px;
+    }
+
+    .goal-icon {
+      width: 92px;
+      height: 48px;
+      border-radius: 10px;
+      background: #eef6ff;
+      border: 1px solid #cfe2f5;
+      display: grid;
+      place-items: center;
+      color: #1f5f8b;
+      font-size: 26px;
+    }
+
+    .goal-text {
+      font-size: 18px;
+      line-height: 1.2;
+      color: #0f2940;
+    }
+
+    /* Responsive: stack columns and hide arrows on small screens */
+    @media (max-width: 1100px) {
+      .pipeline-row { flex-direction: column; }
+      .pipe-arrow { display: none; }
+      .pipe-col.inputs, .pipe-col.methods, .pipe-col.outputs, .pipe-col.goal { width: min(92vw, 560px); }
+    }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
@@ -256,6 +412,166 @@
             </div>
           </div>
         </aside>
+      </section>
+
+      <section class="card p-6 mb-6 framework-wrap">
+        <div class="framework-title text-5xl md:text-6xl">
+          Framework: Predictive Population Modeling Pipeline
+        </div>
+        <hr class="framework-hr" />
+
+        <div class="pipeline-row">
+          <!-- INPUTS -->
+          <div class="pipe-col inputs">
+            <h3>Inputs <span class="sub">(</span><em>X</em><span class="sub">ₘ,ₜ)</span></h3>
+
+            <div class="pipe-inner">
+              <div class="pipe-block">
+                <div class="pipe-ico"><i class="fa-solid fa-people-group"></i></div>
+                <div>
+                  <b>Structural:</b>
+                  <div class="pipe-small">Birth rates,<br/>Age structure<br/>(%&lt;15, %&gt;65)</div>
+                </div>
+              </div>
+
+              <div class="pipe-block">
+                <div class="pipe-ico"><i class="fa-solid fa-industry"></i></div>
+                <div>
+                  <b>Resilience:</b>
+                  <div class="pipe-small">Unemployment,<br/>Payroll,<br/>Establishment counts</div>
+                </div>
+              </div>
+
+              <div class="pipe-block">
+                <div class="pipe-ico"><i class="fa-solid fa-house"></i></div>
+                <div>
+                  <b>Vulnerability:</b>
+                  <div class="pipe-small">CDC SVI<br/>(Poverty,<br/>Transportation,<br/>Housing)</div>
+                </div>
+              </div>
+
+              <div class="pipe-block">
+                <div class="pipe-ico"><i class="fa-solid fa-cloud-bolt"></i></div>
+                <div>
+                  <b>Shocks:</b>
+                  <div class="pipe-small">Hurricane strikes<br/>Earthquake intensity</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ARROW -->
+          <div class="pipe-arrow" aria-hidden="true">
+            <svg width="54" height="54" viewBox="0 0 64 64">
+              <defs>
+                <linearGradient id="gArrow" x1="0" x2="1">
+                  <stop offset="0" stop-color="#2f87b7"/>
+                  <stop offset="1" stop-color="#1f5f8b"/>
+                </linearGradient>
+              </defs>
+              <path d="M8 28h30v-10l18 14-18 14V36H8z" fill="url(#gArrow)" stroke="#1b3d55" stroke-width="2" />
+            </svg>
+          </div>
+
+          <!-- METHODS -->
+          <div class="pipe-col methods">
+            <h3>Methods</h3>
+
+            <div class="pipe-inner">
+              <div class="pipe-block">
+                <div class="pipe-ico"><i class="fa-solid fa-chart-line"></i></div>
+                <div>
+                  <div class="pipe-subtitle">Phase I (Supervised):</div>
+                  <div class="pipe-small">
+                    Lasso Regression<br/>(feature selection)<br/>
+                    And Random Forest<br/>(capturing “shock cliffs”)
+                  </div>
+                </div>
+              </div>
+
+              <div class="pipe-arrow-vert" aria-hidden="true">
+                <svg width="40" height="30" viewBox="0 0 64 48">
+                  <path d="M28 6h8v22h12L32 44 16 28h12z" fill="#1f5f8b" stroke="#1b3d55" stroke-width="2"/>
+                </svg>
+              </div>
+
+              <div class="pipe-block">
+                <div class="pipe-ico"><i class="fa-solid fa-diagram-project"></i></div>
+                <div>
+                  <div class="pipe-subtitle">Phase II (Unsupervised):</div>
+                  <div class="pipe-small">
+                    K-Means / Hierarchical<br/>
+                    Clustering for<br/>
+                    typology profiling
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ARROW -->
+          <div class="pipe-arrow" aria-hidden="true">
+            <svg width="54" height="54" viewBox="0 0 64 64">
+              <path d="M8 28h30v-10l18 14-18 14V36H8z" fill="#1f5f8b" stroke="#1b3d55" stroke-width="2" />
+            </svg>
+          </div>
+
+          <!-- OUTPUTS -->
+          <div class="pipe-col outputs">
+            <h3>Outputs <span class="sub">(</span><em>Y</em><span class="sub">ₘ,ₜ)</span></h3>
+
+            <div class="pipe-inner">
+              <div class="pipe-block">
+                <div class="pipe-ico"><i class="fa-solid fa-chart-column"></i></div>
+                <div>
+                  <b>Primary:</b>
+                  <div class="pipe-small">Population<br/>change / net<br/>migration<br/>forecast</div>
+                </div>
+              </div>
+
+              <div class="pipe-block">
+                <div class="pipe-ico"><i class="fa-solid fa-gauge-high"></i></div>
+                <div>
+                  <b>Secondary:</b>
+                  <div class="pipe-small">
+                    Composite<br/>
+                    municipal<br/>
+                    demographic<br/>
+                    vulnerability<br/>
+                    score (0-1)
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ARROW -->
+          <div class="pipe-arrow" aria-hidden="true">
+            <svg width="54" height="54" viewBox="0 0 64 64">
+              <path d="M8 28h30v-10l18 14-18 14V36H8z" fill="#1f5f8b" stroke="#1b3d55" stroke-width="2" />
+            </svg>
+          </div>
+
+          <!-- GOAL -->
+          <div class="pipe-col goal">
+            <h3>Goal</h3>
+            <div class="pipe-inner goal-box">
+              <div class="goal-icon" aria-hidden="true">
+                <i class="fa-solid fa-map"></i>&nbsp;<i class="fa-solid fa-gear"></i>
+              </div>
+              <div class="goal-text">
+                Distinguish between<br/>
+                “natural” demographic<br/>
+                momentum and<br/>
+                shock-driven<br/>
+                emptying to inform<br/>
+                resource allocation<br/>
+                for the Puerto Rico<br/>
+                Planning Board
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section class="card p-6">
