@@ -640,48 +640,57 @@
         </div>
       </section>   
       
-      <section class="max-w-5xl mx-auto px-6 py-16">
-        
-        <!-- Title -->
-        <div class="mb-8">
-          <h2 class="text-4xl font-extrabold tracking-tight text-gray-900">
-            Data Structure (The Input Vector)
-          </h2>
-          <div class="mt-4 h-1 w-full bg-blue-800"></div>
+      <section class="card p-6">
+
+        <h2 class="text-2xl font-bold">
+          Data Structure (The Input Vector)
+        </h2>
+
+        <p class="mt-3 text-gray-700">
+          For a specific Municipality <span class="italic">m</span> at a specific Year 
+          <span class="italic">t</span>, the data point 
+          <span class="italic">X</span><sub>m,t</sub> is a structured feature vector containing
+          demographic, economic, social, and hazard variables.
+        </p>
+
+        <!-- Equation Block -->
+        <div class="mt-6 p-6 rounded-xl bg-gray-50 border border-gray-200 text-center">
+          <div class="text-lg font-mono text-gray-800">
+            X<sub>m,t</sub> =
+            D<sub>birth</sub>,
+            D<sub>age65+</sub>,
+            E<sub>unemp</sub>,
+            E<sub>payroll</sub>,
+            S<sub>pov</sub>,
+            S<sub>transportation</sub>,
+            H<sub>hazard</sub>
+          </div>
         </div>
 
-        <!-- Content -->
-        <div class="space-y-10 text-gray-800 leading-relaxed text-xl">
+        <!-- Grid Breakdown -->
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
 
-          <!-- Input Vector -->
-          <div>
-            <div class="font-extrabold text-2xl mb-4">• Input Vector:</div>
-            <p class="mb-6">
-              For a specific Municipality <span class="italic">m</span> at a specific Year 
-              <span class="italic">t</span>, the data point 
-              <span class="italic">X</span><sub>m,t</sub> is a vector containing all variables information:
-            </p>
-
-            <!-- Equation Block -->
-            <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 text-center text-2xl font-mono">
-              X<sub>m,t</sub> = 
-              D<sub>birth</sub>,
-              D<sub>age65+</sub>,
-              E<sub>unemp</sub>,
-              E<sub>payroll</sub>,
-              S<sub>pov</sub>,
-              S<sub>transportation</sub>,
-              H<sub>hazard</sub>
-            </div>
+          <!-- Inputs Card -->
+          <div class="p-6 rounded-xl bg-gradient-to-br from-sky-50 to-white border border-sky-100">
+            <h3 class="font-semibold text-sky-900 mb-3">
+              Inputs (X<sub>m,t</sub>)
+            </h3>
+            <ul class="text-sm text-gray-700 space-y-2">
+              <li><strong>Structural:</strong> Birth rates, Age structure (% &lt;15, % &gt;65)</li>
+              <li><strong>Resilience:</strong> Unemployment, Payroll, Establishments</li>
+              <li><strong>Vulnerability:</strong> Poverty, Transportation, Housing</li>
+              <li><strong>Shocks:</strong> Hurricane strikes, Earthquake intensity</li>
+            </ul>
           </div>
 
-          <!-- Target -->
-          <div>
-            <div class="font-extrabold text-2xl mb-4">• Target 
-              <span class="italic">Y</span><sub>m,t</sub>
-            </div>
-            <p>
-              The population change (or net migration) we are trying to predict.
+          <!-- Target Card -->
+          <div class="p-6 rounded-xl bg-gradient-to-br from-lime-50 to-white border border-lime-100">
+            <h3 class="font-semibold text-lime-900 mb-3">
+              Target (Y<sub>m,t</sub>)
+            </h3>
+            <p class="text-sm text-gray-700">
+              The population change (or net migration) the model aims to predict —
+              capturing both structural demographic momentum and shock-driven displacement.
             </p>
           </div>
 
