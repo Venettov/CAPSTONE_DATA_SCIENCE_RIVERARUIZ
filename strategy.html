@@ -570,50 +570,65 @@
       <section class="card p-6">
 
         <h2 class="text-2xl font-bold">
-          Section Title Goes Here
+          Framework: Predictive Population Modeling Pipeline
         </h2>
 
-        <p class="mt-3 text-gray-700">
-          Short executive-level description of this section. Keep it concise, academic,
-          and aligned with your capstone narrative.
-        </p>
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
 
-        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-
-          <!-- Card 1 -->
+          <!-- Inputs -->
           <div class="p-6 rounded-xl bg-gradient-to-br from-sky-50 to-white border border-sky-100">
-            <h3 class="font-semibold text-sky-900 mb-2">
-              Subheading One
+            <h3 class="font-semibold text-sky-900 mb-3">
+              Inputs (X<sub>m,t</sub>)
             </h3>
-            <p class="text-sm text-gray-700">
-              Supporting explanation or technical detail. Keep this clean and concise.
-            </p>
+            <ul class="list-disc ml-5 space-y-2 text-sm text-gray-700">
+              <li><span class="font-semibold">Structural:</span> Birth rates, Age structure (% &lt;15, % &gt;65)</li>
+              <li><span class="font-semibold">Resilience:</span> Unemployment, Payroll, Establishment counts</li>
+              <li><span class="font-semibold">Vulnerability:</span> CDC SVI (Poverty, Transportation, Housing)</li>
+              <li><span class="font-semibold">Shocks:</span> Hurricane strikes, Earthquake intensity</li>
+            </ul>
           </div>
 
-          <!-- Card 2 -->
+          <!-- Methods -->
           <div class="p-6 rounded-xl bg-gradient-to-br from-lime-50 to-white border border-lime-100">
-            <h3 class="font-semibold text-lime-900 mb-2">
-              Subheading Two
+            <h3 class="font-semibold text-lime-900 mb-3">
+              Methods
             </h3>
-            <p class="text-sm text-gray-700">
-              Add additional modeling explanation, validation details,
-              or policy implications.
-            </p>
+            <div class="space-y-3 text-sm text-gray-700">
+              <p>
+                <span class="font-semibold">Phase I (Supervised):</span>
+                Lasso Regression (feature selection) and Random Forest (capturing “shock cliffs”)
+              </p>
+              <p>
+                <span class="font-semibold">Phase II (Unsupervised):</span>
+                K-Means/Hierarchical Clustering for typology profiling
+              </p>
+            </div>
           </div>
 
-          <!-- Card 3 -->
+          <!-- Outputs -->
           <div class="p-6 rounded-xl bg-gradient-to-br from-fuchsia-50 to-white border border-fuchsia-100">
-            <h3 class="font-semibold text-fuchsia-900 mb-2">
-              Subheading Three
+            <h3 class="font-semibold text-fuchsia-900 mb-3">
+              Outputs (Y<sub>m,t</sub>)
+            </h3>
+            <div class="space-y-2 text-sm text-gray-700">
+              <p><span class="font-semibold">Primary:</span> Population change / Net migration forecast</p>
+              <p><span class="font-semibold">Secondary:</span> Composite Municipal Demographic Vulnerability Score (0–1)</p>
+            </div>
+          </div>
+
+          <!-- Goal -->
+          <div class="p-6 rounded-xl bg-gradient-to-br from-amber-50 to-white border border-amber-100">
+            <h3 class="font-semibold text-amber-900 mb-3">
+              Goal
             </h3>
             <p class="text-sm text-gray-700">
-              Concluding insight or forward-looking implication.
+              Distinguish between “natural” demographic momentum and shock-driven emptying to inform resource allocation for the PR Planning Board
             </p>
           </div>
 
         </div>
 
-      </section>  
+      </section>
       
       <section class="card p-6">
 
