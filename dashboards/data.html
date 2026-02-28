@@ -336,6 +336,100 @@
         </div>
       </section> 
 
+      <section class="max-w-7xl mx-auto px-6 py-16">
+        <!-- Title -->
+        <div class="mb-8">
+          <h2 class="text-4xl font-extrabold tracking-tight text-gray-900">
+            Pipeline Risk Assessment &amp; Mitigation
+          </h2>
+          <div class="mt-4 h-1 w-full bg-blue-800"></div>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto shadow-lg rounded-xl border border-gray-200">
+          <table class="min-w-full text-sm text-left border-collapse">
+            <thead class="bg-gray-100 text-gray-800 font-semibold uppercase tracking-wide text-xs">
+              <tr>
+                <th class="px-6 py-4 border">Risk Identified</th>
+                <th class="px-6 py-4 border w-40 text-center">Level</th>
+                <th class="px-6 py-4 border">Mitigation Plan</th>
+              </tr>
+            </thead>
+
+            <tbody class="bg-white text-gray-800">
+              <!-- Row 1 -->
+              <tr class="border-t">
+                <td class="px-6 py-6 align-top">
+                  <div class="font-extrabold">Data Volatility (&quot;Noise&quot;):</div>
+                  <div class="mt-1 text-gray-700">
+                    Migration data at the town level can be noisy.
+                  </div>
+                </td>
+                <td class="px-6 py-6 align-top text-center font-semibold">Medium</td>
+                <td class="px-6 py-6 align-top">
+                  <div class="font-extrabold">Regularization:</div>
+                  <div class="mt-1 text-gray-700">
+                    Utilize Lasso (L1) and Ridge regression techniques to penalize outliers and force the
+                    model to focus only on significant drivers.
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 2 -->
+              <tr class="border-t bg-gray-50">
+                <td class="px-6 py-6 align-top">
+                  <div class="font-extrabold">Non-Linear Shocks:</div>
+                  <div class="mt-1 text-gray-700">
+                    Standard linear models may fail to predict the &quot;cliff-like&quot; population drops caused by disasters
+                  </div>
+                </td>
+                <td class="px-6 py-6 align-top text-center font-semibold">Medium</td>
+                <td class="px-6 py-6 align-top">
+                  <div class="font-extrabold">Non-Linear Algorithms:</div>
+                  <div class="mt-1 text-gray-700">
+                    Use Random Forest and Gradient Boosting to capture abrupt shifts that traditional demographic tools (DAPPS) miss
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 3 -->
+              <tr class="border-t">
+                <td class="px-6 py-6 align-top">
+                  <div class="font-extrabold">Dataset Alignment:</div>
+                  <div class="mt-1 text-gray-700">
+                    Harmonizing time-series data from 5+ disparate sources (Census, NOAA, Police Bureau, etc.)
+                  </div>
+                </td>
+                <td class="px-6 py-6 align-top text-center font-semibold">Medium</td>
+                <td class="px-6 py-6 align-top">
+                  <div class="font-extrabold">ETL Pipeline:</div>
+                  <div class="mt-1 text-gray-700">
+                    Implement a reproducible Python/Pandas pipeline to standardize FIPS codes and temporal resolution into a single municipal-level panel
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 4 -->
+              <tr class="border-t bg-gray-50">
+                <td class="px-6 py-6 align-top">
+                  <div class="font-extrabold">Model Generalization:</div>
+                  <div class="mt-1 text-gray-700">
+                    Risk of the model overfitting to a specific &quot;shock&quot; year (like Maria)
+                  </div>
+                </td>
+                <td class="px-6 py-6 align-top text-center font-semibold">Low</td>
+                <td class="px-6 py-6 align-top">
+                  <div class="font-extrabold">Validation Strategy:</div>
+                  <div class="mt-1 text-gray-700">
+                    Train in 2010–2016 data and test specifically on the 2017 &quot;Maria crash&quot; to verify the model's ability to interpret shocks
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      
     </main>
   </div>
 
