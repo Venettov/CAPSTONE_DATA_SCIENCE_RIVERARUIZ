@@ -326,64 +326,68 @@
 
         <div class="mt-3">&nbsp;</div>
       </header>
-
-      <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <article class="card p-6 lg:col-span-2">
-          <h2 class="text-2xl font-bold">Proposed Predictive & Analytical Framework</h2>
-          <p class="mt-3 text-gray-700">
+      
+      <section class="w-full">
+        <article class="card p-6 md:p-8">
+          <h2 class="text-2xl font-bold text-gray-900">Proposed Predictive & Analytical Framework</h2>
+          <p class="mt-3 text-gray-700 max-w-4xl">
             To address the convergence of population decline and economic fragility, this project implements a 
             <strong>municipal-level predictive data science framework</strong>. The approach moves beyond descriptive dashboards 
             to forecast trajectories and quantify the relative importance of fertility, age structure, and hazard exposure.
           </p>
           
-          <div class="mt-6 grid grid-cols-1 gap-5">
+          <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
             
-            <div class="p-5 rounded-xl border border-indigo-100 bg-white shadow-sm flex flex-col sm:flex-row gap-4">
+            <div class="p-6 rounded-xl border border-indigo-100 bg-white shadow-sm flex flex-col sm:flex-row gap-4 hover:shadow-md transition-shadow">
               <div class="flex-shrink-0">
                 <div class="w-12 h-12 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl">📊</div>
               </div>
               <div>
-                <h3 class="font-semibold text-lg text-gray-900">1. Population Forecasting (Supervised Learning)</h3>
-                <p class="mt-2 text-sm text-gray-600 leading-relaxed">
+                <h3 class="font-semibold text-lg text-gray-900">1. Population Forecasting</h3>
+                <div class="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-2">Supervised Learning</div>
+                <p class="text-sm text-gray-600 leading-relaxed">
                   We employ <strong>regularized regression (Ridge/Lasso)</strong> and <strong>tree-based models</strong> (Random Forest, Gradient Boosting) to forecast percent population change. 
                   Unlike standard cohort models, this approach integrates demographic momentum features (median age, birth rates) with economic covariates and hazard data to separate structural decline from shock-related migration.
                 </p>
               </div>
             </div>
 
-            <div class="p-5 rounded-xl border border-emerald-100 bg-white shadow-sm flex flex-col sm:flex-row gap-4">
+            <div class="p-6 rounded-xl border border-emerald-100 bg-white shadow-sm flex flex-col sm:flex-row gap-4 hover:shadow-md transition-shadow">
               <div class="flex-shrink-0">
                 <div class="w-12 h-12 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">🔍</div>
               </div>
               <div>
                 <h3 class="font-semibold text-lg text-gray-900">2. Driver Analysis & Explainability</h3>
-                <p class="mt-2 text-sm text-gray-600 leading-relaxed">
+                <div class="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-2">Feature Importance</div>
+                <p class="text-sm text-gray-600 leading-relaxed">
                   To open the "black box" of prediction, we apply <strong>SHAP values</strong> and permutation importance. 
                   This allows us to rank drivers of change, explicitly comparing the influence of structural factors (low fertility) against policy-amenable factors (employment density, housing vacancy).
                 </p>
               </div>
             </div>
 
-            <div class="p-5 rounded-xl border border-amber-100 bg-white shadow-sm flex flex-col sm:flex-row gap-4">
+            <div class="p-6 rounded-xl border border-amber-100 bg-white shadow-sm flex flex-col sm:flex-row gap-4 hover:shadow-md transition-shadow">
               <div class="flex-shrink-0">
                 <div class="w-12 h-12 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-xl">🧩</div>
               </div>
               <div>
-                <h3 class="font-semibold text-lg text-gray-900">3. Municipal Typologies (Unsupervised Learning)</h3>
-                <p class="mt-2 text-sm text-gray-600 leading-relaxed">
+                <h3 class="font-semibold text-lg text-gray-900">3. Municipal Typologies</h3>
+                <div class="text-xs font-bold text-amber-600 uppercase tracking-wider mb-2">Unsupervised Learning</div>
+                <p class="text-sm text-gray-600 leading-relaxed">
                   Using <strong>K-means clustering</strong>, we identify distinct municipal profiles that share trajectories. 
                   This helps classify municipalities into actionable groups, such as "Low-Fertility/High-Migration" or "Hazard-Exposed/Aging," facilitating targeted rather than blanket policy interventions.
                 </p>
               </div>
             </div>
 
-            <div class="p-5 rounded-xl border border-rose-100 bg-white shadow-sm flex flex-col sm:flex-row gap-4">
+            <div class="p-6 rounded-xl border border-rose-100 bg-white shadow-sm flex flex-col sm:flex-row gap-4 hover:shadow-md transition-shadow">
               <div class="flex-shrink-0">
                 <div class="w-12 h-12 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center text-xl">🛡️</div>
               </div>
               <div>
                 <h3 class="font-semibold text-lg text-gray-900">4. Risk Scoring & Scenario Analysis</h3>
-                <p class="mt-2 text-sm text-gray-600 leading-relaxed">
+                <div class="text-xs font-bold text-rose-600 uppercase tracking-wider mb-2">Policy Simulation</div>
+                <p class="text-sm text-gray-600 leading-relaxed">
                   The model outputs feed into a <strong>Municipal Demographic Vulnerability Score</strong>. 
                   We simulate simplified scenarios (e.g., improved employment vs. stagnation) to assess potential resilience even under the constraints of low fertility and demographic momentum.
                 </p>
@@ -392,31 +396,6 @@
 
           </div>
         </article>
-
-        <aside class="card p-6 space-y-4 h-fit">
-          <h3 class="text-lg font-semibold">Context at a Glance</h3>
-          <div class="kpi">
-            <div class="icon">📉</div>
-            <div>
-              <div class="val">Population decline</div>
-              <div class="text-xs text-gray-500">Linked to low fertility, aging, and out-migration<sup><a class="link" href="#ref-1">1</a>, <a class="link" href="#ref-2">2</a></sup></div>
-            </div>
-          </div>
-          <div class="kpi">
-            <div class="icon">🏭</div>
-            <div>
-              <div class="val">Legacy of §936</div>
-              <div class="text-xs text-gray-500">Tax-credit phase-out weakened employment base<sup><a class="link" href="#ref-3">3</a>, <a class="link" href="#ref-4">4</a></sup></div>
-            </div>
-          </div>
-          <div class="kpi">
-            <div class="icon">💸</div>
-            <div>
-              <div class="val">High poverty</div>
-              <div class="text-xs text-gray-500">Poverty rate & inequality among highest in U.S.<sup><a class="link" href="#ref-17">17</a></sup></div>
-            </div>
-          </div>
-        </aside>
       </section>
 
       <section class="card p-6 mb-6 framework-wrap">
