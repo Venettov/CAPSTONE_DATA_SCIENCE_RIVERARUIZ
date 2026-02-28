@@ -567,6 +567,78 @@
         </div>
       </section>
 
+      <section class="max-w-7xl mx-auto px-6 py-16">
+        <!-- Title -->
+        <div class="mb-8">
+          <h2 class="text-4xl font-extrabold tracking-tight text-gray-900">
+            Framework: Predictive Population Modeling Pipeline
+          </h2>
+          <div class="mt-4 h-1 w-full bg-blue-800"></div>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto shadow-lg rounded-xl border border-gray-200">
+          <table class="min-w-full text-sm text-left border-collapse">
+            <thead class="bg-gray-100 text-gray-800 font-semibold uppercase tracking-wide text-xs">
+              <tr>
+                <th class="px-6 py-4 border w-64">Component</th>
+                <th class="px-6 py-4 border">Detail</th>
+              </tr>
+            </thead>
+
+            <tbody class="bg-white text-gray-800">
+              <!-- Inputs -->
+              <tr class="border-t">
+                <td class="px-6 py-6 align-top font-semibold">
+                  Inputs (<span class="italic">X</span><sub>m,t</sub>)
+                </td>
+                <td class="px-6 py-6 align-top">
+                  <ul class="list-disc ml-6 space-y-2">
+                    <li><span class="font-semibold">Structural:</span> Birth rates, Age structure (% &lt;15, % &gt;65)</li>
+                    <li><span class="font-semibold">Resilience:</span> Unemployment, Payroll, Establishment counts</li>
+                    <li><span class="font-semibold">Vulnerability:</span> CDC SVI (Poverty, Transportation, Housing)</li>
+                    <li><span class="font-semibold">Shocks:</span> Hurricane strikes, Earthquake intensity</li>
+                  </ul>
+                </td>
+              </tr>
+
+              <!-- Methods -->
+              <tr class="border-t bg-gray-50">
+                <td class="px-6 py-6 align-top font-semibold">Methods</td>
+                <td class="px-6 py-6 align-top space-y-3">
+                  <p>
+                    <span class="font-semibold">Phase I (Supervised):</span>
+                    Lasso Regression (feature selection) and Random Forest (capturing “shock cliffs”)
+                  </p>
+                  <p>
+                    <span class="font-semibold">Phase II (Unsupervised):</span>
+                    K-Means/Hierarchical Clustering for typology profiling
+                  </p>
+                </td>
+              </tr>
+
+              <!-- Outputs -->
+              <tr class="border-t">
+                <td class="px-6 py-6 align-top font-semibold">
+                  Outputs (<span class="italic">Y</span><sub>m,t</sub>)
+                </td>
+                <td class="px-6 py-6 align-top space-y-2">
+                  <p><span class="font-semibold">Primary:</span> Population change / Net migration forecast</p>
+                  <p><span class="font-semibold">Secondary:</span> Composite Municipal Demographic Vulnerability Score (0–1)</p>
+                </td>
+              </tr>
+
+              <!-- Goal -->
+              <tr class="border-t bg-gray-50">
+                <td class="px-6 py-6 align-top font-semibold">Goal</td>
+                <td class="px-6 py-6 align-top">
+                  Distinguish between “natural” demographic momentum and shock-driven emptying to inform resource allocation for the PR Planning Board
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>     
 
       <section class="card p-6">
         <h2 class="text-2xl font-bold">Expected Outcomes & Impact</h2>
