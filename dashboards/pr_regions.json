@@ -1,0 +1,54 @@
+{
+  "regions": [
+    {
+      "id": "metro",
+      "name": "Metro",
+      "municipalities": [
+        "Bayamón", "Carolina", "Cataño", "Guaynabo", "San Juan", "Trujillo Alto"
+      ]
+    },
+    {
+      "id": "north",
+      "name": "North",
+      "municipalities": [
+        "Arecibo", "Barceloneta", "Camuy", "Dorado", "Florida", "Hatillo", 
+        "Manatí", "Quebradillas", "Toa Alta", "Toa Baja", "Vega Alta", "Vega Baja"
+      ]
+    },
+    {
+      "id": "south",
+      "name": "South",
+      "municipalities": [
+        "Arroyo", "Coamo", "Guayama", "Guayanilla", "Juana Díaz", "Patillas", 
+        "Peñuelas", "Ponce", "Salinas", "Santa Isabel", "Villalba", "Yauco"
+      ]
+    },
+    {
+      "id": "east",
+      "name": "East",
+      "municipalities": [
+        "Caguas", "Canóvanas", "Ceiba", "Culebra", "Fajardo", "Gurabo", 
+        "Humacao", "Juncos", "Las Piedras", "Loíza", "Luquillo", "Maunabo", 
+        "Naguabo", "Río Grande", "San Lorenzo", "Vieques", "Yabucoa"
+      ]
+    },
+    {
+      "id": "west",
+      "name": "West",
+      "municipalities": [
+        "Aguada", "Aguadilla", "Añasco", "Cabo Rojo", "Guánica", "Hormigueros", 
+        "Isabela", "Lajas", "Las Marías", "Mayagüez", "Moca", "Rincón", 
+        "Sabana Grande", "San Germán"
+      ]
+    },
+    {
+      "id": "central",
+      "name": "Central",
+      "municipalities": [
+        "Adjuntas", "Aguas Buenas", "Aibonito", "Barranquitas", "Cayey", 
+        "Ciales", "Cidra", "Comerío", "Corozal", "Jayuya", "Lares", "Maricao", 
+        "Morovis", "Naranjito", "Orocovis", "San Sebastián", "Utuado"
+      ]
+    }
+  ]
+}
