@@ -1,0 +1,38 @@
+[
+    {
+        "year": 2025,
+        "expected": 3165154,
+        "worst_case": 3124059,
+        "best_case": 3221324
+    },
+    {
+        "year": 2026,
+        "expected": 3130688,
+        "worst_case": 3049921,
+        "best_case": 3242791
+    },
+    {
+        "year": 2027,
+        "expected": 3096597,
+        "worst_case": 2977542,
+        "best_case": 3264401
+    },
+    {
+        "year": 2028,
+        "expected": 3062878,
+        "worst_case": 2906880,
+        "best_case": 3286154
+    },
+    {
+        "year": 2029,
+        "expected": 3029525,
+        "worst_case": 2837896,
+        "best_case": 3308053
+    },
+    {
+        "year": 2030,
+        "expected": 2996536,
+        "worst_case": 2770548,
+        "best_case": 3330097
+    }
+]
