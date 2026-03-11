@@ -1,0 +1,56 @@
+{
+    "best_model_name": "Random Forest (tuned)",
+    "phase1_baseline_r2": -0.3814,
+    "rf_best_params": {
+        "bootstrap": true,
+        "max_depth": 20,
+        "min_samples_split": 5,
+        "n_estimators": 400
+    },
+    "hgb_best_params": {
+        "l2_regularization": 1.0,
+        "learning_rate": 0.03,
+        "max_depth": null,
+        "max_leaf_nodes": 15,
+        "min_samples_leaf": 30
+    },
+    "lgbm_best_params": {
+        "l2_regularization": 1.0,
+        "learning_rate": 0.03,
+        "max_depth": null,
+        "max_leaf_nodes": 15,
+        "min_samples_leaf": 30
+    },
+    "comparison_table": [
+        {
+            "Model": "Phase 1 OLS baseline",
+            "R2": -0.3814,
+            "MAE": NaN,
+            "RMSE": NaN
+        },
+        {
+            "Model": "Random Forest (default)",
+            "R2": -0.25357655765836573,
+            "MAE": 1.7616326083962797,
+            "RMSE": 3.1652111516242742
+        },
+        {
+            "Model": "Random Forest (tuned)",
+            "R2": -0.24586664553783288,
+            "MAE": 1.7766562229258467,
+            "RMSE": 3.1554625894352704
+        },
+        {
+            "Model": "HistGradientBoosting (default)",
+            "R2": -0.37950042848950116,
+            "MAE": 1.8916454954728243,
+            "RMSE": 3.3203829566137983
+        },
+        {
+            "Model": "HistGradientBoosting (tuned)",
+            "R2": -0.34728811222355227,
+            "MAE": 1.8465713997086424,
+            "RMSE": 3.2813873160301372
+        }
+    ]
+}

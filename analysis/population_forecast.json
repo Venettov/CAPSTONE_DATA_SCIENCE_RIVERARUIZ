@@ -1,38 +1,38 @@
 [
     {
         "year": 2025,
-        "expected": 3166870,
-        "worst_case": 3123010,
-        "best_case": 3216075
+        "expected": 3192439,
+        "lower_band": 3155159,
+        "upper_band": 3221582
     },
     {
         "year": 2026,
-        "expected": 3134082,
-        "worst_case": 3047873,
-        "best_case": 3232230
+        "expected": 3151110,
+        "lower_band": 3077945,
+        "upper_band": 3208905
     },
     {
         "year": 2027,
-        "expected": 3101634,
-        "worst_case": 2974543,
-        "best_case": 3248467
+        "expected": 3110317,
+        "lower_band": 3002621,
+        "upper_band": 3196278
     },
     {
         "year": 2028,
-        "expected": 3069522,
-        "worst_case": 2902978,
-        "best_case": 3264786
+        "expected": 3070052,
+        "lower_band": 2929141,
+        "upper_band": 3183701
     },
     {
         "year": 2029,
-        "expected": 3037743,
-        "worst_case": 2833134,
-        "best_case": 3281186
+        "expected": 3030308,
+        "lower_band": 2857458,
+        "upper_band": 3171173
     },
     {
         "year": 2030,
-        "expected": 3006292,
-        "worst_case": 2764971,
-        "best_case": 3297669
+        "expected": 2991079,
+        "lower_band": 2787530,
+        "upper_band": 3158695
     }
 ]
