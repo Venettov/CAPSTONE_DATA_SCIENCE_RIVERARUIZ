@@ -1,0 +1,4 @@
+kmeans_cluster_3,vulnerability_score_0_1,median_income_real,income_growth,max_wind_knots,max_seismic_mag,lag_violent_crime_rate,lag_property_crime_rate,lag_pop_change_1,lag_pop_change_2
+0,0.599,29946.918,2.555,0.0,0.0,0.628,0.879,-0.501,-1.231
+1,0.804,23102.11,2.513,0.0,1.849,0.229,0.524,-0.616,-1.18
+2,0.525,30847.49,4.224,0.0,0.0,0.0,1.561,8.01,-8.275

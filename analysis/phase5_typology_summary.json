@@ -1,0 +1,25 @@
+{
+    "latest_year": 2024,
+    "cluster_columns": [
+        "vulnerability_score_0_1",
+        "median_income_real",
+        "income_growth",
+        "max_wind_knots",
+        "max_seismic_mag",
+        "lag_violent_crime_rate",
+        "lag_property_crime_rate",
+        "lag_pop_change_1",
+        "lag_pop_change_2"
+    ],
+    "net_migration_status": "not_available",
+    "kmeans_cluster_counts": {
+        "0": 32,
+        "1": 45,
+        "2": 1
+    },
+    "hier_cluster_counts": {
+        "1": 19,
+        "2": 58,
+        "3": 1
+    }
+}
