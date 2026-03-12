@@ -1,0 +1,14 @@
+{
+    "cluster_column_used": "kmeans_cluster_3",
+    "region_counts": {
+        "Central Mountains": 15,
+        "Culebra & Vieques": 2,
+        "East": 15,
+        "Metro": 8,
+        "North": 10,
+        "South": 12,
+        "West": 16
+    },
+    "highest_mean_vulnerability_region": "Central Mountains",
+    "missing_region_mappings": []
+}

@@ -1,0 +1,21 @@
+region,municipio,vulnerability_score_0_1,kmeans_cluster_3
+Central Mountains,Adjuntas,1.0,1
+Central Mountains,Comerío,0.9787347227945996,1
+Central Mountains,Orocovis,0.9600291400111188,1
+Culebra & Vieques,Vieques,0.978505582219254,0
+Culebra & Vieques,Culebra,0.5249525915162087,2
+East,Maunabo,0.9181065898658498,1
+East,Naguabo,0.8295745361093306,0
+East,Yabucoa,0.8090424352854986,1
+Metro,Cataño,0.6783653555571718,0
+Metro,Toa Alta,0.5779802771365696,0
+Metro,Toa Baja,0.553328238476057,0
+North,Florida,0.8897637150487134,1
+North,Manatí,0.7167435880831297,0
+North,Barceloneta,0.7089320085764179,0
+South,Peñuelas,0.9895265754571116,1
+South,Juana Díaz,0.873310499795639,1
+South,Arroyo,0.8550297259158205,0
+West,Guánica,0.9945985556533914,1
+West,Las Marías,0.9686472715750492,1
+West,Maricao,0.9045772080208349,1
