@@ -64,5 +64,5 @@
             "importance_std": 0.015085160821314053
         }
     ],
-    "shap_status": "completed"
+    "shap_status": "skipped: No module named 'shap'"
 }
