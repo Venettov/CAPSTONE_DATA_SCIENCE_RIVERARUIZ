@@ -6,7 +6,7 @@
         "upper_band": 3221582,
         "adverse_change_rate": -0.024472147004141652,
         "expected_change_rate": -0.012945678020541015,
-        "favorable_change_rate": -0.003934960913027292
+        "favorable_change_rate": -0.003934960913027291
     },
     {
         "year": 2026,
@@ -15,7 +15,7 @@
         "upper_band": 3208905,
         "adverse_change_rate": -0.024472147004141652,
         "expected_change_rate": -0.012945678020541015,
-        "favorable_change_rate": -0.003934960913027292
+        "favorable_change_rate": -0.003934960913027291
     },
     {
         "year": 2027,
@@ -24,7 +24,7 @@
         "upper_band": 3196278,
         "adverse_change_rate": -0.024472147004141652,
         "expected_change_rate": -0.012945678020541015,
-        "favorable_change_rate": -0.003934960913027292
+        "favorable_change_rate": -0.003934960913027291
     },
     {
         "year": 2028,
@@ -33,7 +33,7 @@
         "upper_band": 3183701,
         "adverse_change_rate": -0.024472147004141652,
         "expected_change_rate": -0.012945678020541015,
-        "favorable_change_rate": -0.003934960913027292
+        "favorable_change_rate": -0.003934960913027291
     },
     {
         "year": 2029,
@@ -42,7 +42,7 @@
         "upper_band": 3171173,
         "adverse_change_rate": -0.024472147004141652,
         "expected_change_rate": -0.012945678020541015,
-        "favorable_change_rate": -0.003934960913027292
+        "favorable_change_rate": -0.003934960913027291
     },
     {
         "year": 2030,
@@ -51,6 +51,6 @@
         "upper_band": 3158695,
         "adverse_change_rate": -0.024472147004141652,
         "expected_change_rate": -0.012945678020541015,
-        "favorable_change_rate": -0.003934960913027292
+        "favorable_change_rate": -0.003934960913027291
     }
 ]

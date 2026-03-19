@@ -1,68 +1,270 @@
 {
+    "feature_set": [
+        "vulnerability_index",
+        "median_income_real",
+        "max_wind_knots",
+        "max_seismic_mag",
+        "lag_violent_crime_rate",
+        "lag_property_crime_rate",
+        "lag_pop_change_1",
+        "lag_pop_change_2",
+        "income_growth"
+    ],
+    "train_years": [
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020
+    ],
+    "test_years": [
+        2021,
+        2022,
+        2023,
+        2024
+    ],
     "ridge_metrics": {
-        "R2": -0.23065227496291762,
-        "MAE": 1.9906314342545357,
-        "RMSE": 3.136136344820225,
+        "R2": -0.2249252316361503,
+        "MAE": 1.8115275273766445,
+        "RMSE": 3.1288305713993045,
         "alpha": 316.22776601683796
     },
     "lasso_metrics": {
-        "R2": -0.15948340881731404,
-        "MAE": 1.839773904160791,
-        "RMSE": 3.0441042781480596,
-        "alpha": 0.27511858941600414
+        "R2": -0.23066351437881494,
+        "MAE": 1.7698436188897808,
+        "RMSE": 3.136150665786808,
+        "alpha": 0.05736152510448681
     },
     "tree_model_metrics": {
         "model_name": "Random Forest (tuned)",
-        "R2": -0.25013022737606505,
-        "MAE": 1.7662926938974788,
-        "RMSE": 3.160857260906036
+        "R2": -0.24149657631275034,
+        "MAE": 1.8125321864274049,
+        "RMSE": 3.1499235923304574
+    },
+    "comparison_table": [
+        {
+            "model": "Ridge (time-aware)",
+            "R2": -0.2249252316361503,
+            "MAE": 1.8115275273766445,
+            "RMSE": 3.1288305713993045,
+            "alpha": 316.22776601683796
+        },
+        {
+            "model": "Lasso (time-aware)",
+            "R2": -0.23066351437881494,
+            "MAE": 1.7698436188897808,
+            "RMSE": 3.136150665786808,
+            "alpha": 0.05736152510448681
+        },
+        {
+            "model": "Random Forest (tuned)",
+            "R2": -0.24149657631275034,
+            "MAE": 1.8125321864274049,
+            "RMSE": 3.1499235923304574,
+            "alpha": NaN
+        }
+    ],
+    "lasso_nonzero_count": 5,
+    "ridge_coefficients": {
+        "lag_pop_change_1": 0.301389,
+        "lag_pop_change_2": 0.259813,
+        "median_income_real": 0.093943,
+        "lag_violent_crime_rate": -0.067103,
+        "lag_property_crime_rate": 0.065433,
+        "vulnerability_index": 0.058453,
+        "max_wind_knots": 0.052514,
+        "income_growth": 0.041927,
+        "max_seismic_mag": 0.018126
+    },
+    "lasso_coefficients": {
+        "lag_pop_change_1": 0.586856,
+        "lag_pop_change_2": 0.199185,
+        "lag_violent_crime_rate": -0.046864,
+        "median_income_real": 0.021082,
+        "max_wind_knots": 0.008223,
+        "vulnerability_index": -0.0,
+        "max_seismic_mag": 0.0,
+        "lag_property_crime_rate": 0.0,
+        "income_growth": 0.0
     },
     "top_permutation_features": [
         {
             "feature": "max_seismic_mag",
-            "importance_mean": 0.0005629255886013152,
-            "importance_std": 0.0005927061252565609
-        },
-        {
-            "feature": "lag_property_crime_rate",
-            "importance_mean": 0.00027868641033751787,
-            "importance_std": 0.0011325282191185233
-        },
-        {
-            "feature": "income_growth",
-            "importance_mean": 2.140983026954757e-05,
-            "importance_std": 0.001071961724828061
-        },
-        {
-            "feature": "max_wind_knots",
-            "importance_mean": -0.0002690306568553513,
-            "importance_std": 0.0006898777727116928
-        },
-        {
-            "feature": "lag_violent_crime_rate",
-            "importance_mean": -0.000389947466434748,
-            "importance_std": 0.0017351088987475874
-        },
-        {
-            "feature": "median_income_real",
-            "importance_mean": -0.001097997544236984,
-            "importance_std": 0.0005877918931785958
+            "importance_mean": 0.00106,
+            "importance_std": 0.0006,
+            "importance_mean_rounded": 0.00106,
+            "importance_std_rounded": 0.0006,
+            "importance_sign": "positive_or_zero"
         },
         {
             "feature": "vulnerability_index",
-            "importance_mean": -0.0019281031193701874,
-            "importance_std": 0.0015884454578512447
+            "importance_mean": 0.00064,
+            "importance_std": 0.00563,
+            "importance_mean_rounded": 0.00064,
+            "importance_std_rounded": 0.00563,
+            "importance_sign": "positive_or_zero"
+        },
+        {
+            "feature": "lag_property_crime_rate",
+            "importance_mean": 0.0006,
+            "importance_std": 0.0013,
+            "importance_mean_rounded": 0.0006,
+            "importance_std_rounded": 0.0013,
+            "importance_sign": "positive_or_zero"
+        },
+        {
+            "feature": "max_wind_knots",
+            "importance_mean": -0.00012,
+            "importance_std": 0.00052,
+            "importance_mean_rounded": -0.00012,
+            "importance_std_rounded": 0.00052,
+            "importance_sign": "negative"
+        },
+        {
+            "feature": "lag_violent_crime_rate",
+            "importance_mean": -0.00071,
+            "importance_std": 0.00139,
+            "importance_mean_rounded": -0.00071,
+            "importance_std_rounded": 0.00139,
+            "importance_sign": "negative"
+        },
+        {
+            "feature": "income_growth",
+            "importance_mean": -0.00071,
+            "importance_std": 0.00214,
+            "importance_mean_rounded": -0.00071,
+            "importance_std_rounded": 0.00214,
+            "importance_sign": "negative"
+        },
+        {
+            "feature": "median_income_real",
+            "importance_mean": -0.00107,
+            "importance_std": 0.00051,
+            "importance_mean_rounded": -0.00107,
+            "importance_std_rounded": 0.00051,
+            "importance_sign": "negative"
         },
         {
             "feature": "lag_pop_change_2",
-            "importance_mean": -0.05152425938982123,
-            "importance_std": 0.018159266907362828
+            "importance_mean": -0.0405,
+            "importance_std": 0.02595,
+            "importance_mean_rounded": -0.0405,
+            "importance_std_rounded": 0.02595,
+            "importance_sign": "negative"
         },
         {
             "feature": "lag_pop_change_1",
-            "importance_mean": -0.06312071018523063,
-            "importance_std": 0.015085160821314053
+            "importance_mean": -0.09998,
+            "importance_std": 0.02484,
+            "importance_mean_rounded": -0.09998,
+            "importance_std_rounded": 0.02484,
+            "importance_sign": "negative"
         }
     ],
-    "shap_status": "skipped: No module named 'shap'"
+    "permutation_contains_negative_values": true,
+    "strongest_training_feature_correlations": [
+        {
+            "feature_1": "lag_pop_change_2",
+            "feature_2": "lag_pop_change_1",
+            "correlation": 0.86426,
+            "abs_correlation": 0.86426
+        },
+        {
+            "feature_1": "vulnerability_index",
+            "feature_2": "median_income_real",
+            "correlation": -0.65494,
+            "abs_correlation": 0.65494
+        },
+        {
+            "feature_1": "lag_violent_crime_rate",
+            "feature_2": "max_wind_knots",
+            "correlation": 0.40854,
+            "abs_correlation": 0.40854
+        },
+        {
+            "feature_1": "lag_pop_change_2",
+            "feature_2": "vulnerability_index",
+            "correlation": 0.32158,
+            "abs_correlation": 0.32158
+        },
+        {
+            "feature_1": "lag_property_crime_rate",
+            "feature_2": "lag_pop_change_1",
+            "correlation": 0.31798,
+            "abs_correlation": 0.31798
+        },
+        {
+            "feature_1": "lag_property_crime_rate",
+            "feature_2": "lag_pop_change_2",
+            "correlation": 0.31577,
+            "abs_correlation": 0.31577
+        },
+        {
+            "feature_1": "lag_pop_change_1",
+            "feature_2": "vulnerability_index",
+            "correlation": 0.30103,
+            "abs_correlation": 0.30103
+        },
+        {
+            "feature_1": "lag_pop_change_1",
+            "feature_2": "max_seismic_mag",
+            "correlation": -0.28036,
+            "abs_correlation": 0.28036
+        },
+        {
+            "feature_1": "vulnerability_index",
+            "feature_2": "lag_property_crime_rate",
+            "correlation": 0.27734,
+            "abs_correlation": 0.27734
+        },
+        {
+            "feature_1": "lag_violent_crime_rate",
+            "feature_2": "vulnerability_index",
+            "correlation": -0.26937,
+            "abs_correlation": 0.26937
+        }
+    ],
+    "tree_builtin_feature_importance": [
+        {
+            "feature": "lag_pop_change_1",
+            "tree_feature_importance": 0.52031
+        },
+        {
+            "feature": "lag_pop_change_2",
+            "tree_feature_importance": 0.303215
+        },
+        {
+            "feature": "lag_property_crime_rate",
+            "tree_feature_importance": 0.092927
+        },
+        {
+            "feature": "lag_violent_crime_rate",
+            "tree_feature_importance": 0.024671
+        },
+        {
+            "feature": "vulnerability_index",
+            "tree_feature_importance": 0.022476
+        },
+        {
+            "feature": "income_growth",
+            "tree_feature_importance": 0.019219
+        },
+        {
+            "feature": "max_wind_knots",
+            "tree_feature_importance": 0.007586
+        },
+        {
+            "feature": "median_income_real",
+            "tree_feature_importance": 0.006347
+        },
+        {
+            "feature": "max_seismic_mag",
+            "tree_feature_importance": 0.003249
+        }
+    ],
+    "shap_status": "skipped: No module named 'shap'",
+    "top_shap_features": null
 }
