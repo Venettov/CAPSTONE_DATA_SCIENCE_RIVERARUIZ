@@ -27,172 +27,172 @@
         2024
     ],
     "ridge_metrics": {
-        "R2": -0.2249252316361503,
-        "MAE": 1.8115275273766445,
-        "RMSE": 3.1288305713993045,
+        "R2": -0.22103567548042458,
+        "MAE": 1.805653817871514,
+        "RMSE": 3.1238590686285077,
         "alpha": 316.22776601683796
     },
     "lasso_metrics": {
-        "R2": -0.23066351437881494,
-        "MAE": 1.7698436188897808,
-        "RMSE": 3.136150665786808,
+        "R2": -0.22970492000259757,
+        "MAE": 1.7687586947865828,
+        "RMSE": 3.134929015025287,
         "alpha": 0.05736152510448681
     },
     "tree_model_metrics": {
         "model_name": "Random Forest (tuned)",
-        "R2": -0.24149657631275034,
-        "MAE": 1.8125321864274049,
-        "RMSE": 3.1499235923304574
+        "R2": -0.2265857885658462,
+        "MAE": 1.745939176191307,
+        "RMSE": 3.1309506361612525
     },
     "comparison_table": [
         {
             "model": "Ridge (time-aware)",
-            "R2": -0.2249252316361503,
-            "MAE": 1.8115275273766445,
-            "RMSE": 3.1288305713993045,
+            "R2": -0.22103567548042458,
+            "MAE": 1.805653817871514,
+            "RMSE": 3.1238590686285077,
             "alpha": 316.22776601683796
         },
         {
             "model": "Lasso (time-aware)",
-            "R2": -0.23066351437881494,
-            "MAE": 1.7698436188897808,
-            "RMSE": 3.136150665786808,
+            "R2": -0.22970492000259757,
+            "MAE": 1.7687586947865828,
+            "RMSE": 3.134929015025287,
             "alpha": 0.05736152510448681
         },
         {
             "model": "Random Forest (tuned)",
-            "R2": -0.24149657631275034,
-            "MAE": 1.8125321864274049,
-            "RMSE": 3.1499235923304574,
+            "R2": -0.2265857885658462,
+            "MAE": 1.745939176191307,
+            "RMSE": 3.1309506361612525,
             "alpha": NaN
         }
     ],
-    "lasso_nonzero_count": 5,
+    "lasso_nonzero_count": 4,
     "ridge_coefficients": {
-        "lag_pop_change_1": 0.301389,
-        "lag_pop_change_2": 0.259813,
-        "median_income_real": 0.093943,
-        "lag_violent_crime_rate": -0.067103,
-        "lag_property_crime_rate": 0.065433,
-        "vulnerability_index": 0.058453,
-        "max_wind_knots": 0.052514,
-        "income_growth": 0.041927,
-        "max_seismic_mag": 0.018126
+        "lag_pop_change_1": 0.301561,
+        "lag_pop_change_2": 0.25737,
+        "median_income_real": 0.091354,
+        "lag_property_crime_rate": 0.062467,
+        "lag_violent_crime_rate": -0.058207,
+        "vulnerability_index": 0.056828,
+        "income_growth": 0.040747,
+        "max_wind_knots": 0.039676,
+        "max_seismic_mag": 0.020107
     },
     "lasso_coefficients": {
-        "lag_pop_change_1": 0.586856,
-        "lag_pop_change_2": 0.199185,
-        "lag_violent_crime_rate": -0.046864,
-        "median_income_real": 0.021082,
-        "max_wind_knots": 0.008223,
+        "lag_pop_change_1": 0.588761,
+        "lag_pop_change_2": 0.195445,
+        "lag_violent_crime_rate": -0.045063,
+        "median_income_real": 0.02054,
         "vulnerability_index": -0.0,
+        "max_wind_knots": 0.0,
         "max_seismic_mag": 0.0,
         "lag_property_crime_rate": 0.0,
         "income_growth": 0.0
     },
     "top_permutation_features": [
         {
-            "feature": "max_seismic_mag",
-            "importance_mean": 0.00106,
-            "importance_std": 0.0006,
-            "importance_mean_rounded": 0.00106,
-            "importance_std_rounded": 0.0006,
+            "feature": "income_growth",
+            "importance_mean": 0.00343,
+            "importance_std": 0.0053,
+            "importance_mean_rounded": 0.00343,
+            "importance_std_rounded": 0.0053,
             "importance_sign": "positive_or_zero"
         },
         {
-            "feature": "vulnerability_index",
-            "importance_mean": 0.00064,
-            "importance_std": 0.00563,
-            "importance_mean_rounded": 0.00064,
-            "importance_std_rounded": 0.00563,
+            "feature": "max_seismic_mag",
+            "importance_mean": 0.00246,
+            "importance_std": 0.00285,
+            "importance_mean_rounded": 0.00246,
+            "importance_std_rounded": 0.00285,
             "importance_sign": "positive_or_zero"
         },
         {
             "feature": "lag_property_crime_rate",
-            "importance_mean": 0.0006,
-            "importance_std": 0.0013,
-            "importance_mean_rounded": 0.0006,
-            "importance_std_rounded": 0.0013,
+            "importance_mean": 0.00088,
+            "importance_std": 0.00151,
+            "importance_mean_rounded": 0.00088,
+            "importance_std_rounded": 0.00151,
+            "importance_sign": "positive_or_zero"
+        },
+        {
+            "feature": "lag_violent_crime_rate",
+            "importance_mean": 0.00087,
+            "importance_std": 0.00216,
+            "importance_mean_rounded": 0.00087,
+            "importance_std_rounded": 0.00216,
+            "importance_sign": "positive_or_zero"
+        },
+        {
+            "feature": "median_income_real",
+            "importance_mean": 0.00073,
+            "importance_std": 0.00111,
+            "importance_mean_rounded": 0.00073,
+            "importance_std_rounded": 0.00111,
             "importance_sign": "positive_or_zero"
         },
         {
             "feature": "max_wind_knots",
-            "importance_mean": -0.00012,
-            "importance_std": 0.00052,
-            "importance_mean_rounded": -0.00012,
-            "importance_std_rounded": 0.00052,
+            "importance_mean": -0.00013,
+            "importance_std": 0.00064,
+            "importance_mean_rounded": -0.00013,
+            "importance_std_rounded": 0.00064,
             "importance_sign": "negative"
         },
         {
-            "feature": "lag_violent_crime_rate",
-            "importance_mean": -0.00071,
-            "importance_std": 0.00139,
-            "importance_mean_rounded": -0.00071,
-            "importance_std_rounded": 0.00139,
-            "importance_sign": "negative"
-        },
-        {
-            "feature": "income_growth",
-            "importance_mean": -0.00071,
-            "importance_std": 0.00214,
-            "importance_mean_rounded": -0.00071,
-            "importance_std_rounded": 0.00214,
-            "importance_sign": "negative"
-        },
-        {
-            "feature": "median_income_real",
-            "importance_mean": -0.00107,
-            "importance_std": 0.00051,
-            "importance_mean_rounded": -0.00107,
-            "importance_std_rounded": 0.00051,
+            "feature": "vulnerability_index",
+            "importance_mean": -0.00174,
+            "importance_std": 0.00267,
+            "importance_mean_rounded": -0.00174,
+            "importance_std_rounded": 0.00267,
             "importance_sign": "negative"
         },
         {
             "feature": "lag_pop_change_2",
-            "importance_mean": -0.0405,
-            "importance_std": 0.02595,
-            "importance_mean_rounded": -0.0405,
-            "importance_std_rounded": 0.02595,
+            "importance_mean": -0.04061,
+            "importance_std": 0.02558,
+            "importance_mean_rounded": -0.04061,
+            "importance_std_rounded": 0.02558,
             "importance_sign": "negative"
         },
         {
             "feature": "lag_pop_change_1",
-            "importance_mean": -0.09998,
-            "importance_std": 0.02484,
-            "importance_mean_rounded": -0.09998,
-            "importance_std_rounded": 0.02484,
+            "importance_mean": -0.09266,
+            "importance_std": 0.02691,
+            "importance_mean_rounded": -0.09266,
+            "importance_std_rounded": 0.02691,
             "importance_sign": "negative"
         }
     ],
     "permutation_contains_negative_values": true,
     "strongest_training_feature_correlations": [
         {
-            "feature_1": "lag_pop_change_2",
-            "feature_2": "lag_pop_change_1",
+            "feature_1": "lag_pop_change_1",
+            "feature_2": "lag_pop_change_2",
             "correlation": 0.86426,
             "abs_correlation": 0.86426
         },
         {
             "feature_1": "vulnerability_index",
             "feature_2": "median_income_real",
-            "correlation": -0.65494,
-            "abs_correlation": 0.65494
-        },
-        {
-            "feature_1": "lag_violent_crime_rate",
-            "feature_2": "max_wind_knots",
-            "correlation": 0.40854,
-            "abs_correlation": 0.40854
+            "correlation": -0.65276,
+            "abs_correlation": 0.65276
         },
         {
             "feature_1": "lag_pop_change_2",
             "feature_2": "vulnerability_index",
-            "correlation": 0.32158,
-            "abs_correlation": 0.32158
+            "correlation": 0.32319,
+            "abs_correlation": 0.32319
         },
         {
-            "feature_1": "lag_property_crime_rate",
-            "feature_2": "lag_pop_change_1",
+            "feature_1": "lag_pop_change_2",
+            "feature_2": "max_wind_knots",
+            "correlation": -0.32192,
+            "abs_correlation": 0.32192
+        },
+        {
+            "feature_1": "lag_pop_change_1",
+            "feature_2": "lag_property_crime_rate",
             "correlation": 0.31798,
             "abs_correlation": 0.31798
         },
@@ -205,66 +205,103 @@
         {
             "feature_1": "lag_pop_change_1",
             "feature_2": "vulnerability_index",
-            "correlation": 0.30103,
-            "abs_correlation": 0.30103
+            "correlation": 0.30346,
+            "abs_correlation": 0.30346
         },
         {
-            "feature_1": "lag_pop_change_1",
-            "feature_2": "max_seismic_mag",
-            "correlation": -0.28036,
-            "abs_correlation": 0.28036
-        },
-        {
-            "feature_1": "vulnerability_index",
-            "feature_2": "lag_property_crime_rate",
-            "correlation": 0.27734,
-            "abs_correlation": 0.27734
+            "feature_1": "lag_property_crime_rate",
+            "feature_2": "vulnerability_index",
+            "correlation": 0.28704,
+            "abs_correlation": 0.28704
         },
         {
             "feature_1": "lag_violent_crime_rate",
             "feature_2": "vulnerability_index",
-            "correlation": -0.26937,
-            "abs_correlation": 0.26937
+            "correlation": -0.2717,
+            "abs_correlation": 0.2717
+        },
+        {
+            "feature_1": "lag_pop_change_1",
+            "feature_2": "max_seismic_mag",
+            "correlation": -0.2515,
+            "abs_correlation": 0.2515
         }
     ],
     "tree_builtin_feature_importance": [
         {
             "feature": "lag_pop_change_1",
-            "tree_feature_importance": 0.52031
+            "tree_feature_importance": 0.489917
         },
         {
             "feature": "lag_pop_change_2",
-            "tree_feature_importance": 0.303215
+            "tree_feature_importance": 0.27085
         },
         {
             "feature": "lag_property_crime_rate",
-            "tree_feature_importance": 0.092927
+            "tree_feature_importance": 0.095342
         },
         {
             "feature": "lag_violent_crime_rate",
-            "tree_feature_importance": 0.024671
-        },
-        {
-            "feature": "vulnerability_index",
-            "tree_feature_importance": 0.022476
+            "tree_feature_importance": 0.038865
         },
         {
             "feature": "income_growth",
-            "tree_feature_importance": 0.019219
+            "tree_feature_importance": 0.036972
         },
         {
-            "feature": "max_wind_knots",
-            "tree_feature_importance": 0.007586
+            "feature": "vulnerability_index",
+            "tree_feature_importance": 0.023442
         },
         {
             "feature": "median_income_real",
-            "tree_feature_importance": 0.006347
+            "tree_feature_importance": 0.020595
         },
         {
             "feature": "max_seismic_mag",
-            "tree_feature_importance": 0.003249
+            "tree_feature_importance": 0.01603
+        },
+        {
+            "feature": "max_wind_knots",
+            "tree_feature_importance": 0.007986
         }
     ],
-    "shap_status": "skipped: No module named 'shap'",
-    "top_shap_features": null
+    "shap_status": "completed_rf_treeexplainer",
+    "top_shap_features": [
+        {
+            "feature": "lag_pop_change_1",
+            "mean_abs_shap": 0.52037
+        },
+        {
+            "feature": "lag_pop_change_2",
+            "mean_abs_shap": 0.278249
+        },
+        {
+            "feature": "vulnerability_index",
+            "mean_abs_shap": 0.070163
+        },
+        {
+            "feature": "lag_violent_crime_rate",
+            "mean_abs_shap": 0.066901
+        },
+        {
+            "feature": "income_growth",
+            "mean_abs_shap": 0.03706
+        },
+        {
+            "feature": "lag_property_crime_rate",
+            "mean_abs_shap": 0.024197
+        },
+        {
+            "feature": "max_seismic_mag",
+            "mean_abs_shap": 0.017065
+        },
+        {
+            "feature": "median_income_real",
+            "mean_abs_shap": 0.013984
+        },
+        {
+            "feature": "max_wind_knots",
+            "mean_abs_shap": 0.011477
+        }
+    ]
 }

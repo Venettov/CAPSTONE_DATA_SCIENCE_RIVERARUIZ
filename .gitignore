@@ -1,0 +1,17 @@
+# Python virtual environments
+phase_env/
+venv/
+.env/
+
+# macOS system files
+.DS_Store
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Optional: logs
+*.log
