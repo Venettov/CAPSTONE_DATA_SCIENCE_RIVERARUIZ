@@ -1,14 +1,46 @@
 {
-    "cluster_column_used": "kmeans_cluster_3",
+    "phase5_typology_file": "municipal_typologies_latest_year.csv",
+    "primary_phase5_cluster_column": "kmeans_cluster",
+    "detected_phase5_cluster_columns": [
+        "kmeans_cluster_2",
+        "kmeans_cluster_3",
+        "kmeans_cluster_4"
+    ],
+    "missing_region_mappings": [],
     "region_counts": {
         "Central Mountains": 15,
-        "Culebra & Vieques": 2,
-        "East": 15,
+        "East": 17,
         "Metro": 8,
         "North": 10,
         "South": 12,
         "West": 16
     },
-    "highest_mean_vulnerability_region": "Central Mountains",
-    "missing_region_mappings": []
+    "profile_metric_cols": [
+        "vulnerability_score_0_1",
+        "vulnerability_index",
+        "median_income_real",
+        "lag_pop_change_1"
+    ],
+    "spatial_backend": "geojson_fallback",
+    "has_geopandas": false,
+    "geometry_file_used": "/Users/andreruiz/Library/Mobile Documents/com~apple~CloudDocs/Documents/Capstone/CAPSTONE_DATA_SCIENCE_RIVERARUIZ/data/tl_2022_72_cousub/pr_municipalities.geojson",
+    "constant_region_cols_removed": [],
+    "best_region_system_k_by_silhouette": 3,
+    "preferred_primary_region_system_k": 3,
+    "region_system_seed_stability": {
+        "mean_ari": 1.0,
+        "min_ari": 1.0,
+        "max_ari": 1.0
+    },
+    "adjacency_summary": null,
+    "moran_summary": null,
+    "map_outputs": {
+        "region_map_png": "phase6_map_regions.png",
+        "region_system_map_png": "phase6_map_region_systems.png",
+        "vulnerability_map_png": "phase6_map_vulnerability.png",
+        "labeled_region_map_png": "phase6_map_regions_labeled.png",
+        "region_pop_change_map_png": "phase6_map_region_pop_change.png",
+        "region_pop_change_labeled_png": "phase6_map_region_pop_change_labeled.png"
+    },
+    "regional_geojson_output": null
 }

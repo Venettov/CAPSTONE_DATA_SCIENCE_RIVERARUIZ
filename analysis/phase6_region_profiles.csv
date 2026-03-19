@@ -1,0 +1,7 @@
+region,vulnerability_score_0_1,vulnerability_index,median_income_real,lag_pop_change_1,kmeans_cluster_share_0,kmeans_cluster_share_1,dominant_typology_label,region_system_k3,region_system_label,dominant_phase5_cluster
+Central Mountains,0.7729075367620961,-1.993437745888228,23572.914666666664,-0.24177847228767035,0.8666666666666667,0.13333333333333333,"Higher-vulnerability, lower-income declining municipalities",1,Regional System 1,0
+East,0.49378865098598534,-3.428292218237157,27588.331176470587,-0.13939988122417613,0.29411764705882354,0.7058823529411765,"Relatively stable, higher-income municipalities",2,Regional System 2,1
+Metro,0.14740990028052584,-5.8554503274081515,35898.8625,-0.5860424640255254,0.0,1.0,"Relatively stable, higher-income municipalities",0,Regional System 0,1
+North,0.48087233895289516,-3.4941105499072456,27019.197999999997,-0.20606244889365022,0.2,0.8,"Relatively stable, higher-income municipalities",2,Regional System 2,1
+South,0.6922243099006155,-2.4091644486377835,24084.48833333333,-1.0723562094228636,0.9166666666666666,0.08333333333333333,"Higher-vulnerability, lower-income declining municipalities",1,Regional System 1,0
+West,0.6111421812018483,-2.821573954251304,22484.484375,-0.6339875660179024,0.9375,0.0625,"Higher-vulnerability, lower-income declining municipalities",1,Regional System 1,0
