@@ -27,9 +27,9 @@
         2024
     ],
     "ridge_metrics": {
-        "R2": -0.22103567548042458,
-        "MAE": 1.805653817871514,
-        "RMSE": 3.1238590686285077,
+        "R2": -0.22103567547349945,
+        "MAE": 1.8056538178630446,
+        "RMSE": 3.123859068619649,
         "alpha": 316.22776601683796
     },
     "lasso_metrics": {
@@ -47,9 +47,9 @@
     "comparison_table": [
         {
             "model": "Ridge (time-aware)",
-            "R2": -0.22103567548042458,
-            "MAE": 1.805653817871514,
-            "RMSE": 3.1238590686285077,
+            "R2": -0.22103567547349945,
+            "MAE": 1.8056538178630446,
+            "RMSE": 3.123859068619649,
             "alpha": 316.22776601683796
         },
         {
@@ -265,43 +265,6 @@
             "tree_feature_importance": 0.007986
         }
     ],
-    "shap_status": "completed_rf_treeexplainer",
-    "top_shap_features": [
-        {
-            "feature": "lag_pop_change_1",
-            "mean_abs_shap": 0.52037
-        },
-        {
-            "feature": "lag_pop_change_2",
-            "mean_abs_shap": 0.278249
-        },
-        {
-            "feature": "vulnerability_index",
-            "mean_abs_shap": 0.070163
-        },
-        {
-            "feature": "lag_violent_crime_rate",
-            "mean_abs_shap": 0.066901
-        },
-        {
-            "feature": "income_growth",
-            "mean_abs_shap": 0.03706
-        },
-        {
-            "feature": "lag_property_crime_rate",
-            "mean_abs_shap": 0.024197
-        },
-        {
-            "feature": "max_seismic_mag",
-            "mean_abs_shap": 0.017065
-        },
-        {
-            "feature": "median_income_real",
-            "mean_abs_shap": 0.013984
-        },
-        {
-            "feature": "max_wind_knots",
-            "mean_abs_shap": 0.011477
-        }
-    ]
+    "shap_status": "skipped: No module named 'shap'",
+    "top_shap_features": null
 }

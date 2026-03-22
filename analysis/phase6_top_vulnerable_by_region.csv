@@ -1,0 +1,19 @@
+region,municipio,vulnerability_score_0_1,kmeans_cluster,region_system_label
+Central Mountains,Adjuntas,1.0,0,Regional System 1
+Central Mountains,Comerío,0.9992331440482494,0,Regional System 1
+Central Mountains,Ciales,0.962155482090643,0,Regional System 1
+East,Vieques,1.0,1,Regional System 2
+East,Maunabo,0.9595000889376576,0,Regional System 2
+East,Yabucoa,0.7281934139284393,0,Regional System 2
+Metro,Cataño,0.4248768454711247,1,Regional System 0
+Metro,Toa Alta,0.2867060254615845,1,Regional System 0
+Metro,Toa Baja,0.2028458699630248,1,Regional System 0
+North,Florida,0.8162497856773214,0,Regional System 2
+North,Manatí,0.5057476594187784,1,Regional System 2
+North,Quebradillas,0.4998925466073857,0,Regional System 2
+South,Peñuelas,1.0,0,Regional System 1
+South,Juana Díaz,0.7723626420730654,0,Regional System 1
+South,Arroyo,0.7344856092224398,0,Regional System 1
+West,Guánica,1.0,0,Regional System 1
+West,Maricao,0.9762202905307228,0,Regional System 1
+West,Las Marías,0.96706054011261,0,Regional System 1

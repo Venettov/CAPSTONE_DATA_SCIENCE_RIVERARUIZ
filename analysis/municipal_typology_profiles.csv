@@ -1,0 +1,3 @@
+kmeans_cluster,vulnerability_score_0_1,median_income_real,income_growth,max_seismic_mag,lag_violent_crime_rate,lag_property_crime_rate,lag_pop_change_1,typology_label,municipality_count
+0,0.689,23079.38,2.647,0.209,0.24,0.527,-0.634,"Higher-vulnerability, lower-income declining municipalities",46
+1,0.334,30221.636,2.415,0.0,0.606,0.908,-0.206,"Relatively stable, higher-income municipalities",32

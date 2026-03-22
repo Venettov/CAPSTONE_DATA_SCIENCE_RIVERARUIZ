@@ -60,9 +60,9 @@
         2024
     ],
     "best_model_r2": -0.24614618172389569,
-    "linear_baseline_r2": -0.39047610103237895,
-    "linear_baseline_mae": 2.3657177562733094,
-    "linear_baseline_rmse": 3.333565712422038,
+    "linear_baseline_r2": -0.39047610102713315,
+    "linear_baseline_mae": 2.3657177562807394,
+    "linear_baseline_rmse": 3.333565712415749,
     "naive_zero_r2": -0.019310980889553298,
     "naive_zero_mae": 1.7835804949887002,
     "naive_zero_rmse": 2.8541750640447536,
@@ -104,9 +104,9 @@
         },
         {
             "Model": "Linear benchmark (reduced feature set)",
-            "R2": -0.39047610103237895,
-            "MAE": 2.3657177562733094,
-            "RMSE": 3.333565712422038
+            "R2": -0.39047610102713315,
+            "MAE": 2.3657177562807394,
+            "RMSE": 3.333565712415749
         },
         {
             "Model": "Naive benchmark: persistence",
