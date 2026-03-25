@@ -1,4 +1,3 @@
-region_system_k3,vulnerability_score_0_1,median_income_real,lag_pop_change_1
-0,0.118,35898.862,-0.586
-1,0.671,23380.629,-0.649
-2,0.463,27303.765,-0.173
+region_system_k2,vulnerability_score_0_1,median_income_real,target_pop_change
+0,0.348,30168.797,-0.416
+1,0.671,23380.629,-0.764

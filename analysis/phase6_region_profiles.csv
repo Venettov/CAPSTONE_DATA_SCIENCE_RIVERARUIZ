@@ -1,7 +1,7 @@
-region,vulnerability_score_0_1,vulnerability_index,median_income_real,lag_pop_change_1,kmeans_cluster_share_0,kmeans_cluster_share_1,dominant_typology_label,region_system_k3,region_system_label,dominant_phase5_cluster
-Central Mountains,0.7480427858688572,0.4296319065795315,23572.914666666664,-0.24177847228767035,0.8666666666666667,0.13333333333333333,"Higher-vulnerability, lower-income declining municipalities",1,Regional System 1,0
-East,0.4731884722956689,0.31158945938976607,27588.331176470587,-0.13939988122417613,0.29411764705882354,0.7058823529411765,"Relatively stable, higher-income municipalities",2,Regional System 2,1
-Metro,0.11787683340572679,0.1221854892050866,35898.8625,-0.5860424640255254,0.0,1.0,"Relatively stable, higher-income municipalities",0,Regional System 0,1
-North,0.4537140993795507,0.30236377035889017,27019.197999999997,-0.20606244889365022,0.2,0.8,"Relatively stable, higher-income municipalities",2,Regional System 2,1
-South,0.6477900910045228,0.38581009109085734,24084.48833333333,-1.0723562094228636,0.8333333333333334,0.16666666666666666,"Higher-vulnerability, lower-income declining municipalities",1,Regional System 1,0
-West,0.6179295443091027,0.37380960789148115,22484.484375,-0.6339875660179024,1.0,0.0,"Higher-vulnerability, lower-income declining municipalities",1,Regional System 1,0
+region,vulnerability_score_0_1,vulnerability_index,median_income_real,target_pop_change,lag_pop_change_1,kmeans_cluster_share_0,kmeans_cluster_share_1,dominant_typology_label,region_system_k2,region_system_label,dominant_phase5_cluster
+Central Mountains,0.7480427858688572,0.4296319065795315,23572.914666666664,-0.3429685833001309,-0.24177847228767035,0.13333333333333333,0.8666666666666667,Mixed structural profile,1,Regional System 1,1
+East,0.4731884722956689,0.31158945938976607,27588.331176470587,-0.21181234524522338,-0.13939988122417613,0.7058823529411765,0.29411764705882354,"Relatively stable, higher-income municipalities",0,Regional System 0,0
+Metro,0.11787683340572679,0.1221854892050866,35898.8625,-0.671133279649222,-0.5860424640255254,1.0,0.0,"Relatively stable, higher-income municipalities",0,Regional System 0,0
+North,0.4537140993795507,0.30236377035889017,27019.197999999997,-0.3653750922918797,-0.20606244889365022,0.8,0.2,"Relatively stable, higher-income municipalities",0,Regional System 0,0
+South,0.6477900910045228,0.38581009109085734,24084.48833333333,-1.175954048940157,-1.0723562094228636,0.16666666666666666,0.8333333333333334,Mixed structural profile,1,Regional System 1,1
+West,0.6179295443091027,0.37380960789148115,22484.484375,-0.7719544483775299,-0.6339875660179024,0.0,1.0,Mixed structural profile,1,Regional System 1,1

@@ -1,0 +1,111 @@
+{
+    "best_extended_target": "target_pop_change_3y_avg",
+    "best_extended_specification": "besttarget_bestregime",
+    "train_years": [
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020
+    ],
+    "test_years": [
+        2021
+    ],
+    "ridge_extended_r2": -0.07308444486728094,
+    "ridge_extended_rmse": 0.7705739499602076,
+    "ridge_extended_mae": 0.5247517422417719,
+    "lasso_extended_r2": -0.04885797564562755,
+    "lasso_extended_rmse": 0.7618258692910379,
+    "lasso_extended_mae": 0.5245866257181405,
+    "lasso_extended_nonzero_features": [
+        {
+            "feature": "vulnerability_index",
+            "lasso_extended_coef": -0.36062244811274585
+        },
+        {
+            "feature": "median_income_real",
+            "lasso_extended_coef": -0.1489697769967769
+        },
+        {
+            "feature": "max_wind_knots",
+            "lasso_extended_coef": -0.13491007928308518
+        },
+        {
+            "feature": "income_growth",
+            "lasso_extended_coef": 0.1285930976221452
+        },
+        {
+            "feature": "max_seismic_mag",
+            "lasso_extended_coef": 0.12174309450579163
+        },
+        {
+            "feature": "lag_violent_crime_rate",
+            "lasso_extended_coef": -0.11040511066380422
+        },
+        {
+            "feature": "lag_property_crime_rate",
+            "lasso_extended_coef": -0.039914974686727674
+        },
+        {
+            "feature": "lag_pop_change_1",
+            "lasso_extended_coef": -0.034156838893918094
+        },
+        {
+            "feature": "lag_pop_change_2",
+            "lasso_extended_coef": 0.02324317022489079
+        }
+    ],
+    "ridge_extended_top_features": [
+        {
+            "feature": "vulnerability_index",
+            "ridge_extended_coef": -0.4047400196078008
+        },
+        {
+            "feature": "median_income_real",
+            "ridge_extended_coef": -0.18862557411217404
+        },
+        {
+            "feature": "max_wind_knots",
+            "ridge_extended_coef": -0.15058243517873748
+        },
+        {
+            "feature": "income_growth",
+            "ridge_extended_coef": 0.14097401647508676
+        },
+        {
+            "feature": "max_seismic_mag",
+            "ridge_extended_coef": 0.12276106970346444
+        },
+        {
+            "feature": "lag_violent_crime_rate",
+            "ridge_extended_coef": -0.12065325508137553
+        },
+        {
+            "feature": "lag_pop_change_2",
+            "ridge_extended_coef": 0.05397451945632439
+        },
+        {
+            "feature": "lag_pop_change_1",
+            "ridge_extended_coef": -0.04782872101560997
+        },
+        {
+            "feature": "lag_property_crime_rate",
+            "ridge_extended_coef": -0.044525072797495305
+        }
+    ],
+    "extended_feature_columns": [
+        "vulnerability_index",
+        "median_income_real",
+        "max_wind_knots",
+        "max_seismic_mag",
+        "lag_violent_crime_rate",
+        "lag_property_crime_rate",
+        "lag_pop_change_1",
+        "lag_pop_change_2",
+        "income_growth"
+    ],
+    "note": "The extended target uses a smaller effective test window because forward-average targets reduce usable end-of-sample rows."
+}

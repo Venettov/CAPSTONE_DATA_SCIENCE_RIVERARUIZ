@@ -19,29 +19,20 @@
       "stability_flag": "stable_enough_for_latest_snapshot"
     },
     {
-      "variable": "lag_pop_change_1",
-      "corr_latest_vs_recent_avg": 0.274,
-      "mean_abs_diff": 1.508,
-      "stability_flag": "year_sensitive"
-    },
-    {
       "variable": "median_income_real",
       "corr_latest_vs_recent_avg": 0.991,
       "mean_abs_diff": 739.58,
       "stability_flag": "stable_enough_for_latest_snapshot"
     }
   ],
-  "year_sensitive_variables": [
-    "lag_pop_change_1"
-  ],
+  "year_sensitive_variables": [],
   "cluster_columns": [
     "vulnerability_score_0_1",
     "median_income_real",
     "income_growth",
     "max_seismic_mag",
     "lag_violent_crime_rate",
-    "lag_property_crime_rate",
-    "lag_pop_change_1"
+    "lag_property_crime_rate"
   ],
   "constant_columns_removed": [
     "max_wind_knots"
@@ -58,47 +49,47 @@
   "kmeans_diagnostics": [
     {
       "k": 2,
-      "inertia": 410.843696,
-      "silhouette": 0.239761,
+      "inertia": 335.398885,
+      "silhouette": 0.254439,
       "min_cluster_size": 32,
       "max_cluster_size": 46,
       "singleton_clusters": 0
     },
     {
       "k": 3,
-      "inertia": 343.655243,
-      "silhouette": 0.231918,
+      "inertia": 270.089503,
+      "silhouette": 0.253159,
       "min_cluster_size": 19,
-      "max_cluster_size": 37,
+      "max_cluster_size": 36,
       "singleton_clusters": 0
     },
     {
       "k": 4,
-      "inertia": 283.239532,
-      "silhouette": 0.239432,
-      "min_cluster_size": 1,
-      "max_cluster_size": 35,
-      "singleton_clusters": 1
+      "inertia": 229.980413,
+      "silhouette": 0.252821,
+      "min_cluster_size": 11,
+      "max_cluster_size": 25,
+      "singleton_clusters": 0
     },
     {
       "k": 5,
-      "inertia": 243.853901,
-      "silhouette": 0.238478,
-      "min_cluster_size": 1,
-      "max_cluster_size": 25,
-      "singleton_clusters": 1
+      "inertia": 205.394496,
+      "silhouette": 0.228619,
+      "min_cluster_size": 6,
+      "max_cluster_size": 20,
+      "singleton_clusters": 0
     },
     {
       "k": 6,
-      "inertia": 219.574187,
-      "silhouette": 0.203053,
-      "min_cluster_size": 1,
+      "inertia": 186.742191,
+      "silhouette": 0.209326,
+      "min_cluster_size": 6,
       "max_cluster_size": 22,
-      "singleton_clusters": 1
+      "singleton_clusters": 0
     }
   ],
   "kmeans_stability_mean_ari": 1.0,
-  "kmeans_vs_hierarchical_ari": 0.75676812802474,
+  "kmeans_vs_hierarchical_ari": 0.7568572620729538,
   "net_migration_status": "deferred_missing_birth_death_fields",
   "migration_note": "Birth/death fields were not available in the processed panel, so migration modeling is explicitly deferred in this run.",
   "migration_regression_summary": {},

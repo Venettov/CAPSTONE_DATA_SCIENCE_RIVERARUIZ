@@ -19,6 +19,7 @@
         "vulnerability_score_0_1",
         "vulnerability_index",
         "median_income_real",
+        "target_pop_change",
         "lag_pop_change_1"
     ],
     "spatial_backend": "geopandas",
@@ -26,7 +27,7 @@
     "geometry_file_used": "/Users/andreruiz/Library/Mobile Documents/com~apple~CloudDocs/Documents/Capstone/CAPSTONE_DATA_SCIENCE_RIVERARUIZ/data/tl_2022_72_cousub/pr_municipalities.geojson",
     "constant_region_cols_removed": [],
     "best_region_system_k_by_silhouette": 3,
-    "preferred_primary_region_system_k": 3,
+    "preferred_primary_region_system_k": 2,
     "region_system_seed_stability": {
         "mean_ari": 1.0,
         "min_ari": 1.0,
@@ -43,7 +44,7 @@
         },
         {
             "metric": "share_same_region_system",
-            "value": 0.7923497267759563
+            "value": 0.8469945355191257
         },
         {
             "metric": "adjacent_pairs",

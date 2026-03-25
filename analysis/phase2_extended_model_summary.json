@@ -1,0 +1,110 @@
+{
+    "base_features": [
+        "vulnerability_index",
+        "median_income_real",
+        "max_wind_knots",
+        "max_seismic_mag",
+        "lag_violent_crime_rate",
+        "lag_property_crime_rate",
+        "lag_pop_change_1",
+        "lag_pop_change_2",
+        "income_growth",
+        "svi_x_wind",
+        "svi_x_quake"
+    ],
+    "round1_best_target_col": "target_pop_change_3y_avg",
+    "round1_best_specification": "forward_avg_3y",
+    "round2_best_specification": "besttarget_baseline_features",
+    "round2_best_features": [
+        "vulnerability_index",
+        "median_income_real",
+        "max_wind_knots",
+        "max_seismic_mag",
+        "lag_violent_crime_rate",
+        "lag_property_crime_rate",
+        "lag_pop_change_1",
+        "lag_pop_change_2",
+        "income_growth",
+        "svi_x_wind",
+        "svi_x_quake"
+    ],
+    "round3_best_specification": "besttarget_bestregime",
+    "timing_features_available": [
+        "storm_burden_3y",
+        "seismic_burden_3y",
+        "years_since_major_storm",
+        "years_since_major_quake"
+    ],
+    "round1_best_row": {
+        "round": "Round1_TargetRedesign",
+        "specification_name": "forward_avg_3y",
+        "target_name": "target_pop_change_3y_avg",
+        "feature_set_name": "forward_avg_3y",
+        "model_name": "Lasso",
+        "n_features": 11,
+        "train_years": [
+            2013,
+            2014,
+            2015,
+            2016,
+            2017,
+            2018,
+            2019,
+            2020
+        ],
+        "test_years": [
+            2021
+        ],
+        "test_r2": -0.0745433011844292,
+        "test_rmse": 0.7710975689854239,
+        "test_mae": 0.5463456014598924
+    },
+    "round2_best_row": {
+        "round": "Round2_RegimeIndicators",
+        "specification_name": "besttarget_baseline_features",
+        "target_name": "target_pop_change_3y_avg",
+        "feature_set_name": "besttarget_baseline_features",
+        "model_name": "Lasso",
+        "n_features": 11,
+        "train_years": [
+            2013,
+            2014,
+            2015,
+            2016,
+            2017,
+            2018,
+            2019,
+            2020
+        ],
+        "test_years": [
+            2021
+        ],
+        "test_r2": -0.0745433011844292,
+        "test_rmse": 0.7710975689854239,
+        "test_mae": 0.5463456014598924
+    },
+    "round3_best_row": {
+        "round": "Round3_DisasterTiming",
+        "specification_name": "besttarget_bestregime",
+        "target_name": "target_pop_change_3y_avg",
+        "feature_set_name": "besttarget_bestregime",
+        "model_name": "Lasso",
+        "n_features": 11,
+        "train_years": [
+            2013,
+            2014,
+            2015,
+            2016,
+            2017,
+            2018,
+            2019,
+            2020
+        ],
+        "test_years": [
+            2021
+        ],
+        "test_r2": -0.0745433011844292,
+        "test_rmse": 0.7710975689854239,
+        "test_mae": 0.5463456014598924
+    }
+}
