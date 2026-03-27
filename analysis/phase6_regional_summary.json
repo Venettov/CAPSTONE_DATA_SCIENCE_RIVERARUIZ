@@ -24,7 +24,7 @@
     ],
     "spatial_backend": "geopandas",
     "has_geopandas": true,
-    "geometry_file_used": "/Users/andreruiz/Library/Mobile Documents/com~apple~CloudDocs/Documents/Capstone/CAPSTONE_DATA_SCIENCE_RIVERARUIZ/data/tl_2022_72_cousub/pr_municipalities.geojson",
+    "geometry_file_used": "/Users/andreruiz/Documents/Capstone/CAPSTONE_DATA_SCIENCE_RIVERARUIZ/data/tl_2022_72_cousub/pr_municipalities.geojson",
     "constant_region_cols_removed": [],
     "best_region_system_k_by_silhouette": 3,
     "preferred_primary_region_system_k": 2,
