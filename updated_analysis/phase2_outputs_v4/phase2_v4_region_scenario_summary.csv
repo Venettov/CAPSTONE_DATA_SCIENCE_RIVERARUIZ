@@ -1,0 +1,13 @@
+scenario,region,predicted_pop_change
+Earthquake Magnitude 6.5,Central Mountains,-1.5432585947111803
+Earthquake Magnitude 6.5,East,-1.8394832564586487
+Earthquake Magnitude 6.5,Metro,-1.284859599145922
+Earthquake Magnitude 6.5,North,-1.5944976980870358
+Earthquake Magnitude 6.5,South,-1.8640202148635483
+Earthquake Magnitude 6.5,West,-1.4027415785492676
+Hurricane Category 3,Central Mountains,-1.259740166934348
+Hurricane Category 3,East,-1.8015643077186603
+Hurricane Category 3,Metro,-1.0322294882081389
+Hurricane Category 3,North,-1.2061886122481744
+Hurricane Category 3,South,-1.7094662711221258
+Hurricane Category 3,West,-0.8435793179223425
