@@ -1,0 +1,4 @@
+scenario_name,seconds,n_sims,save_detail,forecast_horizon_years
+baseline_no_disaster,32429.48621726036,100,False,6
+hurricane_cat3_2026,47477.16979932785,100,False,6
+earthquake_m65_2026,48257.27086901665,100,False,6

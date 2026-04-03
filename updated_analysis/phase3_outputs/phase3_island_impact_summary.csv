@@ -1,0 +1,4 @@
+scenario_name,scenario_label,forecast_year,median_population,median_vs_baseline,p05_vs_baseline,p95_vs_baseline
+earthquake_m65_2026,Earthquake M6.5 in 2026,2030,3070557.478019571,382.82990187965333,1644.697502231691,2297.106821575202
+baseline_no_disaster,No natural disaster,2030,3070174.6481176913,0.0,0.0,0.0
+hurricane_cat3_2026,Hurricane Category 3 in 2026,2030,3036154.6010515164,-34020.04706617491,-32664.07731294213,-33035.73333459627
