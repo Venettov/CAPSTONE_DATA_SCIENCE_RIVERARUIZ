@@ -1,0 +1,17 @@
+feature,mean_abs_shap,feature_pretty
+seismic_3yr_sum,0.2278596879482641,3-year earthquake exposure
+region_South,0.17036834635729348,Region: South
+region_East,0.1596887242521347,Region: East
+lag_pop_change_1,0.1137694722456274,Lagged population change (t-1)
+lag_pop_change_2,0.07131719664834921,Lagged population change (t-2)
+establishment_growth,0.06046490191496322,Establishment growth
+seismic_3yr_x_svi,0.047108892998175715,Earthquake × vulnerability
+wind_3yr_sum,0.03871210717031696,3-year hurricane exposure
+svi_pca_1,0.015526447925179458,Social vulnerability (PCA)
+wind_3yr_x_svi,0.014876795480430478,Hurricane × vulnerability
+region_North,0.01344933847400373,Region: North
+region_Central Mountains,0.012645440018857911,Region: Central Mountains
+region_Metro,0.01104331709609125,Region: Metro
+income_growth,0.010048584119050581,Income growth
+lag_total_crime_rate,0.009265579260410937,Lagged crime rate
+region_West,0.0052569084547056805,Region: West
