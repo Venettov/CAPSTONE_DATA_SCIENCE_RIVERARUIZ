@@ -17,28 +17,20 @@
     "region"
   ],
   "n_train": 702,
-  "n_val": 78,
-  "n_test": 156,
+  "n_val": 156,
+  "n_test": 78,
   "metrics": {
     "validation": {
-      "r2": 0.7469719857441863,
-      "rmse": 0.8924329399791264,
-      "mae": 0.6942979737824501
+      "r2": 0.567324469461269,
+      "rmse": 1.2434093554969734,
+      "mae": 0.9644612350533697
     },
     "test": {
-      "r2": 0.23405939583721558,
-      "rmse": 1.3162361588476064,
-      "mae": 1.0161787502970374
+      "r2": -1.2126418481855108,
+      "rmse": 1.0813224095526703,
+      "mae": 0.7977330042697854
     }
   },
   "phase2_pipeline_loaded": true,
-  "reference_phase2_summary_loaded": true,
-  "phase2_reference_metrics": {
-    "validation_r2": 0.4079199696004543,
-    "test_r2": 0.17858057969069385
-  },
-  "reproduction_gap": {
-    "validation_r2_gap": 0.33905201614373204,
-    "test_r2_gap": 0.055478816146521726
-  }
+  "reference_phase2_summary_loaded": false
 }
