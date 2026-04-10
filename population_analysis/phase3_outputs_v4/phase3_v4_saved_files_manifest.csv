@@ -1,5 +1,7 @@
 filepath
 phase3_outputs_v4/phase3_v4_backbone_model_summary.json
+phase3_outputs_v4/phase3_v4_clean_backbone_evaluation.csv
+phase3_outputs_v4/phase3_v4_backbone_vs_phase2_reference.csv
 phase3_outputs_v4/phase3_v4_scenario_definitions.json
 phase3_outputs_v4/phase3_v4_scenario_timing.csv
 phase3_outputs_v4/phase3_v4_maria_backtest_island.csv
