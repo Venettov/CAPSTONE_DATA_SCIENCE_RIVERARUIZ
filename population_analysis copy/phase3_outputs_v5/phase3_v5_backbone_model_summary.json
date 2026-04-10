@@ -1,0 +1,81 @@
+{
+  "model": "lasso",
+  "target": "target_pop_change_3y_avg",
+  "features": [
+    "lag_pop_change_1",
+    "lag_pop_change_2",
+    "total_population",
+    "svi_pca_1",
+    "wind_3yr_sum",
+    "seismic_3yr_sum",
+    "wind_3yr_x_svi",
+    "seismic_3yr_x_svi",
+    "income_growth",
+    "establishment_growth",
+    "lag_total_crime_rate",
+    "year",
+    "target_pop_change_3y_avg_lag1",
+    "target_pop_change_3y_avg_lag2",
+    "target_pop_change_3y_avg_roll3_mean",
+    "target_pop_change_3y_avg_yoy_change",
+    "svi_pca_1_lag1",
+    "svi_pca_1_lag2",
+    "svi_pca_1_roll3_mean",
+    "svi_pca_1_yoy_change",
+    "wind_3yr_sum_lag1",
+    "wind_3yr_sum_lag2",
+    "wind_3yr_sum_roll3_mean",
+    "wind_3yr_sum_yoy_change",
+    "seismic_3yr_sum_lag1",
+    "seismic_3yr_sum_lag2",
+    "seismic_3yr_sum_roll3_mean",
+    "seismic_3yr_sum_yoy_change",
+    "income_growth_lag1",
+    "income_growth_lag2",
+    "income_growth_roll3_mean",
+    "income_growth_yoy_change",
+    "establishment_growth_lag1",
+    "establishment_growth_lag2",
+    "establishment_growth_roll3_mean",
+    "establishment_growth_yoy_change",
+    "lag_total_crime_rate_lag1",
+    "lag_total_crime_rate_lag2",
+    "lag_total_crime_rate_roll3_mean",
+    "lag_total_crime_rate_yoy_change",
+    "total_population_lag1",
+    "total_population_lag2",
+    "total_population_roll3_mean",
+    "total_population_yoy_change",
+    "municipio",
+    "region"
+  ],
+  "n_train": 702,
+  "n_val": 78,
+  "n_test": 156,
+  "expected_phase2_test_r2": 0.8678,
+  "expected_phase2_test_rmse": 0.5468,
+  "metrics": {
+    "validation": {
+      "r2": 0.9373345432852163,
+      "rmse": 0.4441251762674558,
+      "mae": 0.3774416905171595
+    },
+    "test": {
+      "r2": 0.8678244275012517,
+      "rmse": 0.5467790560200507,
+      "mae": 0.4876969260287781
+    }
+  },
+  "phase2_pipeline_loaded": true,
+  "reference_phase2_summary_loaded": true,
+  "phase2_reference_metrics": {
+    "validation_r2": 0.9373345432852163,
+    "test_r2": 0.8678244275012517,
+    "test_rmse": 0.5467790560200507
+  },
+  "reproduction_gap": {
+    "validation_r2_gap": 0.0,
+    "test_r2_gap": 0.0,
+    "test_rmse_gap": 0.0
+  }
+}

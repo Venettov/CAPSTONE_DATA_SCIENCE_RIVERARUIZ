@@ -1,0 +1,31 @@
+scenario,region,predicted_pop_change_3y_avg
+baseline,Central Mountains,-0.7092731477919778
+baseline,East,-0.9411208012535179
+baseline,Metro,-1.0248240771322696
+baseline,North,-0.7143357176991262
+baseline,South,-1.5057201814759709
+baseline,West,-1.0187609562714897
+earthquake_m6,Central Mountains,-0.7092731477919778
+earthquake_m6,East,-0.9411208012535179
+earthquake_m6,Metro,-1.0248240771322696
+earthquake_m6,North,-0.7143357176991262
+earthquake_m6,South,-1.5057201814759709
+earthquake_m6,West,-1.0187609562714897
+earthquake_m7_5,Central Mountains,-0.7092731477919778
+earthquake_m7_5,East,-0.9411208012535179
+earthquake_m7_5,Metro,-1.0248240771322696
+earthquake_m7_5,North,-0.7143357176991262
+earthquake_m7_5,South,-1.5057201814759709
+earthquake_m7_5,West,-1.0187609562714897
+hurricane_cat3,Central Mountains,-0.7092731477919778
+hurricane_cat3,East,-0.9411208012535179
+hurricane_cat3,Metro,-1.0248240771322696
+hurricane_cat3,North,-0.7143357176991262
+hurricane_cat3,South,-1.5057201814759709
+hurricane_cat3,West,-1.0187609562714897
+hurricane_cat5,Central Mountains,-0.7092731477919778
+hurricane_cat5,East,-0.9411208012535179
+hurricane_cat5,Metro,-1.0248240771322696
+hurricane_cat5,North,-0.7143357176991262
+hurricane_cat5,South,-1.5057201814759709
+hurricane_cat5,West,-1.0187609562714897

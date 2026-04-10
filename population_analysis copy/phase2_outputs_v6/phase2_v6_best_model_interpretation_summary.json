@@ -1,0 +1,28 @@
+{
+  "best_model": "lasso",
+  "interpretation_method": "standardized_coefficients",
+  "top_positive_features": [
+    "target_pop_change_3y_avg_yoy_change",
+    "target_pop_change_3y_avg_lag1",
+    "svi_pca_1",
+    "wind_3yr_sum",
+    "seismic_3yr_sum",
+    "wind_3yr_x_svi",
+    "seismic_3yr_x_svi",
+    "income_growth",
+    "establishment_growth",
+    "lag_total_crime_rate"
+  ],
+  "top_negative_features": [
+    "year",
+    "municipio_Pe\u00f1uelas",
+    "wind_3yr_sum",
+    "seismic_3yr_sum",
+    "wind_3yr_x_svi",
+    "seismic_3yr_x_svi",
+    "income_growth",
+    "establishment_growth",
+    "lag_total_crime_rate",
+    "target_pop_change_3y_avg_lag2"
+  ]
+}
