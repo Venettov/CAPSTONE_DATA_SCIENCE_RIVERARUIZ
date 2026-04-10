@@ -1,2 +1,0 @@
-model,target,drivers_tested,lag_horizon,val_r2,test_r2,val_rmse,test_rmse,val_mae,test_mae
-extra_trees_leadlag,target_pop_change_3y_avg,"wind_3yr_sum, seismic_3yr_sum, income_growth, establishment_growth, lag_total_crime_rate, svi_pca_1","0,1,2,3",0.36828567618773567,0.08785976368317405,1.4101056426732694,1.4363724864229848,1.146129240160287,1.1050307763048262

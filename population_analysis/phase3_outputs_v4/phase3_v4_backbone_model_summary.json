@@ -1,0 +1,36 @@
+{
+  "model": "extra_trees",
+  "target": "target_pop_change_3y_avg",
+  "features": [
+    "lag_pop_change_1",
+    "lag_pop_change_2",
+    "svi_pca_1",
+    "wind_3yr_sum",
+    "seismic_3yr_sum",
+    "wind_3yr_x_svi",
+    "seismic_3yr_x_svi",
+    "income_growth",
+    "establishment_growth",
+    "lag_total_crime_rate",
+    "year",
+    "municipio",
+    "region"
+  ],
+  "n_train": 702,
+  "n_val": 156,
+  "n_test": 78,
+  "metrics": {
+    "validation": {
+      "r2": 0.5673244694612689,
+      "rmse": 1.2434093554969734,
+      "mae": 0.9644612350533697
+    },
+    "test": {
+      "r2": -1.2126418481855112,
+      "rmse": 1.0813224095526706,
+      "mae": 0.7977330042697853
+    }
+  },
+  "phase2_pipeline_loaded": true,
+  "reference_phase2_summary_loaded": false
+}

@@ -1,0 +1,171 @@
+analysis_level,scenario,municipio,region,year,predicted_pop_change,svi_pca_1,wind_3yr_sum,seismic_3yr_sum
+municipio,Hurricane Category 3,Vega Baja,North,2024.0,-1.3589004721744007,,111.0,61942.720812060375
+municipio,Hurricane Category 3,Yabucoa,East,2024.0,-1.6654885012641611,,111.0,21496.36919507423
+municipio,Hurricane Category 3,Vieques,East,2024.0,-1.8811201189693807,,111.0,16994.40845966302
+municipio,Hurricane Category 3,Villalba,South,2024.0,-1.793025985470211,,111.0,72123.80471371753
+municipio,Hurricane Category 3,Juana Díaz,South,2024.0,-1.8174726943225694,,111.0,76255.4306539325
+municipio,Hurricane Category 3,Utuado,Central Mountains,2024.0,-0.42718909806299776,,111.0,84547.79825951418
+municipio,Hurricane Category 3,Ciales,Central Mountains,2024.0,-1.3684280297580058,,111.0,66977.40494438403
+municipio,Hurricane Category 3,Cidra,Central Mountains,2024.0,-1.4120143244907015,,111.0,50994.59319908696
+municipio,Hurricane Category 3,Coamo,South,2024.0,-1.6819444158535208,,111.0,62535.62918334366
+municipio,Hurricane Category 3,Comerío,Central Mountains,2024.0,-1.1238570824243106,,111.0,54609.23846829515
+municipio,Hurricane Category 3,Corozal,Central Mountains,2024.0,-1.5146546930917673,,111.0,59841.54420509037
+municipio,Hurricane Category 3,Culebra,East,2024.0,-2.4864430055275166,,111.0,20166.52906235877
+municipio,Hurricane Category 3,Ceiba,East,2024.0,-1.658432263744621,,111.0,22047.39151712663
+municipio,Hurricane Category 3,Dorado,North,2024.0,-1.33699078092027,,111.0,56938.04887203283
+municipio,Hurricane Category 3,Florida,North,2024.0,-1.3214361025251704,,111.0,71398.81883752269
+municipio,Hurricane Category 3,Guayama,South,2024.0,-1.8375307458682808,,111.0,45909.41633336456
+municipio,Hurricane Category 3,Guayanilla,South,2024.0,-1.6535250765811715,,111.0,168992.9624940522
+municipio,Hurricane Category 3,Guaynabo,Metro,2024.0,-1.7805378691699534,,111.0,45082.13195561373
+municipio,Hurricane Category 3,Gurabo,East,2024.0,-1.7088491593895405,,111.0,31461.56751295262
+municipio,Hurricane Category 3,Guánica,West,2024.0,-1.909836008204308,,111.0,206824.04060981187
+municipio,Hurricane Category 3,Fajardo,East,2024.0,-1.9664264184225746,,111.0,23992.638412251777
+municipio,Hurricane Category 3,Cayey,Central Mountains,2024.0,-0.6741025630752715,,111.0,51112.542987932
+municipio,Hurricane Category 3,Cataño,Metro,2024.0,-0.6824358143679574,,111.0,42946.647967477504
+municipio,Hurricane Category 3,Carolina,Metro,2024.0,-1.2549373925402958,,111.0,29816.19827128312
+municipio,Hurricane Category 3,Adjuntas,Central Mountains,2024.0,-1.4805068756168105,,111.0,98287.82473889366
+municipio,Hurricane Category 3,Aguada,West,2024.0,-1.2781157517537418,,111.0,73322.509781234
+municipio,Hurricane Category 3,Aguadilla,West,2024.0,-1.0572784922523792,,111.0,75901.59149321905
+municipio,Hurricane Category 3,Aguas Buenas,Central Mountains,2024.0,-0.5283208146272496,,111.0,47341.65188111521
+municipio,Hurricane Category 3,Aibonito,Central Mountains,2024.0,-1.5821773273128608,,111.0,56348.106850331045
+municipio,Hurricane Category 3,Arecibo,North,2024.0,-1.2252349713109838,,111.0,74943.83596324506
+municipio,Hurricane Category 3,Arroyo,South,2024.0,-1.913441830208525,,111.0,42312.481080425256
+municipio,Hurricane Category 3,Añasco,West,2024.0,-0.573664324223122,,111.0,81691.91821302533
+municipio,Hurricane Category 3,Barceloneta,North,2024.0,-0.9777493742824471,,111.0,68697.73509716813
+municipio,Hurricane Category 3,Barranquitas,Central Mountains,2024.0,-1.497733267920052,,111.0,58294.74067691213
+municipio,Hurricane Category 3,Bayamón,Metro,2024.0,-1.243002039759174,,111.0,52349.44959056013
+municipio,Hurricane Category 3,Cabo Rojo,West,2024.0,-1.205470385280747,,111.0,97960.7413833848
+municipio,Hurricane Category 3,Caguas,East,2024.0,-1.959458932038012,,111.0,37615.18866251163
+municipio,Hurricane Category 3,Camuy,North,2024.0,-1.4091901889791347,,111.0,76360.1813275565
+municipio,Hurricane Category 3,Canóvanas,East,2024.0,-1.8785670856506973,,111.0,28224.345114258096
+municipio,Hurricane Category 3,Hatillo,North,2024.0,-0.9537280687367341,,111.0,76299.40895970055
+municipio,Hurricane Category 3,Vega Alta,North,2024.0,-0.7501276906960946,,111.0,59979.58265414288
+municipio,Hurricane Category 3,Hormigueros,West,2024.0,-1.0013478723533014,,111.0,95265.61252629355
+municipio,Hurricane Category 3,Isabela,West,2024.0,-1.4832328673985726,,111.0,78042.23711156206
+municipio,Hurricane Category 3,Ponce,South,2024.0,-1.6945940551478842,,111.0,95595.82279863312
+municipio,Hurricane Category 3,Quebradillas,North,2024.0,-1.1970476249382813,,111.0,76555.32864846943
+municipio,Hurricane Category 3,Rincón,West,2024.0,-1.580951444006182,,111.0,71947.69519853435
+municipio,Hurricane Category 3,Río Grande,East,2024.0,-1.6944426069871854,,111.0,25654.328382885033
+municipio,Hurricane Category 3,Sabana Grande,West,2024.0,-0.9494515034892091,,111.0,138370.66953482764
+municipio,Hurricane Category 3,Salinas,South,2024.0,-1.7063799929347843,,111.0,61224.88716240305
+municipio,Hurricane Category 3,Peñuelas,South,2024.0,-1.8075690680015546,,111.0,121746.73278616328
+municipio,Hurricane Category 3,San Germán,West,2024.0,-0.7906254414617163,,111.0,122160.22788580332
+municipio,Hurricane Category 3,San Lorenzo,East,2024.0,-2.2488514362521026,,111.0,30829.6349965196
+municipio,Hurricane Category 3,San Sebastián,West,2024.0,-1.4903495204749775,,111.0,82517.94720684599
+municipio,Hurricane Category 3,Santa Isabel,South,2024.0,-1.774269446183295,,111.0,65888.36939765864
+municipio,Hurricane Category 3,Toa Alta,Metro,2024.0,-0.8739000619910212,,111.0,57746.07242885453
+municipio,Hurricane Category 3,Toa Baja,Metro,2024.0,-0.4434172636271844,,111.0,57158.79008849955
+municipio,Hurricane Category 3,Trujillo Alto,Metro,2024.0,-1.7747636167465588,,111.0,34280.8051362024
+municipio,Hurricane Category 3,San Juan,Metro,2024.0,-1.125517221865229,,111.0,41125.67566159651
+municipio,Hurricane Category 3,Patillas,South,2024.0,-2.109800265591634,,111.0,37148.114726905085
+municipio,Hurricane Category 3,Orocovis,Central Mountains,2024.0,-1.4388914846435337,,111.0,66447.49164287941
+municipio,Hurricane Category 3,Naranjito,Central Mountains,2024.0,-1.514328244377658,,111.0,56675.01928260402
+municipio,Hurricane Category 3,Jayuya,Central Mountains,2024.0,-0.8780811893900043,,111.0,77519.81511038919
+municipio,Hurricane Category 3,Juncos,East,2024.0,-2.0986616179265223,,111.0,26510.570694065325
+municipio,Hurricane Category 3,Lajas,West,2024.0,-1.1435958332877842,,111.0,125767.3079703938
+municipio,Hurricane Category 3,Lares,Central Mountains,2024.0,-1.5636474186346032,,111.0,88029.39444052654
+municipio,Hurricane Category 3,Las Marías,West,2024.0,-1.2578731208261031,,111.0,92156.67580161768
+municipio,Hurricane Category 3,Las Piedras,East,2024.0,-2.061066107298753,,111.0,22678.56305949029
+municipio,Hurricane Category 3,Loíza,East,2024.0,-1.4881372032349496,,111.0,27223.263320531943
+municipio,Hurricane Category 3,Luquillo,East,2024.0,-1.9641710290416206,,111.0,25461.268258555618
+municipio,Hurricane Category 3,Manatí,North,2024.0,-0.9801449452449225,,111.0,67403.59558164829
+municipio,Hurricane Category 3,Maricao,West,2024.0,-0.4541603824090758,,111.0,104295.31455789776
+municipio,Hurricane Category 3,Maunabo,East,2024.0,-1.9440268841942556,,111.0,23310.879653065684
+municipio,Hurricane Category 3,Mayagüez,West,2024.0,-0.2575031427532278,,111.0,88925.79432464403
+municipio,Hurricane Category 3,Moca,West,2024.0,-1.4726521169298634,,111.0,74738.40546117464
+municipio,Hurricane Category 3,Morovis,Central Mountains,2024.0,-0.6499156273920765,,111.0,63987.50301610221
+municipio,Hurricane Category 3,Naguabo,East,2024.0,-1.8956488214665712,,111.0,21246.28067778564
+municipio,Hurricane Category 3,Humacao,East,2024.0,-1.9160126710621188,,111.0,21080.552993507463
+municipio,Hurricane Category 3,Yauco,South,2024.0,-1.6640500963499802,,111.0,168904.36166907367
+municipio,Earthquake Magnitude 6.5,Vega Baja,North,2024.0,-1.7841232430793477,,2.881085623826044,6.5
+municipio,Earthquake Magnitude 6.5,Yabucoa,East,2024.0,-1.6946634071858528,,2.544327944035897,6.5
+municipio,Earthquake Magnitude 6.5,Vieques,East,2024.0,-1.803543479337791,,2.424454394696878,6.5
+municipio,Earthquake Magnitude 6.5,Villalba,South,2024.0,-1.9004236141225974,,3.478859119194468,6.5
+municipio,Earthquake Magnitude 6.5,Juana Díaz,South,2024.0,-1.8382811057348687,,3.6839614918738177,6.5
+municipio,Earthquake Magnitude 6.5,Utuado,Central Mountains,2024.0,-0.935357171899015,,4.49523228095363,6.5
+municipio,Earthquake Magnitude 6.5,Ciales,Central Mountains,2024.0,-1.6435884374879781,,3.1849686543608,6.5
+municipio,Earthquake Magnitude 6.5,Cidra,Central Mountains,2024.0,-1.580617456394962,,2.932252564458663,6.5
+municipio,Earthquake Magnitude 6.5,Coamo,South,2024.0,-1.8180961673596838,,3.4030468359053128,6.5
+municipio,Earthquake Magnitude 6.5,Comerío,Central Mountains,2024.0,-1.4117353683213334,,2.975613544620204,6.5
+municipio,Earthquake Magnitude 6.5,Corozal,Central Mountains,2024.0,-1.7656870025570583,,2.941464176737775,6.5
+municipio,Earthquake Magnitude 6.5,Culebra,East,2024.0,-2.5745462399129107,,2.9940049251777654,6.5
+municipio,Earthquake Magnitude 6.5,Ceiba,East,2024.0,-1.8313516487085004,,2.2444217617691464,6.5
+municipio,Earthquake Magnitude 6.5,Dorado,North,2024.0,-1.6868262101998754,,2.9141368072364298,6.5
+municipio,Earthquake Magnitude 6.5,Florida,North,2024.0,-1.7413475805705911,,3.6782318932885367,6.5
+municipio,Earthquake Magnitude 6.5,Guayama,South,2024.0,-1.8127059328467174,,3.0780196740188335,6.5
+municipio,Earthquake Magnitude 6.5,Guayanilla,South,2024.0,-1.8110478047751846,,6.1417391329340605,6.5
+municipio,Earthquake Magnitude 6.5,Guaynabo,Metro,2024.0,-1.9261880676924943,,2.870529326307224,6.5
+municipio,Earthquake Magnitude 6.5,Gurabo,East,2024.0,-1.8423597380047845,,2.828441944972063,6.5
+municipio,Earthquake Magnitude 6.5,Guánica,West,2024.0,-2.629924387869878,,7.445981831899326,6.5
+municipio,Earthquake Magnitude 6.5,Fajardo,East,2024.0,-2.0109738465439615,,2.6758244513986806,6.5
+municipio,Earthquake Magnitude 6.5,Cayey,Central Mountains,2024.0,-1.0386313870772206,,3.012615064288169,6.5
+municipio,Earthquake Magnitude 6.5,Cataño,Metro,2024.0,-1.0755728997973208,,2.7985103925913517,6.5
+municipio,Earthquake Magnitude 6.5,Carolina,Metro,2024.0,-1.3207971391535043,,2.7155268076938675,6.5
+municipio,Earthquake Magnitude 6.5,Adjuntas,Central Mountains,2024.0,-1.7986157856346436,,4.9731257518630265,6.5
+municipio,Earthquake Magnitude 6.5,Aguada,West,2024.0,-1.762575092220501,,5.202597061974426,6.5
+municipio,Earthquake Magnitude 6.5,Aguadilla,West,2024.0,-1.5269555177377896,,4.860819064731745,6.5
+municipio,Earthquake Magnitude 6.5,Aguas Buenas,Central Mountains,2024.0,-0.9162832050988964,,2.9618158001970905,6.5
+municipio,Earthquake Magnitude 6.5,Aibonito,Central Mountains,2024.0,-1.7773323147991038,,3.1425035801162537,6.5
+municipio,Earthquake Magnitude 6.5,Arecibo,North,2024.0,-1.5632876324894716,,3.8304408244572294,6.5
+municipio,Earthquake Magnitude 6.5,Arroyo,South,2024.0,-1.8311951120969827,,3.0130896584325733,6.5
+municipio,Earthquake Magnitude 6.5,Añasco,West,2024.0,-1.2246715064518665,,5.621895771470265,6.5
+municipio,Earthquake Magnitude 6.5,Barceloneta,North,2024.0,-1.3890012826991982,,3.191372293652666,6.5
+municipio,Earthquake Magnitude 6.5,Barranquitas,Central Mountains,2024.0,-1.7632257376663012,,3.1504770326037494,6.5
+municipio,Earthquake Magnitude 6.5,Bayamón,Metro,2024.0,-1.581577208769463,,2.8915701704757764,6.5
+municipio,Earthquake Magnitude 6.5,Cabo Rojo,West,2024.0,-1.5550049877755938,,7.52413257452099,6.5
+municipio,Earthquake Magnitude 6.5,Caguas,East,2024.0,-2.0437475502135785,,2.9147600037786168,6.5
+municipio,Earthquake Magnitude 6.5,Camuy,North,2024.0,-1.856912386104576,,3.837025836884047,6.5
+municipio,Earthquake Magnitude 6.5,Canóvanas,East,2024.0,-1.8818738184041215,,2.3214533622413107,6.5
+municipio,Earthquake Magnitude 6.5,Hatillo,North,2024.0,-1.405867489709032,,3.794717565839286,6.5
+municipio,Earthquake Magnitude 6.5,Vega Alta,North,2024.0,-1.3127586946831895,,2.8595699912438057,6.5
+municipio,Earthquake Magnitude 6.5,Hormigueros,West,2024.0,-1.407455950713779,,6.683151229642274,6.5
+municipio,Earthquake Magnitude 6.5,Isabela,West,2024.0,-1.9624538008084196,,4.048577786862198,6.5
+municipio,Earthquake Magnitude 6.5,Ponce,South,2024.0,-1.857293844952522,,4.620480221842408,6.5
+municipio,Earthquake Magnitude 6.5,Quebradillas,North,2024.0,-1.6194409565981307,,4.025119286186561,6.5
+municipio,Earthquake Magnitude 6.5,Rincón,West,2024.0,-1.956419165579433,,5.3383825770751425,6.5
+municipio,Earthquake Magnitude 6.5,Río Grande,East,2024.0,-1.8456018775636698,,2.2829398859429193,6.5
+municipio,Earthquake Magnitude 6.5,Sabana Grande,West,2024.0,-1.4574620447600655,,6.754141269901825,6.5
+municipio,Earthquake Magnitude 6.5,Salinas,South,2024.0,-1.875099645896678,,3.230632776446729,6.5
+municipio,Earthquake Magnitude 6.5,Peñuelas,South,2024.0,-1.9068353310946222,,5.411150501763986,6.5
+municipio,Earthquake Magnitude 6.5,San Germán,West,2024.0,-1.3781361470036628,,7.520070742659695,6.5
+municipio,Earthquake Magnitude 6.5,San Lorenzo,East,2024.0,-2.2531854807891865,,2.870136777516633,6.5
+municipio,Earthquake Magnitude 6.5,San Sebastián,West,2024.0,-2.010523348119435,,4.716493552404291,6.5
+municipio,Earthquake Magnitude 6.5,Santa Isabel,South,2024.0,-1.8752219215209096,,3.516828538021328,6.5
+municipio,Earthquake Magnitude 6.5,Toa Alta,Metro,2024.0,-1.295575276785125,,2.7904264335855173,6.5
+municipio,Earthquake Magnitude 6.5,Toa Baja,Metro,2024.0,-1.0551680201909768,,2.923932737635095,6.5
+municipio,Earthquake Magnitude 6.5,Trujillo Alto,Metro,2024.0,-1.768288983076267,,2.7774512995342726,6.5
+municipio,Earthquake Magnitude 6.5,San Juan,Metro,2024.0,-1.3071208693612906,,2.762855933530989,6.5
+municipio,Earthquake Magnitude 6.5,Patillas,South,2024.0,-1.8698193603538278,,2.90627091401333,6.5
+municipio,Earthquake Magnitude 6.5,Orocovis,Central Mountains,2024.0,-1.724995917029731,,3.342932221020556,6.5
+municipio,Earthquake Magnitude 6.5,Naranjito,Central Mountains,2024.0,-1.7580015086645113,,2.897525584628638,6.5
+municipio,Earthquake Magnitude 6.5,Jayuya,Central Mountains,2024.0,-1.226705042963035,,3.9267191634531375,6.5
+municipio,Earthquake Magnitude 6.5,Juncos,East,2024.0,-2.084531354254256,,2.800584301732431,6.5
+municipio,Earthquake Magnitude 6.5,Lajas,West,2024.0,-1.6535257492148194,,8.488383464038595,6.5
+municipio,Earthquake Magnitude 6.5,Lares,Central Mountains,2024.0,-1.8918649157507814,,4.662225624171089,6.5
+municipio,Earthquake Magnitude 6.5,Las Marías,West,2024.0,-1.8107816181775735,,5.26316062623252,6.5
+municipio,Earthquake Magnitude 6.5,Las Piedras,East,2024.0,-1.9881688833673496,,2.432944393815106,6.5
+municipio,Earthquake Magnitude 6.5,Loíza,East,2024.0,-1.6738381477519642,,2.517232054840595,6.5
+municipio,Earthquake Magnitude 6.5,Luquillo,East,2024.0,-2.011146295336089,,2.6890682043680187,6.5
+municipio,Earthquake Magnitude 6.5,Manatí,North,2024.0,-1.4353643495390158,,3.0458605711610973,6.5
+municipio,Earthquake Magnitude 6.5,Maricao,West,2024.0,-1.362162426256788,,5.8099102511074046,6.5
+municipio,Earthquake Magnitude 6.5,Maunabo,East,2024.0,-1.9197238907038803,,2.5988615911792907,6.5
+municipio,Earthquake Magnitude 6.5,Mayagüez,West,2024.0,-0.9498674529847188,,6.287165863500088,6.5
+municipio,Earthquake Magnitude 6.5,Moca,West,2024.0,-1.979872578997738,,4.962494660012984,6.5
+municipio,Earthquake Magnitude 6.5,Morovis,Central Mountains,2024.0,-1.0973001811688714,,3.0991396479154343,6.5
+municipio,Earthquake Magnitude 6.5,Naguabo,East,2024.0,-1.8512490559326666,,2.3228048803312245,6.5
+municipio,Earthquake Magnitude 6.5,Humacao,East,2024.0,-1.9074970209699063,,2.426784311434724,6.5
+municipio,Earthquake Magnitude 6.5,Yauco,South,2024.0,-1.8278788324919928,,6.437332105663239,6.5
+region,Hurricane Category 3,REGION_AVG,Central Mountains,2024.0,-1.259740166934348,,111.0,65400.97798027041
+region,Hurricane Category 3,REGION_AVG,East,2024.0,-1.8015643077186594,,111.0,25058.457645447255
+region,Hurricane Category 3,REGION_AVG,Metro,2024.0,-1.0322294882081386,,111.0,45063.22138751093
+region,Hurricane Category 3,REGION_AVG,North,2024.0,-1.2061886122481746,,111.0,69051.92567535468
+region,Hurricane Category 3,REGION_AVG,South,2024.0,-1.7094662711221256,,111.0,84886.50108330605
+region,Hurricane Category 3,REGION_AVG,West,2024.0,-0.8435793179223429,,111.0,100618.04306626687
+region,Earthquake Magnitude 6.5,REGION_AVG,Central Mountains,2024.0,-1.5432585947111817,,3.446574046092548,6.5
+region,Earthquake Magnitude 6.5,REGION_AVG,East,2024.0,-1.8394832564586496,,2.5817085405430173,6.5
+region,Earthquake Magnitude 6.5,REGION_AVG,Metro,2024.0,-1.284859599145922,,2.8163503876692615,6.5
+region,Earthquake Magnitude 6.5,REGION_AVG,North,2024.0,-1.5944976980870358,,3.4057560693775706,6.5
+region,Earthquake Magnitude 6.5,REGION_AVG,South,2024.0,-1.8640202148635476,,4.076784247509174,6.5
+region,Earthquake Magnitude 6.5,REGION_AVG,West,2024.0,-1.4027415785492676,,6.032959895502111,6.5
+island,Hurricane Category 3,ISLAND_AVG,Puerto Rico,2024.0,-0.7307763493315889,,111.0,65212.30999474662
+island,Earthquake Magnitude 6.5,ISLAND_AVG,Puerto Rico,2024.0,-1.291454565809476,,3.81570242274222,6.5
