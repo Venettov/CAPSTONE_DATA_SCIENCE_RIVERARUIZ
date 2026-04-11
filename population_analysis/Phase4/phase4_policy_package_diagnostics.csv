@@ -1,0 +1,7 @@
+policy_package,mean_predicted_target,mean_delta_vs_baseline,approx_retained_residents
+baseline,-0.6923344524304067,0.0,0.0
+jobs_push,-0.6923344524304067,0.0,0.0
+public_safety,-0.6923344524304067,0.0,0.0
+resilience_and_vulnerability,-0.6923344524304067,0.0,0.0
+family_demography_support,-0.7073578623040506,-0.015023409873643923,-485.903497650154
+retention_bundle,-0.7073578623040506,-0.015023409873643923,-485.903497650154

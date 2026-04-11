@@ -50,7 +50,14 @@
     "post_maria_x_high_svi",
     "post_quake2020_x_high_svi",
     "years_since_hurricane",
-    "years_since_earthquake"
+    "years_since_earthquake",
+    "birth_rate_pr",
+    "death_rate_pr",
+    "natural_change_rate_pr",
+    "birth_rate_pr_lag1",
+    "death_rate_pr_lag1",
+    "natural_change_rate_pr_lag1",
+    "natural_change_rate_pr_roll3_mean"
   ],
   "preferred_features_missing": [],
   "svi_indicator_columns": [

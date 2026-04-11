@@ -1,0 +1,6 @@
+source,value
+status,skipped
+reason,No valid region labels remain for regional policy plotting after cleaning and fallback.
+policy_regions,[]
+observed_regions,[]
+latest_region_baseline_regions,[]

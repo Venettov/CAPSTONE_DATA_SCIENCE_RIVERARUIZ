@@ -1,0 +1,133 @@
+feature,mean_abs_shap
+target_pop_change_3y_avg_lag1,1.3872019207437596
+target_pop_change_3y_avg_yoy_change,0.8280857849675852
+year,0.5566657455462481
+natural_change_rate_pr_lag1,0.24003903515779335
+municipio_Isabela,0.0
+municipio_Jayuya,0.0
+municipio_Juana Díaz,0.0
+municipio_Juncos,0.0
+municipio_Lajas,0.0
+municipio_Lares,0.0
+lag_pop_change_1,0.0
+municipio_Las Piedras,0.0
+municipio_Loíza,0.0
+municipio_Luquillo,0.0
+municipio_Manatí,0.0
+municipio_Maricao,0.0
+municipio_Maunabo,0.0
+municipio_Mayagüez,0.0
+municipio_Moca,0.0
+municipio_Las Marías,0.0
+municipio_Humacao,0.0
+municipio_Naguabo,0.0
+municipio_Hormigueros,0.0
+municipio_Hatillo,0.0
+municipio_Guánica,0.0
+municipio_Gurabo,0.0
+municipio_Guaynabo,0.0
+municipio_Guayanilla,0.0
+municipio_Guayama,0.0
+municipio_Florida,0.0
+municipio_Fajardo,0.0
+municipio_Dorado,0.0
+municipio_Culebra,0.0
+municipio_Corozal,0.0
+municipio_Comerío,0.0
+municipio_Morovis,0.0
+municipio_Orocovis,0.0
+municipio_Naranjito,0.0
+municipio_Toa Baja,0.0
+region_South,0.0
+region_North,0.0
+region_Metro,0.0
+region_East,0.0
+region_Central Mountains,0.0
+municipio_Yauco,0.0
+municipio_Yabucoa,0.0
+municipio_Villalba,0.0
+municipio_Vieques,0.0
+municipio_Vega Baja,0.0
+municipio_Vega Alta,0.0
+municipio_Utuado,0.0
+municipio_Trujillo Alto,0.0
+municipio_Toa Alta,0.0
+municipio_Cidra,0.0
+municipio_Santa Isabel,0.0
+municipio_San Sebastián,0.0
+municipio_San Lorenzo,0.0
+municipio_San Juan,0.0
+municipio_San Germán,0.0
+municipio_Salinas,0.0
+municipio_Sabana Grande,0.0
+municipio_Río Grande,0.0
+municipio_Rincón,0.0
+municipio_Quebradillas,0.0
+municipio_Ponce,0.0
+municipio_Peñuelas,0.0
+municipio_Patillas,0.0
+municipio_Coamo,0.0
+municipio_Ceiba,0.0
+municipio_Ciales,0.0
+svi_pca_1_lag1,0.0
+income_growth_lag2,0.0
+income_growth_lag1,0.0
+seismic_3yr_sum_yoy_change,0.0
+seismic_3yr_sum_roll3_mean,0.0
+seismic_3yr_sum_lag2,0.0
+seismic_3yr_sum_lag1,0.0
+wind_3yr_sum_yoy_change,0.0
+wind_3yr_sum_roll3_mean,0.0
+wind_3yr_sum_lag2,0.0
+wind_3yr_sum_lag1,0.0
+svi_pca_1_yoy_change,0.0
+svi_pca_1_roll3_mean,0.0
+svi_pca_1_lag2,0.0
+target_pop_change_3y_avg_roll3_mean,0.0
+income_growth_yoy_change,0.0
+target_pop_change_3y_avg_lag2,0.0
+death_rate_pr_lag1,0.0
+birth_rate_pr_lag1,0.0
+natural_change_rate_pr_roll3_mean,0.0
+lag_total_crime_rate,0.0
+establishment_growth,0.0
+income_growth,0.0
+seismic_3yr_x_svi,0.0
+wind_3yr_x_svi,0.0
+seismic_3yr_sum,0.0
+wind_3yr_sum,0.0
+svi_pca_1,0.0
+total_population,0.0
+income_growth_roll3_mean,0.0
+establishment_growth_lag1,0.0
+lag_pop_change_2,0.0
+municipio_Aibonito,0.0
+municipio_Cayey,0.0
+municipio_Cataño,0.0
+municipio_Carolina,0.0
+municipio_Canóvanas,0.0
+municipio_Camuy,0.0
+municipio_Caguas,0.0
+municipio_Cabo Rojo,0.0
+municipio_Bayamón,0.0
+municipio_Barranquitas,0.0
+municipio_Barceloneta,0.0
+municipio_Añasco,0.0
+municipio_Arroyo,0.0
+municipio_Arecibo,0.0
+municipio_Aguas Buenas,0.0
+establishment_growth_lag2,0.0
+municipio_Aguadilla,0.0
+municipio_Aguada,0.0
+municipio_Adjuntas,0.0
+total_population_yoy_change,0.0
+total_population_roll3_mean,0.0
+total_population_lag2,0.0
+total_population_lag1,0.0
+lag_total_crime_rate_yoy_change,0.0
+lag_total_crime_rate_roll3_mean,0.0
+lag_total_crime_rate_lag2,0.0
+lag_total_crime_rate_lag1,0.0
+establishment_growth_yoy_change,0.0
+establishment_growth_roll3_mean,0.0
+region_West,0.0

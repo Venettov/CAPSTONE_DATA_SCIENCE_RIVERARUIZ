@@ -5,8 +5,10 @@ baseline_svi_composite_z15,1170,float64
 baseline_svi_pca_1,1170,float64
 baseline_vulnerability_index,1170,float64
 baseline_vulnerability_index_current,1170,float64
+birth_rate_pr,1170,float64
 cpi,1170,float64
 crowding_pct,1170,float64
+death_rate_pr,1170,float64
 disability_pct,1170,float64
 doctorate_count,1170,int64
 doctorate_moe,1170,float64
@@ -38,6 +40,8 @@ mobile_homes_pct,1170,float64
 multi_unit_housing_pct,1170,float64
 municipality_id,1170,int64
 municipio,1170,str
+natural_change_rate_pr,1170,float64
+natural_change_rate_pr_roll3_mean,1170,float64
 no_hs_diploma_pct,1170,float64
 no_vehicle_pct,1170,float64
 over_65_pct,1170,float64
@@ -88,7 +92,9 @@ years_since_earthquake,1170,int64
 years_since_earthquake_capped_5,1170,int64
 years_since_hurricane,1170,int64
 years_since_hurricane_capped_5,1170,int64
+birth_rate_pr_lag1,1092,float64
 county_fips,1092,float64
+death_rate_pr_lag1,1092,float64
 earthquake_event_lag1,1092,float64
 emp_pop_ratio_moe,1092,float64
 emp_pop_ratio_pct,1092,float64
@@ -118,6 +124,7 @@ lag_total_crime_rate,1092,float64
 lag_wind_exposure_score_100km,1092,float64
 lag_wind_exposure_score_200km,1092,float64
 min_storm_distance_km,1092,float64
+natural_change_rate_pr_lag1,1092,float64
 property_crime_change,1092,float64
 state_fips,1092,float64
 svi_composite_z15,1092,float64
