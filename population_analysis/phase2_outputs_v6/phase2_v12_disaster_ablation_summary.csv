@@ -1,0 +1,2 @@
+n_rows,mean_actual_prediction,mean_counterfactual_prediction,mean_delta_prediction,median_delta_prediction,std_delta_prediction,n_input_cols_zeroed
+156,-0.9315475895997914,-0.9315475895997914,0.0,0.0,0.0,17
