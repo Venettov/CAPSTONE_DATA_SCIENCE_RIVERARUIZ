@@ -1,7 +1,7 @@
-policy_package,mean_predicted_target,mean_delta_vs_baseline,approx_retained_residents
-baseline,-0.6923344524304067,0.0,0.0
-jobs_push,-0.6923344524304067,0.0,0.0
-public_safety,-0.6923344524304067,0.0,0.0
-resilience_and_vulnerability,-0.6923344524304067,0.0,0.0
-family_demography_support,-0.7073578623040506,-0.015023409873643923,-485.903497650154
-retention_bundle,-0.7073578623040506,-0.015023409873643923,-485.903497650154
+policy_package,mean_predicted_target,mean_delta_vs_baseline,approx_retained_residents,active_direct_features,active_proxy_features,proxy_used,n_active_direct_features,n_active_proxy_features
+retention_bundle,-0.9292716880427931,0.42133413795156655,13627.247943839931,natural_change_rate_pr_lag1,"target_pop_change_3y_avg_lag1, target_pop_change_3y_avg_yoy_change",True,1,2
+jobs_push,-1.0559423381240038,0.2946634878703556,9530.327707904818,,"target_pop_change_3y_avg_lag1, target_pop_change_3y_avg_yoy_change",True,0,2
+public_safety,-1.148702412778202,0.20190341321615754,6530.180264957372,,"target_pop_change_3y_avg_lag1, target_pop_change_3y_avg_yoy_change",True,0,2
+resilience_and_vulnerability,-1.1738077332721462,0.17679809272221342,5718.1966247428945,,"target_pop_change_3y_avg_lag1, target_pop_change_3y_avg_yoy_change",True,0,2
+family_demography_support,-1.3330785144751083,0.017527311519251264,566.8874139251797,natural_change_rate_pr_lag1,"target_pop_change_3y_avg_lag1, target_pop_change_3y_avg_yoy_change",False,1,2
+baseline,-1.3506058259943596,0.0,0.0,,,False,0,0
