@@ -1,0 +1,8 @@
+{
+  "phase1_data_path": "/Users/andreruiz/Documents/Capstone/CAPSTONE_DATA_SCIENCE_RIVERARUIZ/population_analysis copy/Phase1/data/processed_puerto_rico_data_rebuild.csv",
+  "phase1_data_filename": "processed_puerto_rico_data_rebuild.csv",
+  "phase1_shape": [
+    1170,
+    167
+  ]
+}

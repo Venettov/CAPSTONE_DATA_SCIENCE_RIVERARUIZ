@@ -1,0 +1,6 @@
+scenario,predicted_pop_change_3y_avg
+baseline,-0.9066867788266684
+earthquake_m6,-0.9066867788266684
+earthquake_m7_5,-0.9066867788266684
+hurricane_cat3,-0.9066867788266684
+hurricane_cat5,-0.9066867788266684

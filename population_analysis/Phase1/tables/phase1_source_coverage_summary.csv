@@ -1,0 +1,9 @@
+source_block,non_null_rows,share_of_rows
+master_panel,1170,1.0
+crime_total,1076,0.9196581196581196
+income,1170,1.0
+employment,1092,0.9333333333333333
+business_establishments,858,0.7333333333333333
+vital_rates,1170,1.0
+hurricane_features,1170,1.0
+earthquake_features,1170,1.0

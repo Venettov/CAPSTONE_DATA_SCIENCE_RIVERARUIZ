@@ -1,0 +1,16 @@
+feature_name,correlation_with_target
+target_pop_change_3y_avg_winsor_1_99,0.9899579451160592
+target_pop_change_2y_avg,0.8590973344039414
+target_pop_change_2y_avg_winsor_1_99,0.8550074619733684
+target_pop_change_1y_winsor_1_99,0.6245457854981168
+target_pop_change_1y,0.6178843768207778
+quake_count_100km,0.2610373023392539
+lag_storm_count_200km,0.25533487964636803
+max_seismic_mag,0.2531632121399935
+quake_count_mag35_100km,0.24455953475131048
+lag_establishment_growth,0.2400383914811288
+svi_composite_z15,-0.23615670054870902
+establishments_pct_micro,0.22759378255916132
+violent_crime_rate,-0.2240984036392256
+robbery_rate,-0.22244395250758228
+lag_pr_annual_storm_count,0.22049055826854494

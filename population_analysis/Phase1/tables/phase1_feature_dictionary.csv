@@ -1,0 +1,168 @@
+feature_name,feature_group,transformation,non_null_count,non_null_share,dtype,description
+establishment_count,business,raw_or_context,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+establishment_growth,business,change_or_growth,936,0.8,float64,Growth in business establishment counts across all sectors.
+establishments_total_all_sectors,business,raw_or_context,858,0.7333333333333333,float64,Engineered or source variable used in the municipal panel.
+lag_establishment_growth,business,lag,858,0.7333333333333333,float64,Engineered or source variable used in the municipal panel.
+burglary_rate,crime,raw_or_context,1076,0.9196581196581196,float64,Engineered or source variable used in the municipal panel.
+lag_property_crime_change,crime,lag,1014,0.8666666666666667,float64,Engineered or source variable used in the municipal panel.
+lag_total_crime_rate,crime,lag,1092,0.9333333333333333,float64,"Lagged total crime rate per 100,000 residents."
+lag_violent_crime_change,crime,lag,1014,0.8666666666666667,float64,Engineered or source variable used in the municipal panel.
+murder_rate,crime,raw_or_context,1054,0.9008547008547009,float64,Engineered or source variable used in the municipal panel.
+property_crime_change,crime,change_or_growth,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+property_crime_rate,crime,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+robbery_rate,crime,raw_or_context,1073,0.917094017094017,float64,Engineered or source variable used in the municipal panel.
+total_crime_rate,crime,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+violent_crime_change,crime,change_or_growth,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+violent_crime_rate,crime,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+total_population,demographics,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+total_population_16plus,demographics,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+earthquake_event,earthquakes,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+earthquake_event_lag1,earthquakes,raw_or_context,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+earthquake_x_svi,earthquakes,interaction,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+earthquake_x_svi_current,earthquakes,interaction,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+lag_max_seismic_mag,earthquakes,lag,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+lag_quake_count_100km,earthquakes,lag,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+lag_quake_count_50km,earthquakes,lag,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+lag_seismic_exposure_score_100km,earthquakes,lag,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+lag_seismic_exposure_score_50km,earthquakes,lag,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+max_seismic_mag,earthquakes,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+min_quake_distance_km,earthquakes,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+post_earthquake_2020,earthquakes,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+post_quake2020_x_high_svi,earthquakes,interaction,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+quake_count_100km,earthquakes,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+quake_count_50km,earthquakes,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+quake_count_mag35_100km,earthquakes,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+quake_window_2020_2022,earthquakes,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+seismic_3yr_sum,earthquakes,rolling,1170,1.0,float64,Three-year rolling sum of earthquake exposure.
+seismic_3yr_x_svi,earthquakes,rolling,1170,1.0,float64,Interaction between rolling earthquake exposure and baseline vulnerability.
+seismic_3yr_x_svi_current,earthquakes,rolling,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+seismic_exposure_score_100km,earthquakes,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+seismic_exposure_score_50km,earthquakes,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+years_since_earthquake,earthquakes,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+years_since_earthquake_capped_5,earthquakes,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+income_growth,economy,change_or_growth,1092,0.9333333333333333,float64,Municipality median-income growth rate.
+income_growth_3yr_avg,economy,rolling,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+median_income_nominal,economy,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+median_income_real,economy,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+per_capita_income,economy,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+hurricane_event,hurricanes,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+hurricane_event_lag1,hurricanes,raw_or_context,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+hurricane_windfield_hit,hurricanes,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+hurricane_x_svi,hurricanes,interaction,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+hurricane_x_svi_current,hurricanes,interaction,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+lag_hurricane_windfield_hit,hurricanes,lag,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+lag_max_wind_knots,hurricanes,lag,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+lag_pr_annual_max_wind,hurricanes,lag,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+lag_pr_annual_storm_count,hurricanes,lag,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+lag_storm_count_100km,hurricanes,lag,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+lag_storm_count_200km,hurricanes,lag,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+lag_wind_exposure_score_100km,hurricanes,lag,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+lag_wind_exposure_score_200km,hurricanes,lag,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+major_hurricane_count_200km,hurricanes,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+maria_window_2017_2019,hurricanes,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+max_wind_knots,hurricanes,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+post_maria,hurricanes,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+post_maria_x_high_svi,hurricanes,interaction,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+pr_annual_max_wind,hurricanes,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+pr_annual_storm_count,hurricanes,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+storm_count_100km,hurricanes,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+storm_count_200km,hurricanes,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+ts_windfield_hit,hurricanes,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+wind_3yr_sum,hurricanes,rolling,1170,1.0,float64,Three-year rolling sum of hurricane wind exposure.
+wind_3yr_x_svi,hurricanes,rolling,1170,1.0,float64,Interaction between rolling hurricane exposure and baseline vulnerability.
+wind_3yr_x_svi_current,hurricanes,rolling,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+wind_exposure_score_100km,hurricanes,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+wind_exposure_score_200km,hurricanes,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+years_since_hurricane,hurricanes,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+years_since_hurricane_capped_5,hurricanes,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+emp_pop_ratio_pct,labor,raw_or_context,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+employment_proxy_count,labor,raw_or_context,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+employment_proxy_growth,labor,change_or_growth,1092,0.9333333333333333,float64,Growth in estimated employment count based on population 16+ and employment-population ratio.
+employment_ratio_change,labor,change_or_growth,1014,0.8666666666666667,float64,Engineered or source variable used in the municipal panel.
+labor_force_participation_change,labor,change_or_growth,1014,0.8666666666666667,float64,Engineered or source variable used in the municipal panel.
+labor_force_participation_pct,labor,raw_or_context,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+unemployment_rate_change,labor,change_or_growth,1014,0.8666666666666667,float64,Engineered or source variable used in the municipal panel.
+unemployment_rate_pct,labor,raw_or_context,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+bachelors_count,other,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+bachelors_plus_pct,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+burglary,other,raw_or_context,1076,0.9196581196581196,float64,Engineered or source variable used in the municipal panel.
+county_fips,other,raw_or_context,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+cpi,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+crowding_pct,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+disability_pct,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+doctorate_count,other,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+doctorate_moe,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+emp_pop_ratio_moe,other,raw_or_context,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+establishments_construction,other,raw_or_context,822,0.7025641025641025,float64,Engineered or source variable used in the municipal panel.
+establishments_healthcare,other,raw_or_context,852,0.7282051282051282,float64,Engineered or source variable used in the municipal panel.
+establishments_micro_1to4,other,raw_or_context,858,0.7333333333333333,float64,Engineered or source variable used in the municipal panel.
+establishments_pct_micro,other,raw_or_context,858,0.7333333333333333,float64,Engineered or source variable used in the municipal panel.
+establishments_professional_services,other,raw_or_context,812,0.694017094017094,float64,Engineered or source variable used in the municipal panel.
+establishments_retail_trade,other,raw_or_context,858,0.7333333333333333,float64,Engineered or source variable used in the municipal panel.
+establishments_tourism_hospitality,other,raw_or_context,858,0.7333333333333333,float64,Engineered or source variable used in the municipal panel.
+geoid,other,raw_or_context,1092,0.9333333333333333,Int64,Engineered or source variable used in the municipal panel.
+group_quarters_count,other,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+hs_graduate_count,other,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+hs_graduate_moe,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+hs_graduate_pct,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+income_source_cpi,other,raw_or_context,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+income_source_nominal,other,raw_or_context,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+income_source_real,other,raw_or_context,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+labor_force_participation_moe,other,raw_or_context,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+larceny / theft,other,raw_or_context,1076,0.9196581196581196,float64,Engineered or source variable used in the municipal panel.
+lat,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+limited_english_pct,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+lon,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+median_income_moe,other,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+min_storm_distance_km,other,raw_or_context,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+minority_pct,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+mobile_homes_pct,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+multi_unit_housing_pct,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+municipality_id,other,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+municipio,other,raw_or_context,1170,1.0,object,Engineered or source variable used in the municipal panel.
+murder,other,raw_or_context,1054,0.9008547008547009,float64,Engineered or source variable used in the municipal panel.
+no_hs_diploma_pct,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+no_vehicle_pct,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+over_65_pct,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+pct_group_quarters,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+per_capita_income_inv,other,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+poverty_rate_pct,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+robbery,other,raw_or_context,1073,0.917094017094017,float64,Engineered or source variable used in the municipal panel.
+single_parent_pct,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+state_fips,other,raw_or_context,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+total,other,raw_or_context,1076,0.9196581196581196,float64,Engineered or source variable used in the municipal panel.
+total_housing_units,other,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+total_housing_units_moe,other,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+total_population_16plus_moe,other,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+total_population_25plus,other,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+total_population_moe,other,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+under_18_pct,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+unemployment_rate_moe,other,raw_or_context,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+unemployment_rate_pct.1,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+uninsured_moe,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+uninsured_pct,other,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+vulnerability_index,other,raw_or_context,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+year,other,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+baseline_svi_composite_z15,svi,baseline,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+baseline_svi_pca_1,svi,baseline,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+baseline_vulnerability_index,svi,baseline,1170,1.0,float64,Municipality baseline vulnerability anchored to first observed PCA-based SVI.
+baseline_vulnerability_index_current,svi,baseline,1170,1.0,float64,Municipality baseline vulnerability anchored to first observed additive SVI.
+high_svi_q75,svi,raw_or_context,1170,1.0,int64,Engineered or source variable used in the municipal panel.
+svi_composite_z15,svi,raw_or_context,1092,0.9333333333333333,float64,Additive standardized social vulnerability composite using 15 indicators.
+svi_pca_1,svi,raw_or_context,1092,0.9333333333333333,float64,First PCA component from the 15-indicator SVI system.
+target_pop_change,targets,target,1092,0.9333333333333333,float64,Observed year-over-year population percent change within municipality.
+target_pop_change_1y,targets,target,1092,0.9333333333333333,float64,Forward one-year population percent change.
+target_pop_change_1y_winsor_1_99,targets,target,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+target_pop_change_2y_avg,targets,target,1014,0.8666666666666667,float64,Forward two-year annualized average population percent change.
+target_pop_change_2y_avg_winsor_1_99,targets,target,1014,0.8666666666666667,float64,Engineered or source variable used in the municipal panel.
+target_pop_change_3y_avg,targets,target,936,0.8,float64,Forward three-year annualized average population percent change.
+target_pop_change_3y_avg_winsor_1_99,targets,target,936,0.8,float64,Engineered or source variable used in the municipal panel.
+lag_pop_change_1,temporal_dynamics,lag,1014,0.8666666666666667,float64,Previous year's municipal population change.
+lag_pop_change_2,temporal_dynamics,lag,936,0.8,float64,Two-year lag of municipal population change.
+birth_rate_pr,vital_rates,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+birth_rate_pr_lag1,vital_rates,raw_or_context,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+death_rate_pr,vital_rates,raw_or_context,1170,1.0,float64,Engineered or source variable used in the municipal panel.
+death_rate_pr_lag1,vital_rates,raw_or_context,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+natural_change_rate_pr,vital_rates,raw_or_context,1170,1.0,float64,Islandwide birth minus death rate repeated as annual context across municipalities.
+natural_change_rate_pr_lag1,vital_rates,raw_or_context,1092,0.9333333333333333,float64,Engineered or source variable used in the municipal panel.
+natural_change_rate_pr_roll3_mean,vital_rates,rolling,1170,1.0,float64,Three-year smoothed islandwide natural change rate.

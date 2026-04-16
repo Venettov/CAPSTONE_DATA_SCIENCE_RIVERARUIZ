@@ -1,0 +1,3 @@
+feature_name,n_obs,correlation_with_target
+wind_3yr_sum,936,0.008104596073811478
+seismic_3yr_sum,936,0.1342069302637398

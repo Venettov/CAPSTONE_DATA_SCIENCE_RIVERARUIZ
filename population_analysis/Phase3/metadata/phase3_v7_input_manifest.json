@@ -1,0 +1,6 @@
+{
+  "phase1_data_path": "Phase1/data/processed_puerto_rico_data_rebuild.csv",
+  "phase2_dir": "Phase2",
+  "phase2_model_dir": "Phase2/models",
+  "phase2_metadata_dir": "Phase2/metadata"
+}
