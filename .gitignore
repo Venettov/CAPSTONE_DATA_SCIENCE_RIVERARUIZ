@@ -14,4 +14,4 @@ __pycache__/
 *.pyc
 
 # Optional: logs
-*.log
+*.log~

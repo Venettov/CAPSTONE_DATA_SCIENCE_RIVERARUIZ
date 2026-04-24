@@ -1,0 +1,5 @@
+scenario,endpoint_2030,gain_vs_baseline_2030,gain_vs_latest_observed,notes
+Baseline decline,3008314.0829012915,0.0,-225994.91709870845,Existing stylized baseline decline path
+Retention bundle,3020730.7868423015,12416.703941009939,-213578.2131576985,Main coordinated policy package from Phase 4
+Recovery bundle (model-implied),3040666.2278835224,32352.14498223085,-193642.7721164776,"Stronger model-based package, without forced rebound floor"
+Recovery rebound sensitivity,3253714.854,245400.77109870827,19405.853999999817,Optimistic return-migration/stabilization sensitivity case
