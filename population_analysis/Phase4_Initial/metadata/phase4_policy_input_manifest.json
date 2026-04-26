@@ -1,8 +1,0 @@
-{
-  "phase1_data_path": "Phase1/data/processed_puerto_rico_data_rebuild.csv",
-  "phase3_pipeline_path": "Phase3/models/phase3_v7_backbone_pipeline.joblib",
-  "phase2_fallback_pipeline_path": "Phase2/models/phase2_v12_best_pipeline.joblib",
-  "selected_pipeline_path": "Phase3/models/phase3_v7_backbone_pipeline.joblib",
-  "phase2_summary_path": "Phase2/metadata/phase2_v12_best_model_summary.json",
-  "phase3_summary_path": "Phase3/metadata/phase3_v7_backbone_model_summary.json"
-}
