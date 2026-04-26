@@ -1,6 +1,0 @@
-feature_family,total_abs_coefficient,mean_abs_coefficient,n_features
-earthquake_exposure,0.0,0.0,5
-earthquake_x_vulnerability,0.0,0.0,1
-hurricane_exposure,0.0,0.0,5
-hurricane_x_vulnerability,0.0,0.0,1
-social_vulnerability,0.0,0.0,5

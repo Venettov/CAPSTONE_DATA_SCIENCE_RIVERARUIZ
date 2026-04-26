@@ -1,6 +1,0 @@
-policy_package,features_changed,intended_retention_logic
-jobs_push,"income growth, lagged income growth, establishment growth, lagged establishment growth","Improves economic opportunity, employment prospects, and business vitality to reduce outmigration pressure."
-public_safety,"crime rate, lagged crime rate, rolling crime pressure",Reduces place-based insecurity and stress that may encourage households to leave.
-resilience_and_vulnerability,SVI vulnerability index and lagged/rolling vulnerability structure,Reduces structural vulnerability and improves resilience to social and disaster-related shocks.
-family_demography_support,"natural change rate, birth rate, death rate",Improves demographic support conditions and population replacement pressure over time.
-retention_bundle,"income, establishments, crime, vulnerability, natural change context",Combines multiple levers into a multi-sector strategy to reduce population loss more effectively than any single lever.
