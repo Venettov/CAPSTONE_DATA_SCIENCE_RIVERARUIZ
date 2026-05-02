@@ -1,0 +1,36 @@
+﻿scenario,feature_group,feature_changed,change_applied,change_type,note
+Baseline decline,Reference,None,No added policy improvement,baseline,No feature changes; reference decline path.
+Retention bundle,Economic opportunity,income growth,20% adjustment,direct,Standard coordinated policy package from Phase 4.
+Retention bundle,Economic opportunity,income growth lag 1,20% adjustment,direct,Standard coordinated policy package from Phase 4.
+Retention bundle,Economic opportunity,income growth 3-year rolling mean,18% adjustment,direct,Standard coordinated policy package from Phase 4.
+Retention bundle,Economic opportunity,establishment growth,20% adjustment,direct,Standard coordinated policy package from Phase 4.
+Retention bundle,Economic opportunity,establishment growth lag 1,20% adjustment,direct,Standard coordinated policy package from Phase 4.
+Retention bundle,Economic opportunity,establishment growth 3-year rolling mean,18% adjustment,direct,Standard coordinated policy package from Phase 4.
+Retention bundle,Public safety,total crime rate,20% adjustment,direct,Standard coordinated policy package from Phase 4.
+Retention bundle,Public safety,total crime rate lag 1,20% adjustment,direct,Standard coordinated policy package from Phase 4.
+Retention bundle,Public safety,total crime rate 3-year rolling mean,18% adjustment,direct,Standard coordinated policy package from Phase 4.
+Retention bundle,Resilience / vulnerability,social vulnerability index,15% adjustment,direct,Standard coordinated policy package from Phase 4.
+Retention bundle,Resilience / vulnerability,social vulnerability index lag 1,15% adjustment,direct,Standard coordinated policy package from Phase 4.
+Retention bundle,Resilience / vulnerability,social vulnerability index 3-year rolling mean,12% adjustment,direct,Standard coordinated policy package from Phase 4.
+Retention bundle,Demographic support,natural change rate lag 1,+0.35 absolute shift,direct,Standard coordinated policy package from Phase 4.
+Retention bundle,Demographic support,natural change rate 3-year rolling mean,+0.25 absolute shift,direct,Standard coordinated policy package from Phase 4.
+Retention bundle,Population momentum proxy,3-year population-change target lag 1,+0.28 absolute shift,proxy,Standard coordinated policy package from Phase 4.
+Retention bundle,Population momentum proxy,3-year population-change target year-over-year change,+0.20 absolute shift,proxy,Standard coordinated policy package from Phase 4.
+Recovery bundle / rebound sensitivity,Economic opportunity,income growth,35% adjustment,direct,Stronger model-implied recovery package; the separate rebound line also adds an explicit return-migration/stabilization layer.
+Recovery bundle / rebound sensitivity,Economic opportunity,income growth lag 1,30% adjustment,direct,Stronger model-implied recovery package; the separate rebound line also adds an explicit return-migration/stabilization layer.
+Recovery bundle / rebound sensitivity,Economic opportunity,income growth 3-year rolling mean,30% adjustment,direct,Stronger model-implied recovery package; the separate rebound line also adds an explicit return-migration/stabilization layer.
+Recovery bundle / rebound sensitivity,Economic opportunity,establishment growth,35% adjustment,direct,Stronger model-implied recovery package; the separate rebound line also adds an explicit return-migration/stabilization layer.
+Recovery bundle / rebound sensitivity,Economic opportunity,establishment growth lag 1,30% adjustment,direct,Stronger model-implied recovery package; the separate rebound line also adds an explicit return-migration/stabilization layer.
+Recovery bundle / rebound sensitivity,Economic opportunity,establishment growth 3-year rolling mean,30% adjustment,direct,Stronger model-implied recovery package; the separate rebound line also adds an explicit return-migration/stabilization layer.
+Recovery bundle / rebound sensitivity,Public safety,total crime rate,25% adjustment,direct,Stronger model-implied recovery package; the separate rebound line also adds an explicit return-migration/stabilization layer.
+Recovery bundle / rebound sensitivity,Public safety,total crime rate lag 1,25% adjustment,direct,Stronger model-implied recovery package; the separate rebound line also adds an explicit return-migration/stabilization layer.
+Recovery bundle / rebound sensitivity,Public safety,total crime rate 3-year rolling mean,22% adjustment,direct,Stronger model-implied recovery package; the separate rebound line also adds an explicit return-migration/stabilization layer.
+Recovery bundle / rebound sensitivity,Resilience / vulnerability,social vulnerability index,22% adjustment,direct,Stronger model-implied recovery package; the separate rebound line also adds an explicit return-migration/stabilization layer.
+Recovery bundle / rebound sensitivity,Resilience / vulnerability,social vulnerability index lag 1,20% adjustment,direct,Stronger model-implied recovery package; the separate rebound line also adds an explicit return-migration/stabilization layer.
+Recovery bundle / rebound sensitivity,Resilience / vulnerability,social vulnerability index 3-year rolling mean,18% adjustment,direct,Stronger model-implied recovery package; the separate rebound line also adds an explicit return-migration/stabilization layer.
+Recovery bundle / rebound sensitivity,Demographic support,natural change rate lag 1,+0.45 absolute shift,direct,Stronger model-implied recovery package; the separate rebound line also adds an explicit return-migration/stabilization layer.
+Recovery bundle / rebound sensitivity,Demographic support,natural change rate 3-year rolling mean,+0.35 absolute shift,direct,Stronger model-implied recovery package; the separate rebound line also adds an explicit return-migration/stabilization layer.
+Recovery bundle / rebound sensitivity,Demographic support,birth rate lag 1,+0.20 absolute shift,direct,Stronger model-implied recovery package; the separate rebound line also adds an explicit return-migration/stabilization layer.
+Recovery bundle / rebound sensitivity,Demographic support,death rate lag 1,+0.15 absolute shift,direct,Stronger model-implied recovery package; the separate rebound line also adds an explicit return-migration/stabilization layer.
+Recovery bundle / rebound sensitivity,Population momentum proxy,3-year population-change target lag 1,+0.75 absolute shift,proxy,Stronger model-implied recovery package; the separate rebound line also adds an explicit return-migration/stabilization layer.
+Recovery bundle / rebound sensitivity,Population momentum proxy,3-year population-change target year-over-year change,+0.50 absolute shift,proxy,Stronger model-implied recovery package; the separate rebound line also adds an explicit return-migration/stabilization layer.

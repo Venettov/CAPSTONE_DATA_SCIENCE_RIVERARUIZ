@@ -1,9 +1,9 @@
-scenario,endpoint_2030,gain_vs_baseline_2030,loss_or_gain_vs_latest_observed,additional_gain_vs_retention,additional_gain_vs_model_implied_recovery,mechanism,notes
+﻿scenario,endpoint_2030,gain_vs_baseline_2030,loss_or_gain_vs_latest_observed,additional_gain_vs_retention,additional_gain_vs_model_implied_recovery,mechanism
 Baseline decline,3008314.0829012915,0.0,-225994.91709870845,2549505.2008457435,2546377.3802703633,"No added policy improvement;
-continues stylized decline path",Existing stylized baseline decline path
+continues stylized decline path"
 Retention bundle,3020730.7868423015,12416.703941009939,-213578.2131576985,2561921.9047867535,2558794.0842113732,"Model-implied effect of coordinated
-policy feature improvements",Main coordinated policy package from Phase 4
+policy feature improvements"
 Recovery bundle (model-implied),3040666.2278835224,32352.14498223085,-193642.7721164776,2581857.3458279744,2578729.525252594,"Stronger feature changes passed
-through fitted Lasso backbone","Stronger model-based package, without forced rebound floor"
+through fitted Lasso backbone"
 Recovery rebound sensitivity,3253714.854,245400.77109870827,19405.853999999817,2794905.9719444523,2791778.1513690716,"Adds explicit return-migration /
-recovery momentum layer",Optimistic return-migration/stabilization sensitivity case
+recovery momentum layer"
