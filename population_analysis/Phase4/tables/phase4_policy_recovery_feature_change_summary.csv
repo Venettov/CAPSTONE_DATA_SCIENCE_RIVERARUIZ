@@ -1,5 +1,5 @@
 ﻿Scenario,What changes in the model?,Magnitude,What it means
 Baseline decline,No policy-feature adjustments,Reference path,Continues stylized decline path
 Retention bundle,Jobs + safety + vulnerability + demographic-support features,20% jobs/safety; 15% vulnerability; +0.35 natural change; +0.28 pop-momentum proxy,Standard coordinated policy package; slows decline
-Recovery bundle (model-implied),Stronger version of retention bundle,30-35% jobs; 22-25% safety/vulnerability; +0.45 natural change; +0.75 pop-momentum proxy,Model-implied recovery improves trajectory but still declines
-Recovery rebound + return migration,"Uses recovery bundle, then adds explicit rebound layer",+1.2% temporary rebound peak; +0.6% 2030 floor above latest observed,Sensitivity case: recovery momentum needed for stabilization/growth
+Recovery strategy,Stronger version of retention bundle,30-35% jobs; 22-25% safety/vulnerability; +0.45 natural change; +0.75 pop-momentum proxy,Recovery strategy improves trajectory but still declines
+Recovery rebound + return migration,"Uses recovery strategy, then adds explicit rebound layer",+1.2% temporary rebound peak; +0.6% 2030 floor above latest observed,Sensitivity case: recovery momentum needed for stabilization/growth
