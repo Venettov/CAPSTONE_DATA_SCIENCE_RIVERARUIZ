@@ -224,40 +224,6 @@
         </div>
 
         <div id="dashboard-error" class="hidden mb-4 rounded-xl border border-red-200 bg-red-50 p-4 text-red-800"></div>
-        <div id="dashboard-status" class="mb-4 rounded-xl border border-blue-100 bg-blue-50 p-4 text-blue-900">
-          Loading Phase 4 manifests and available policy-output files...
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-          <div class="stat-card">
-            <div>
-              <p class="text-sm font-medium text-gray-500">Tables / CSV outputs</p>
-              <p id="kpiTables" class="text-3xl font-extrabold text-gray-900">--</p>
-              <p class="text-xs text-gray-500 mt-1">Detected from artifact manifest</p>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div>
-              <p class="text-sm font-medium text-gray-500">Figures</p>
-              <p id="kpiFigures" class="text-3xl font-extrabold text-gray-900">--</p>
-              <p class="text-xs text-gray-500 mt-1">PNG outputs available for preview</p>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div>
-              <p class="text-sm font-medium text-gray-500">Model feature count</p>
-              <p id="kpiFeatures" class="text-3xl font-extrabold text-gray-900">--</p>
-              <p class="text-xs text-gray-500 mt-1">Expected by selected backbone</p>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div>
-              <p class="text-sm font-medium text-gray-500">Dataset shape</p>
-              <p id="kpiShape" class="text-3xl font-extrabold text-gray-900">--</p>
-              <p class="text-xs text-gray-500 mt-1">Rows × columns from metadata</p>
-            </div>
-          </div>
-        </div>
 
         <div class="card p-5 mb-6">
           <h3 class="text-xl font-bold text-gray-900 mb-3">Interactive graph controls</h3>
@@ -273,7 +239,6 @@
                 <option value="line">Line</option>
                 <option value="bar">Bar</option>
                 <option value="scatter">Scatter</option>
-                <option value="table">Table only</option>
               </select>
             </div>
             <div>
@@ -331,94 +296,58 @@
             </div>
           </div>
           <p id="controlHint" class="text-sm text-gray-600 mt-4">
-            The dashboard automatically detects numeric and categorical columns from the selected CSV. Change the dataset first, then refine axes, grouping, sorting, and row limits.
+            The dashboard automatically detects numeric and categorical columns from the selected CSV. The interactive graph updates with these controls, while the default population-change figure above can be changed from the figure selector.
           </p>
         </div>
 
-        <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 mb-6">
-          <div class="xl:col-span-8 card p-5">
+        <div class="grid grid-cols-1 gap-6 mb-6">
+          <div class="card p-5">
+            <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 mb-4">
+              <div>
+                <h3 class="text-xl font-bold text-gray-900">Default Phase 4 population-change graph</h3>
+                <p class="text-sm text-gray-600 mt-1">
+                  This preview is loaded from the Phase 4 figure outputs listed in the metadata manifest. Use the selector to switch to another notebook-generated figure.
+                </p>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 min-w-full lg:min-w-[520px]">
+                <select id="figureCategorySelect" class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm">
+                  <option value="all">All figure types</option>
+                  <option value="island">Islandwide</option>
+                  <option value="regional">Regional</option>
+                  <option value="municipal">Municipal</option>
+                  <option value="recovery">Recovery / rebound</option>
+                  <option value="diagnostic">Explanatory / diagnostic</option>
+                </select>
+                <select id="figureSelect" class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm"></select>
+              </div>
+            </div>
+            <div class="rounded-xl bg-white border border-gray-200 p-3">
+              <img id="figurePreview" alt="Selected Phase 4 figure preview" class="w-full max-h-[620px] object-contain rounded-lg hidden" />
+              <div id="figurePlaceholder" class="text-sm text-gray-500 p-10 text-center">Select a figure to preview.</div>
+            </div>
+            <p id="figureCaption" class="text-sm text-gray-700 mt-3"></p>
+          </div>
+
+          <div class="card p-5">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
               <div>
-                <h3 id="mainChartTitle" class="text-xl font-bold text-gray-900">Policy output graph</h3>
+                <h3 id="mainChartTitle" class="text-xl font-bold text-gray-900">Interactive selected-output graph</h3>
                 <p id="mainChartSubtitle" class="text-sm text-gray-600">Select a dataset to begin.</p>
               </div>
               <div class="text-sm text-gray-500">
                 Source: <span id="activeFileName" class="font-semibold text-gray-800">--</span>
               </div>
             </div>
-            <div id="mainChartWrapper" style="height:460px;">
+            <div id="mainChartWrapper" style="height:520px;">
               <canvas id="mainChart"></canvas>
             </div>
             <div id="tableOnlyNotice" class="hidden rounded-xl bg-yellow-50 border border-yellow-200 text-yellow-900 p-4 mt-3">
-              This dataset is better suited to table inspection. Use the CSV preview below or switch chart mode to Bar/Scatter.
+              This dataset does not expose a clear numeric graph metric. Select another metric, choose a different dataset, or switch chart mode to Bar/Scatter.
             </div>
             <p id="chartNarrative" class="text-sm text-gray-700 mt-4"></p>
           </div>
-
-          <div class="xl:col-span-4 card p-5">
-            <h3 class="text-xl font-bold text-gray-900 mb-3">Model lineage</h3>
-            <dl class="space-y-3 text-sm">
-              <div>
-                <dt class="font-bold text-gray-500 uppercase text-xs">Selected pipeline</dt>
-                <dd id="selectedPipeline" class="break-words text-gray-900">--</dd>
-              </div>
-              <div>
-                <dt class="font-bold text-gray-500 uppercase text-xs">Phase 4 copied model</dt>
-                <dd id="copiedPipeline" class="break-words text-gray-900">--</dd>
-              </div>
-              <div>
-                <dt class="font-bold text-gray-500 uppercase text-xs">Phase 1 data</dt>
-                <dd id="phase1Path" class="break-words text-gray-900">--</dd>
-              </div>
-              <div>
-                <dt class="font-bold text-gray-500 uppercase text-xs">Interpretation</dt>
-                <dd class="text-gray-700">
-                  Dashboard views are descriptive summaries of the Phase 4 predictive counterfactual outputs. They are not causal treatment estimates.
-                </dd>
-              </div>
-            </dl>
-          </div>
         </div>
 
-        <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 mb-6">
-          <div class="xl:col-span-8 card p-5">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
-              <div>
-                <h3 class="text-xl font-bold text-gray-900">CSV preview</h3>
-                <p class="text-sm text-gray-600">Filtered rows from the selected Phase 4 output.</p>
-              </div>
-              <button id="downloadActiveCsv" class="px-3 py-2 rounded-lg bg-white border border-gray-300 text-sm font-semibold hover:bg-gray-50">
-                Open CSV
-              </button>
-            </div>
-            <div class="overflow-auto max-h-[420px] border border-gray-200 rounded-xl">
-              <table id="previewTable" class="min-w-full text-xs">
-                <thead class="bg-gray-100 sticky top-0"></thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="xl:col-span-4 card p-5">
-            <h3 class="text-xl font-bold text-gray-900 mb-3">Figure browser</h3>
-            <div class="grid grid-cols-1 gap-3 mb-3">
-              <select id="figureCategorySelect" class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm">
-                <option value="all">All figure types</option>
-                <option value="island">Islandwide</option>
-                <option value="regional">Regional</option>
-                <option value="municipal">Municipal</option>
-                <option value="recovery">Recovery / rebound</option>
-                <option value="diagnostic">Explanatory / diagnostic</option>
-              </select>
-              <select id="figureSelect" class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm"></select>
-            </div>
-            <div class="rounded-xl bg-gray-50 border border-gray-200 p-3">
-              <img id="figurePreview" alt="Selected Phase 4 figure preview" class="w-full rounded-lg hidden" />
-              <div id="figurePlaceholder" class="text-sm text-gray-500 p-6 text-center">Select a figure to preview.</div>
-            </div>
-            <p id="figureCaption" class="text-sm text-gray-700 mt-3"></p>
-          </div>
-        </div>
 
         <div class="card p-5">
           <h3 class="text-xl font-bold text-gray-900 mb-3">Recommended dashboard views</h3>
@@ -467,13 +396,13 @@
     };
 
     const PREFERRED_DATASETS = [
+      "phase4_policy_relative_impact_table.csv",
+      "phase4_policy_recovery_rebound_sensitivity.csv",
       "phase4_policy_island_policy_summary.csv",
       "phase4_policy_region_policy_summary.csv",
       "phase4_policy_municipal_policy_summary.csv",
       "phase4_policy_policy_2030_gain_vs_baseline.csv",
-      "phase4_policy_recovery_rebound_sensitivity.csv",
       "phase4_policy_regional_recovery_rebound_sensitivity.csv",
-      "phase4_policy_relative_impact_table.csv",
       "phase4_policy_best_package_by_region.csv",
       "phase4_policy_top_municipal_gains_retention_bundle.csv",
       "phase4_policy_executive_summary_table.csv",
@@ -500,6 +429,7 @@
 
     function showStatus(message, type = "info") {
       const el = $("dashboard-status");
+      if (!el) { console.info(`[dashboard:${type}]`, message.replace(/<[^>]+>/g, "")); return; }
       el.className = "mb-4 rounded-xl border p-4 " + (
         type === "ok" ? "border-green-100 bg-green-50 text-green-900" :
         type === "warn" ? "border-yellow-200 bg-yellow-50 text-yellow-900" :
@@ -614,7 +544,7 @@
       options.forEach(value => {
         const opt = document.createElement("option");
         opt.value = value;
-        opt.textContent = labelize(value);
+        opt.textContent = labelize(value) || String(value);
         if (selected && value === selected) opt.selected = true;
         select.appendChild(opt);
       });
@@ -643,7 +573,9 @@
         opt.textContent = `${labelize(f.name)} (${f.type})`;
         sel.appendChild(opt);
       });
-      if (state.fileIndex.length) sel.value = state.fileIndex[0].name;
+      const defaultDataset = "phase4_policy_relative_impact_table.csv";
+      if (state.fileIndex.some(f => f.name === defaultDataset)) sel.value = defaultDataset;
+      else if (state.fileIndex.length) sel.value = state.fileIndex[0].name;
     }
 
     function populateFigures() {
@@ -667,6 +599,8 @@
       const cat = $("figureCategorySelect").value;
       const filtered = files.filter(name => cat === "all" || figureCategory(name) === cat);
       fillSelect($("figureSelect"), filtered);
+      const defaultFigure = "phase4_policy_recovery_rebound_sensitivity_path.png";
+      if (filtered.includes(defaultFigure)) $("figureSelect").value = defaultFigure;
       updateFigurePreview();
     }
 
@@ -677,13 +611,25 @@
       if (!name) {
         img.classList.add("hidden");
         placeholder.classList.remove("hidden");
+        placeholder.textContent = "No figure is listed in the artifact manifest for this filter.";
         $("figureCaption").textContent = "";
         return;
       }
-      img.src = PATHS.figures + name;
-      img.classList.remove("hidden");
-      placeholder.classList.add("hidden");
-      $("figureCaption").textContent = labelize(name);
+      const src = PATHS.figures + name;
+      placeholder.textContent = "Loading figure...";
+      placeholder.classList.remove("hidden");
+      img.classList.add("hidden");
+      img.onload = () => {
+        img.classList.remove("hidden");
+        placeholder.classList.add("hidden");
+      };
+      img.onerror = () => {
+        img.classList.add("hidden");
+        placeholder.classList.remove("hidden");
+        placeholder.innerHTML = `Could not load <strong>${name}</strong> from <code>${src}</code>. Make sure the Phase 4 figure PNG files are committed under <code>model_population_analysis/Phase4/figures/</code>.`;
+      };
+      img.src = src;
+      $("figureCaption").textContent = `${labelize(name)} — source: ${src}`;
     }
 
     async function loadActiveDataset(fileName) {
@@ -709,22 +655,84 @@
       }
     }
 
+    function defaultControlsForFile(fileName, columns, rows, numeric, categorical) {
+      const has = (name) => columns.includes(name);
+      const pick = (list, fallback = "") => list.find(has) || fallback;
+
+      const defaults = {
+        x: guessCategoryColumn(columns),
+        y: guessNumericColumn(columns, rows, ["gain", "retained", "population", "2030", "impact", "prediction", "baseline"]),
+        y2: "",
+        group: "",
+        sort: "",
+        mode: "auto",
+        topN: "15",
+        baseline: ""
+      };
+
+      if (fileName === "phase4_policy_relative_impact_table.csv") {
+        defaults.x = pick(["policy_label", "policy_package", "scenario", "package"], defaults.x);
+        defaults.y = pick(["relative_improvement_pct_of_latest_population", "approx_retained_residents", "mean_delta_vs_baseline"], defaults.y);
+        defaults.y2 = pick(["approx_retained_residents", "mean_delta_vs_baseline"], "");
+        defaults.sort = defaults.y;
+        defaults.mode = "bar";
+        defaults.topN = "all";
+      } else if (fileName === "phase4_policy_recovery_rebound_sensitivity.csv") {
+        defaults.x = pick(["scenario", "year"], defaults.x);
+        defaults.y = pick(["endpoint_2030", "gain_vs_baseline_2030", "gain_vs_latest_observed"], defaults.y);
+        defaults.y2 = pick(["gain_vs_baseline_2030", "gain_vs_latest_observed"], "");
+        defaults.sort = defaults.y;
+        defaults.mode = "bar";
+        defaults.topN = "all";
+      } else if (fileName === "phase4_policy_regional_recovery_rebound_sensitivity.csv") {
+        defaults.x = pick(["region", "scenario"], defaults.x);
+        defaults.y = pick(["gain_vs_baseline_2030", "endpoint_2030", "gain_vs_latest_observed"], defaults.y);
+        defaults.group = pick(["scenario", "policy_package"], "");
+        defaults.sort = defaults.y;
+        defaults.mode = "bar";
+        defaults.topN = "all";
+      } else if (fileName.includes("region_policy_summary") || fileName.includes("regional")) {
+        defaults.x = pick(["region", "Region"], defaults.x);
+        defaults.y = pick(["approx_retained_residents", "mean_delta_vs_baseline", "gain_vs_baseline_2030"], defaults.y);
+        defaults.group = pick(["policy_package", "scenario"], "");
+        defaults.sort = defaults.y;
+        defaults.mode = "bar";
+        defaults.topN = "all";
+      } else if (fileName.includes("municipal") || fileName.includes("top_municipal")) {
+        defaults.x = pick(["municipio", "Municipio", "municipality", "Municipality"], defaults.x);
+        defaults.y = pick(["approx_retained_residents", "gain_vs_baseline_2030", "mean_delta_vs_baseline"], defaults.y);
+        defaults.sort = defaults.y;
+        defaults.mode = "bar";
+        defaults.topN = "15";
+      } else if (fileName.includes("island_policy_summary") || fileName.includes("executive_summary")) {
+        defaults.x = pick(["policy_package", "scenario", "package"], defaults.x);
+        defaults.y = pick(["approx_retained_residents", "mean_delta_vs_baseline", "endpoint_2030"], defaults.y);
+        defaults.y2 = pick(["mean_delta_vs_baseline", "approx_retained_residents"], "");
+        defaults.sort = defaults.y;
+        defaults.mode = "bar";
+        defaults.topN = "all";
+      }
+
+      if (!defaults.sort) defaults.sort = defaults.y || defaults.x;
+      defaults.baseline = numeric.find(c => /baseline/i.test(c)) || "";
+      return defaults;
+    }
+
     function configureControlsForDataset() {
       const columns = state.activeColumns;
       const rows = state.activeRows;
       const numeric = columns.filter(c => isNumericColumn(rows, c));
       const categorical = columns.filter(c => !numeric.includes(c));
-      const xGuess = guessCategoryColumn(columns);
-      const yGuess = guessNumericColumn(columns, rows, ["gain", "retained", "population", "2030", "impact", "prediction", "baseline"]);
-      const y2Guess = numeric.find(c => c !== yGuess && /(baseline|lower|upper|uncertainty|change|impact)/i.test(c)) || "";
-      const groupGuess = categorical.find(c => c !== xGuess && /(package|scenario|region|bundle)/i.test(c)) || "";
+      const defaults = defaultControlsForFile(state.activeFile?.name || "", columns, rows, numeric, categorical);
 
-      fillSelect($("xSelect"), columns, xGuess);
-      fillSelect($("ySelect"), numeric, yGuess);
-      fillSelect($("y2Select"), numeric, y2Guess, true);
-      fillSelect($("groupSelect"), categorical, groupGuess, true);
-      fillSelect($("sortSelect"), columns, yGuess || xGuess);
-      fillSelect($("baselineSelect"), numeric, numeric.find(c => /baseline/i.test(c)) || "", true);
+      fillSelect($("xSelect"), columns, defaults.x);
+      fillSelect($("ySelect"), numeric, defaults.y);
+      fillSelect($("y2Select"), numeric, defaults.y2, true);
+      fillSelect($("groupSelect"), categorical, defaults.group, true);
+      fillSelect($("sortSelect"), columns, defaults.sort);
+      fillSelect($("baselineSelect"), numeric, defaults.baseline, true);
+      if ([...$("chartModeSelect").options].some(o => o.value === defaults.mode)) $("chartModeSelect").value = defaults.mode;
+      $("topNSelect").value = defaults.topN;
     }
 
     function getFilteredRows() {
@@ -764,7 +772,7 @@
     function chooseChartMode(rows, xCol, yCol, groupCol) {
       const requested = $("chartModeSelect").value;
       if (requested !== "auto") return requested;
-      if (!yCol) return "table";
+      if (!yCol) return "bar";
       if (groupCol) return "line";
       if (rows.length > 30 && typeof rows[0]?.[xCol] === "number") return "scatter";
       return "bar";
@@ -772,14 +780,16 @@
 
     function renderDashboard() {
       renderChart();
-      renderTable();
       renderNarrative();
     }
 
     function renderEmpty() {
       if (state.mainChart) state.mainChart.destroy();
-      $("previewTable").querySelector("thead").innerHTML = "";
-      $("previewTable").querySelector("tbody").innerHTML = "";
+      const table = $("previewTable");
+      if (table) {
+        table.querySelector("thead").innerHTML = "";
+        table.querySelector("tbody").innerHTML = "";
+      }
       $("mainChartSubtitle").textContent = "No data loaded.";
       $("chartNarrative").textContent = "";
     }
@@ -794,11 +804,15 @@
       const mode = chooseChartMode(rows, xCol, yCol, groupCol);
       const ctx = $("mainChart").getContext("2d");
       const wrapper = $("mainChartWrapper");
-      $("tableOnlyNotice").classList.toggle("hidden", mode !== "table");
-      wrapper.style.display = mode === "table" ? "none" : "block";
+      $("tableOnlyNotice").classList.toggle("hidden", Boolean(yCol));
+      wrapper.style.display = "block";
 
       if (state.mainChart) state.mainChart.destroy();
-      if (!rows.length || mode === "table" || !xCol || !yCol) return;
+      if (!rows.length || !xCol || !yCol) {
+        const ctx2d = ctx;
+        ctx2d.clearRect(0, 0, ctx2d.canvas.width, ctx2d.canvas.height);
+        return;
+      }
 
       let chartType = mode === "scatter" ? "scatter" : mode;
       let datasets = [];
@@ -913,11 +927,12 @@
     function renderTable() {
       const rows = getFilteredRows();
       const table = $("previewTable");
+      if (!table) return;
       const thead = table.querySelector("thead");
       const tbody = table.querySelector("tbody");
       thead.innerHTML = "";
       tbody.innerHTML = "";
-      const cols = state.activeColumns.slice(0, 12);
+      const cols = state.activeColumns;
       const trh = document.createElement("tr");
       cols.forEach(c => {
         const th = document.createElement("th");
@@ -960,22 +975,13 @@
           `The highest displayed row is <strong>${String(maxRow?.[x] ?? "n/a")}</strong>; the lowest displayed row is <strong>${String(minRow?.[x] ?? "n/a")}</strong>. ` +
           `Interpret these values as Phase 4 predictive-counterfactual outputs rather than causal estimates.`;
       } else {
-        $("chartNarrative").textContent = "This table does not expose a numeric column suitable for graphing. Use table mode or choose another dataset.";
+        $("chartNarrative").textContent = "This selected output does not expose a numeric column suitable for graphing. Choose another metric or dataset.";
       }
     }
 
     function updateKpis() {
-      const manifest = state.artifactManifest || {};
-      const tableCount = (manifest.data_files || []).length + (manifest.table_files || []).length;
-      const figureCount = (manifest.figure_files || []).filter(f => f.endsWith(".png")).length;
-      $("kpiTables").textContent = fmt.format(tableCount || 0);
-      $("kpiFigures").textContent = fmt.format(figureCount || 0);
-      $("kpiFeatures").textContent = state.backboneMetadata?.feature_count_expected_by_pipeline ?? "--";
-      const shape = state.backboneMetadata?.dataset_shape;
-      $("kpiShape").textContent = Array.isArray(shape) ? `${fmt.format(shape[0])} × ${fmt.format(shape[1])}` : "--";
-      $("selectedPipeline").textContent = state.backboneMetadata?.selected_pipeline_path || state.inputManifest?.selected_pipeline_path || "--";
-      $("copiedPipeline").textContent = state.backboneMetadata?.copied_pipeline_path || "--";
-      $("phase1Path").textContent = state.inputManifest?.phase1_data_path || "--";
+      // Summary KPI cards and lineage card were intentionally removed from the visual layout.
+      // Metadata still loads in state.backboneMetadata/state.inputManifest for internal defaults and future use.
     }
 
     function setQuickView(kind) {
@@ -1011,9 +1017,12 @@
       ["chartModeSelect", "xSelect", "ySelect", "y2Select", "groupSelect", "filterInput", "topNSelect", "sortSelect", "sortDirSelect", "transformSelect", "baselineSelect"]
         .forEach(id => $(id).addEventListener(id === "filterInput" ? "input" : "change", renderDashboard));
       $("reloadBtn").addEventListener("click", initDashboard);
-      $("downloadActiveCsv").addEventListener("click", () => {
-        if (state.activeFile) window.open(state.activeFile.path, "_blank");
-      });
+      const downloadBtn = $("downloadActiveCsv");
+      if (downloadBtn) {
+        downloadBtn.addEventListener("click", () => {
+          if (state.activeFile) window.open(state.activeFile.path, "_blank");
+        });
+      }
       $("toggleFullscreenBtn").addEventListener("click", () => {
         const el = $("dashboardVisuals");
         const isMax = el.classList.toggle("maximized");
