@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Policy Forecasting & Counterfactuals</title>
+  <title>Population & Economic Dynamics in Puerto Rico</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.2.1/dist/chartjs-plugin-annotation.min.js"></script>
 
   <style>
     /* Global Card Style */
@@ -18,8 +19,8 @@
     }
     .hero {
       background:
-        radial-gradient(1200px 600px at 20% -10%, rgba(16, 185, 129, 0.12), transparent 60%),
-        radial-gradient(1200px 600px at 80% -10%, rgba(99, 102, 241, 0.10), transparent 60%),
+        radial-gradient(1200px 600px at 20% -10%, rgba(239,68,68,.12), transparent 60%),
+        radial-gradient(1200px 600px at 80% -10%, rgba(37,99,235,.10), transparent 60%),
         linear-gradient(180deg, #fafafa 0%, #f3f4f6 100%);
     }
 
@@ -32,20 +33,47 @@
     }
     .kpi-group-heading { @apply text-xl font-bold text-gray-900 mb-3; }
     .stat-card {
-      display:flex; gap:.75rem; align-items:flex-start; flex-direction: column;
-      background:#fff; border-radius:.75rem; padding:1.25rem;
-      box-shadow: 0 4px 10px rgba(0,0,0,.04);
-      border: 1px solid #e5e7eb;
+      display:flex; gap:.75rem; align-items:flex-start;
+      background:#fff; border-radius:.75rem; padding:1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,.06);
     }
-    .stat-label { @apply text-sm font-semibold text-gray-500 uppercase tracking-wider; }
-    .stat-value { @apply text-xl font-extrabold leading-none mt-2 text-gray-900 break-all; }
+    .stat-icon { @apply text-2xl text-gray-600 flex-shrink-0 pt-0.5; }
+    .stat-label { @apply text-base font-medium text-gray-700; }
+    .stat-value { @apply text-3xl font-extrabold leading-none mt-1 text-gray-900; }
+    .stat-link { @apply text-sm text-blue-600 mt-2 block; }
+
+    /* Chart & List Containers */
+    .chart-container {
+        background-color: #f0f8ff; 
+        @apply p-4 text-black rounded-xl; 
+    }
+    .chart-content-wrapper { height: 400px; }
+    
+    #municipioList {
+        max-height: 480px; 
+        overflow-y: scroll; 
+        padding-top: 4px; 
+    }
+    #municipioList::-webkit-scrollbar { width: 8px; }
+    #municipioList::-webkit-scrollbar-thumb { background-color: #a7f3d0; border-radius: 4px; }
+    #municipioList::-webkit-scrollbar-track { background: #f0fff0; }
+    
+    .municipio-item { @apply cursor-pointer p-1 rounded-lg text-xs transition-all text-black; }
+    .municipio-item:hover { background-color: #d1fae5; }
+    .selected-muni { @apply bg-blue-600 text-white font-semibold; }
+    
+    #scatterPlotContainer {
+        background-color: #f0f8ff; 
+        @apply rounded-xl p-4;
+    }
+    #scatter-canvas-wrapper { height: 450px; }
     
     .loader {
-      border: 4px solid rgba(0, 0, 0, 0.1); 
+      border: 4px solid rgba(0, 0, 0, 0.3); 
       border-radius: 50%;
-      border-top: 4px solid #4f46e5;
+      border-top: 4px solid #3b82f6;
       width: 40px; height: 40px;
-      animation: spin 1s linear infinite;
+      animation: spin 2s linear infinite;
       margin: 0 auto;
     }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -72,12 +100,34 @@
         transform: rotate(180deg); 
     }
 
-    .artifact-image-card {
-        transition: transform 0.2s;
+    /* Scale Wrapper */
+    #scale-wrapper {
+        transform: scale(0.65); 
+        transform-origin: top center; 
+        height: 154%; 
+        padding-bottom: 200px; 
+        margin-bottom: -35%; 
+        transition: all 0.3s ease; 
     }
-    .artifact-image-card:hover {
-        transform: scale(1.02);
-    }
+    #scale-wrapper.disable-scale { transform: none !important; height: auto !important; margin-bottom: 0 !important; }
+    
+    /* Maximize/Fullscreen Logic */
+    #dashboardVisuals { position: relative; transition: all 0.3s ease; }
+    #dashboardVisuals.maximized { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 900; background: #f3f4f6; margin: 0 !important; padding: 0 !important; overflow-y: auto; display: block !important; }
+    #dashboardVisuals.maximized #main-panel { display: flex !important; flex-direction: row !important; padding: 1rem !important; gap: 1rem !important; width: 100%; max-width: 1050px; margin: 0 auto; }
+    #dashboardVisuals.maximized #scatterPlotContainer { width: calc(100% - 200px - 1rem) !important; flex-shrink: 0; }
+    #dashboardVisuals.maximized .lg\:col-span-2 { width: 200px !important; flex-shrink: 0; }
+    #dashboardVisuals.maximized #scatter-canvas-wrapper { height: 50vh !important; }
+    #dashboardVisuals.maximized #municipioList { max-height: calc(40vh + 195px) !important; height: auto !important; }
+    #dashboardVisuals.maximized #trendCharts { display: grid !important; grid-template-columns: 1fr 1fr; gap: 1rem; width: 100%; max-width: 1050px; margin: 0 auto 2rem auto; }
+    #dashboardVisuals.maximized #trendCharts .chart-content-wrapper { height: 30vh !important; }
+    #dashboardVisuals.maximized .section-title { font-size: 1.5rem; padding: 1rem 1rem 0 1rem; max-width: 1050px; margin: 0 auto; }
+    #maximizeButtonContainer { position: absolute; top: 1.5rem; right: 1.5rem; z-index: 910; }
+
+    /* Policy Modal Styles */
+    #scoreCircle { transition: stroke-dashoffset 1.5s ease-out; }
+    .backdrop-blur-sm { backdrop-filter: blur(4px); }
+    #policyModal { z-index: 2000; } 
   </style>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
@@ -124,7 +174,7 @@
             <a href="../dashboards.html" class="block px-4 py-2 hover:bg-gray-50 font-semibold">Dashboards Main</a>
             <div class="my-1 border-t border-gray-100"></div>
             <a href="socio_economic.html" class="block px-4 py-2 hover:bg-gray-50">Socio-Economic Relationships</a>
-            <a href="#" class="block px-4 py-2 bg-blue-50 text-blue-700 font-medium">Policy Forecasting</a>
+            <a href="#" class="block px-4 py-2 hover:bg-gray-50">Trend Analysis</a>
           </div>
         </div>
       </div>
@@ -135,198 +185,871 @@
     </div>
   </nav>
   
-  <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+  <div id="scale-wrapper">
+    <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
 
-    <header class="card hero p-6 sm:p-8 lg:p-10 relative">
-      <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between">
+      <header class="card hero p-6 sm:p-8 lg:p-10 relative">
+        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between">
+            <div>
+                <p class="text-sm font-semibold text-gray-500 uppercase">Graduate Capstone Project</p>
+                <h1 class="mt-2 text-4xl sm:text-5xl font-extrabold leading-tight">
+                    Population & Economic Dynamics in Puerto Rico
+                </h1>
+                <p class="mt-3 text-lg text-gray-700">
+                    A graduate research project examining demographic shifts, out-migration, and sustainable development
+                    strategies through linked data analysis and policy synthesis.
+                </p>
+            </div>
+        </div>
+      </header>
+
+      <section id="dashboardVisuals" class="dashboard-block">
+        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 mb-6">
           <div>
-              <p class="text-sm font-semibold text-gray-500 uppercase">Phase 4 Dashboard</p>
-              <h1 class="mt-2 text-4xl sm:text-5xl font-extrabold leading-tight text-gray-900">
-                  Policy Forecasting & Counterfactual Analysis
-              </h1>
-              <p class="mt-3 text-lg text-gray-700 max-w-3xl">
-                  Simulating the effects of policy interventions, structural investments, and resilience strategies on municipal population retention through 2030 using the Phase 3 Lasso forecasting backbone.
-              </p>
+            <p class="text-sm font-semibold text-blue-700 uppercase tracking-wide">Phase 4 Forecasting Dashboard</p>
+            <h2 class="text-3xl font-extrabold text-gray-950 mt-1">Policy Response & Population Retention Strategies</h2>
+            <p class="text-gray-700 mt-2 max-w-4xl">
+              Explore the Phase 4 model-aware policy outputs generated from the forecasting notebook. Use the controls below to switch
+              between islandwide, regional, municipal, recovery-rebound, sensitivity, and diagnostic outputs.
+            </p>
           </div>
-      </div>
-    </header>
-    
-    <div id="loading-state" class="text-center py-12">
-        <div class="loader"></div>
-        <p class="mt-4 text-gray-600 font-medium">Loading Phase 4 Model Data and Manifests...</p>
+          <div class="flex flex-wrap gap-2">
+            <button id="reloadBtn" class="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold shadow hover:bg-blue-700">
+              Reload data
+            </button>
+            <button id="toggleFullscreenBtn" class="px-4 py-2 rounded-lg bg-white border border-gray-300 text-gray-700 font-semibold shadow hover:bg-gray-50">
+              Maximize
+            </button>
+          </div>
+        </div>
+
+        <div id="dashboard-error" class="hidden mb-4 rounded-xl border border-red-200 bg-red-50 p-4 text-red-800"></div>
+        <div id="dashboard-status" class="mb-4 rounded-xl border border-blue-100 bg-blue-50 p-4 text-blue-900">
+          Loading Phase 4 manifests and available policy-output files...
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+          <div class="stat-card">
+            <div>
+              <p class="text-sm font-medium text-gray-500">Tables / CSV outputs</p>
+              <p id="kpiTables" class="text-3xl font-extrabold text-gray-900">--</p>
+              <p class="text-xs text-gray-500 mt-1">Detected from artifact manifest</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div>
+              <p class="text-sm font-medium text-gray-500">Figures</p>
+              <p id="kpiFigures" class="text-3xl font-extrabold text-gray-900">--</p>
+              <p class="text-xs text-gray-500 mt-1">PNG outputs available for preview</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div>
+              <p class="text-sm font-medium text-gray-500">Model feature count</p>
+              <p id="kpiFeatures" class="text-3xl font-extrabold text-gray-900">--</p>
+              <p class="text-xs text-gray-500 mt-1">Expected by selected backbone</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div>
+              <p class="text-sm font-medium text-gray-500">Dataset shape</p>
+              <p id="kpiShape" class="text-3xl font-extrabold text-gray-900">--</p>
+              <p class="text-xs text-gray-500 mt-1">Rows × columns from metadata</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card p-5 mb-6">
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Interactive graph controls</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-gray-600 uppercase">Dataset</label>
+              <select id="datasetSelect" class="mt-1 w-full rounded-md border border-gray-300 bg-white p-2 text-sm"></select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-600 uppercase">Chart mode</label>
+              <select id="chartModeSelect" class="mt-1 w-full rounded-md border border-gray-300 bg-white p-2 text-sm">
+                <option value="auto">Auto</option>
+                <option value="line">Line</option>
+                <option value="bar">Bar</option>
+                <option value="scatter">Scatter</option>
+                <option value="table">Table only</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-600 uppercase">X-axis / category</label>
+              <select id="xSelect" class="mt-1 w-full rounded-md border border-gray-300 bg-white p-2 text-sm"></select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-600 uppercase">Y-axis metric</label>
+              <select id="ySelect" class="mt-1 w-full rounded-md border border-gray-300 bg-white p-2 text-sm"></select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-600 uppercase">Second metric</label>
+              <select id="y2Select" class="mt-1 w-full rounded-md border border-gray-300 bg-white p-2 text-sm"></select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-600 uppercase">Group / series</label>
+              <select id="groupSelect" class="mt-1 w-full rounded-md border border-gray-300 bg-white p-2 text-sm"></select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-600 uppercase">Filter text</label>
+              <input id="filterInput" placeholder="municipality, region, package..." class="mt-1 w-full rounded-md border border-gray-300 bg-white p-2 text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-600 uppercase">Rows shown</label>
+              <select id="topNSelect" class="mt-1 w-full rounded-md border border-gray-300 bg-white p-2 text-sm">
+                <option value="10">Top 10</option>
+                <option value="15" selected>Top 15</option>
+                <option value="25">Top 25</option>
+                <option value="50">Top 50</option>
+                <option value="all">All rows</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-600 uppercase">Sort by</label>
+              <select id="sortSelect" class="mt-1 w-full rounded-md border border-gray-300 bg-white p-2 text-sm"></select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-600 uppercase">Sort direction</label>
+              <select id="sortDirSelect" class="mt-1 w-full rounded-md border border-gray-300 bg-white p-2 text-sm">
+                <option value="desc" selected>Descending</option>
+                <option value="asc">Ascending</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-600 uppercase">Data transform</label>
+              <select id="transformSelect" class="mt-1 w-full rounded-md border border-gray-300 bg-white p-2 text-sm">
+                <option value="raw" selected>Raw values</option>
+                <option value="index">Index to first value = 100</option>
+                <option value="pct_of_baseline">Percent of baseline where available</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-600 uppercase">Baseline/reference column</label>
+              <select id="baselineSelect" class="mt-1 w-full rounded-md border border-gray-300 bg-white p-2 text-sm"></select>
+            </div>
+          </div>
+          <p id="controlHint" class="text-sm text-gray-600 mt-4">
+            The dashboard automatically detects numeric and categorical columns from the selected CSV. Change the dataset first, then refine axes, grouping, sorting, and row limits.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 mb-6">
+          <div class="xl:col-span-8 card p-5">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
+              <div>
+                <h3 id="mainChartTitle" class="text-xl font-bold text-gray-900">Policy output graph</h3>
+                <p id="mainChartSubtitle" class="text-sm text-gray-600">Select a dataset to begin.</p>
+              </div>
+              <div class="text-sm text-gray-500">
+                Source: <span id="activeFileName" class="font-semibold text-gray-800">--</span>
+              </div>
+            </div>
+            <div id="mainChartWrapper" style="height:460px;">
+              <canvas id="mainChart"></canvas>
+            </div>
+            <div id="tableOnlyNotice" class="hidden rounded-xl bg-yellow-50 border border-yellow-200 text-yellow-900 p-4 mt-3">
+              This dataset is better suited to table inspection. Use the CSV preview below or switch chart mode to Bar/Scatter.
+            </div>
+            <p id="chartNarrative" class="text-sm text-gray-700 mt-4"></p>
+          </div>
+
+          <div class="xl:col-span-4 card p-5">
+            <h3 class="text-xl font-bold text-gray-900 mb-3">Model lineage</h3>
+            <dl class="space-y-3 text-sm">
+              <div>
+                <dt class="font-bold text-gray-500 uppercase text-xs">Selected pipeline</dt>
+                <dd id="selectedPipeline" class="break-words text-gray-900">--</dd>
+              </div>
+              <div>
+                <dt class="font-bold text-gray-500 uppercase text-xs">Phase 4 copied model</dt>
+                <dd id="copiedPipeline" class="break-words text-gray-900">--</dd>
+              </div>
+              <div>
+                <dt class="font-bold text-gray-500 uppercase text-xs">Phase 1 data</dt>
+                <dd id="phase1Path" class="break-words text-gray-900">--</dd>
+              </div>
+              <div>
+                <dt class="font-bold text-gray-500 uppercase text-xs">Interpretation</dt>
+                <dd class="text-gray-700">
+                  Dashboard views are descriptive summaries of the Phase 4 predictive counterfactual outputs. They are not causal treatment estimates.
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 mb-6">
+          <div class="xl:col-span-8 card p-5">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
+              <div>
+                <h3 class="text-xl font-bold text-gray-900">CSV preview</h3>
+                <p class="text-sm text-gray-600">Filtered rows from the selected Phase 4 output.</p>
+              </div>
+              <button id="downloadActiveCsv" class="px-3 py-2 rounded-lg bg-white border border-gray-300 text-sm font-semibold hover:bg-gray-50">
+                Open CSV
+              </button>
+            </div>
+            <div class="overflow-auto max-h-[420px] border border-gray-200 rounded-xl">
+              <table id="previewTable" class="min-w-full text-xs">
+                <thead class="bg-gray-100 sticky top-0"></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="xl:col-span-4 card p-5">
+            <h3 class="text-xl font-bold text-gray-900 mb-3">Figure browser</h3>
+            <div class="grid grid-cols-1 gap-3 mb-3">
+              <select id="figureCategorySelect" class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm">
+                <option value="all">All figure types</option>
+                <option value="island">Islandwide</option>
+                <option value="regional">Regional</option>
+                <option value="municipal">Municipal</option>
+                <option value="recovery">Recovery / rebound</option>
+                <option value="diagnostic">Explanatory / diagnostic</option>
+              </select>
+              <select id="figureSelect" class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm"></select>
+            </div>
+            <div class="rounded-xl bg-gray-50 border border-gray-200 p-3">
+              <img id="figurePreview" alt="Selected Phase 4 figure preview" class="w-full rounded-lg hidden" />
+              <div id="figurePlaceholder" class="text-sm text-gray-500 p-6 text-center">Select a figure to preview.</div>
+            </div>
+            <p id="figureCaption" class="text-sm text-gray-700 mt-3"></p>
+          </div>
+        </div>
+
+        <div class="card p-5">
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Recommended dashboard views</h3>
+          <div id="quickViews" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
+            <button data-view="island" class="quick-view text-left p-4 rounded-xl border border-gray-200 bg-white hover:bg-blue-50 hover:border-blue-200">
+              <span class="block font-bold text-gray-900">Islandwide policy ranking</span>
+              <span class="block text-sm text-gray-600 mt-1">Compare policy packages against baseline.</span>
+            </button>
+            <button data-view="regional" class="quick-view text-left p-4 rounded-xl border border-gray-200 bg-white hover:bg-blue-50 hover:border-blue-200">
+              <span class="block font-bold text-gray-900">Regional retained residents</span>
+              <span class="block text-sm text-gray-600 mt-1">See where policy packages have larger effects.</span>
+            </button>
+            <button data-view="municipal" class="quick-view text-left p-4 rounded-xl border border-gray-200 bg-white hover:bg-blue-50 hover:border-blue-200">
+              <span class="block font-bold text-gray-900">Top municipal gains</span>
+              <span class="block text-sm text-gray-600 mt-1">Rank municipalities under retention bundle.</span>
+            </button>
+            <button data-view="recovery" class="quick-view text-left p-4 rounded-xl border border-gray-200 bg-white hover:bg-blue-50 hover:border-blue-200">
+              <span class="block font-bold text-gray-900">Recovery rebound sensitivity</span>
+              <span class="block text-sm text-gray-600 mt-1">Explore stabilization and rebound assumptions.</span>
+            </button>
+          </div>
+        </div>
+      </section>
+      </main>
     </div>
 
-    <div id="dashboard-content" class="hidden space-y-8">
-        
-        <section class="dashboard-block">
-            <h2 class="kpi-group-heading">Forecasting Backbone & Inputs</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="metadata-cards">
-                </div>
-        </section>
-
-        <section class="card p-6 border border-gray-200">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-900">Policy Impact Visualizations</h2>
-                <span class="px-3 py-1 bg-indigo-100 text-indigo-800 text-xs font-bold rounded-full uppercase tracking-wider" id="figure-count">0 Figures</span>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="figures-gallery">
-                </div>
-        </section>
-
-        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="card p-6 border border-gray-200">
-                <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                    Generated Counterfactual Tables
-                </h2>
-                <ul class="space-y-3" id="table-list">
-                    </ul>
-            </div>
-
-            <div class="card p-6 border border-gray-200">
-                <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
-                    Data Files
-                </h2>
-                <ul class="space-y-3" id="data-list">
-                    </ul>
-            </div>
-        </section>
-    </div>
-
-  </main>
-
-  <script>
-    // --- Configuration Paths ---
-    // User requested to read files located at model_population_analysis/Phase4/metadata
-    const BASE_PATH = 'model_population_analysis/Phase4/';
-    const METADATA_PATH = BASE_PATH + 'metadata/';
-    
-    // Assuming figures are generated in a figures/ directory parallel to metadata/
-    const FIGURES_PATH = BASE_PATH + 'figures/'; 
-
-    const FILES_TO_FETCH = {
-        artifact_manifest: METADATA_PATH + 'phase4_policy_artifact_manifest.json',
-        backbone_metadata: METADATA_PATH + 'phase4_policy_backbone_metadata.json',
-        input_manifest:    METADATA_PATH + 'phase4_policy_input_manifest.json'
+    <script>
+    // ---------------------------------------------------------------------
+    // Phase 4 forecasting/policy dashboard
+    // Expected deployment location: dashboards/forecasting.html
+    // If this file is placed at project root, set BASE to "model_population_analysis/Phase4/"
+    // ---------------------------------------------------------------------
+    const BASE = "../model_population_analysis/Phase4/";
+    const PATHS = {
+      metadata: BASE + "metadata/",
+      data: BASE + "data/",
+      tables: BASE + "tables/",
+      figures: BASE + "figures/",
+      models: BASE + "models/"
     };
 
+    const MANIFEST_FILES = {
+      artifact: "phase4_policy_artifact_manifest.json",
+      backbone: "phase4_policy_backbone_metadata.json",
+      input: "phase4_policy_input_manifest.json"
+    };
+
+    const PREFERRED_DATASETS = [
+      "phase4_policy_island_policy_summary.csv",
+      "phase4_policy_region_policy_summary.csv",
+      "phase4_policy_municipal_policy_summary.csv",
+      "phase4_policy_policy_2030_gain_vs_baseline.csv",
+      "phase4_policy_recovery_rebound_sensitivity.csv",
+      "phase4_policy_regional_recovery_rebound_sensitivity.csv",
+      "phase4_policy_relative_impact_table.csv",
+      "phase4_policy_best_package_by_region.csv",
+      "phase4_policy_top_municipal_gains_retention_bundle.csv",
+      "phase4_policy_executive_summary_table.csv",
+      "phase4_policy_package_diagnostics.csv",
+      "phase4_policy_model_feature_diagnostics.csv"
+    ];
+
+    const state = {
+      artifactManifest: null,
+      backboneMetadata: null,
+      inputManifest: null,
+      fileIndex: [],
+      activeFile: null,
+      activeRows: [],
+      activeColumns: [],
+      mainChart: null
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const fmt = new Intl.NumberFormat("en-US");
+    const fmt1 = new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 });
+    const fmt2 = new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 });
+    const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+
+    function showStatus(message, type = "info") {
+      const el = $("dashboard-status");
+      el.className = "mb-4 rounded-xl border p-4 " + (
+        type === "ok" ? "border-green-100 bg-green-50 text-green-900" :
+        type === "warn" ? "border-yellow-200 bg-yellow-50 text-yellow-900" :
+        "border-blue-100 bg-blue-50 text-blue-900"
+      );
+      el.innerHTML = message;
+      el.classList.remove("hidden");
+    }
+
+    function showError(message) {
+      const el = $("dashboard-error");
+      el.innerHTML = message;
+      el.classList.remove("hidden");
+    }
+
+    function clearError() {
+      $("dashboard-error").classList.add("hidden");
+      $("dashboard-error").innerHTML = "";
+    }
+
+    async function fetchJson(url) {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Could not load ${url} (${res.status})`);
+      return await res.json();
+    }
+
+    async function fetchText(url) {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Could not load ${url} (${res.status})`);
+      return await res.text();
+    }
+
+    function parseCsv(text) {
+      const rows = [];
+      let row = [], cell = "", quoted = false;
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i], next = text[i + 1];
+        if (ch === '"' && quoted && next === '"') { cell += '"'; i++; continue; }
+        if (ch === '"') { quoted = !quoted; continue; }
+        if (ch === "," && !quoted) { row.push(cell); cell = ""; continue; }
+        if ((ch === "\n" || ch === "\r") && !quoted) {
+          if (ch === "\r" && next === "\n") i++;
+          row.push(cell);
+          if (row.some(v => String(v).trim() !== "")) rows.push(row);
+          row = []; cell = "";
+          continue;
+        }
+        cell += ch;
+      }
+      row.push(cell);
+      if (row.some(v => String(v).trim() !== "")) rows.push(row);
+      if (!rows.length) return [];
+      const headers = rows[0].map(h => String(h || "").trim());
+      return rows.slice(1).map(r => {
+        const obj = {};
+        headers.forEach((h, i) => obj[h || `Column_${i+1}`] = coerceValue(r[i]));
+        return obj;
+      });
+    }
+
+    function coerceValue(value) {
+      if (value === undefined || value === null) return null;
+      const s = String(value).trim();
+      if (s === "" || s.toLowerCase() === "nan" || s.toLowerCase() === "none") return null;
+      const cleaned = s.replace(/[$,%]/g, "").replace(/,/g, "");
+      if (/^-?\d+(\.\d+)?([eE]-?\d+)?$/.test(cleaned)) return Number(cleaned);
+      return s;
+    }
+
+    function labelize(name) {
+      return String(name || "")
+        .replace(/^phase4_policy_/, "")
+        .replace(/\.csv$/i, "")
+        .replace(/\.png$/i, "")
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    function isNumericColumn(rows, col) {
+      const vals = rows.map(r => r[col]).filter(v => v !== null && v !== undefined);
+      if (!vals.length) return false;
+      return vals.filter(v => typeof v === "number" && Number.isFinite(v)).length / vals.length >= 0.7;
+    }
+
+    function getColumns(rows) {
+      if (!rows.length) return [];
+      const set = new Set();
+      rows.forEach(r => Object.keys(r).forEach(k => set.add(k)));
+      return Array.from(set);
+    }
+
+    function guessCategoryColumn(columns) {
+      const preferred = ["policy_package", "Package", "package", "scenario", "Scenario", "Region", "region", "Municipio", "municipio", "Municipality", "metric", "Metric", "feature", "Feature"];
+      return preferred.find(c => columns.includes(c)) || columns.find(c => !state.activeRows.some(r => typeof r[c] === "number")) || columns[0];
+    }
+
+    function guessNumericColumn(columns, rows, terms = []) {
+      const numeric = columns.filter(c => isNumericColumn(rows, c));
+      if (!numeric.length) return "";
+      const termMatch = numeric.find(c => terms.some(t => c.toLowerCase().includes(t)));
+      return termMatch || numeric[0];
+    }
+
+    function fillSelect(select, options, selected = null, includeNone = false) {
+      select.innerHTML = "";
+      if (includeNone) {
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = "None";
+        select.appendChild(opt);
+      }
+      options.forEach(value => {
+        const opt = document.createElement("option");
+        opt.value = value;
+        opt.textContent = labelize(value);
+        if (selected && value === selected) opt.selected = true;
+        select.appendChild(opt);
+      });
+    }
+
+    function buildFileIndex() {
+      const manifest = state.artifactManifest || {};
+      const dataFiles = (manifest.data_files || []).map(name => ({ name, type: "data", path: PATHS.data + name }));
+      const tableFiles = (manifest.table_files || []).map(name => ({ name, type: "table", path: PATHS.tables + name }));
+      const combined = [...dataFiles, ...tableFiles].filter(f => f.name.endsWith(".csv"));
+      combined.sort((a, b) => {
+        const ai = PREFERRED_DATASETS.indexOf(a.name);
+        const bi = PREFERRED_DATASETS.indexOf(b.name);
+        if (ai !== -1 || bi !== -1) return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+        return a.name.localeCompare(b.name);
+      });
+      state.fileIndex = combined;
+    }
+
+    function populateDatasetSelect() {
+      const sel = $("datasetSelect");
+      sel.innerHTML = "";
+      state.fileIndex.forEach(f => {
+        const opt = document.createElement("option");
+        opt.value = f.name;
+        opt.textContent = `${labelize(f.name)} (${f.type})`;
+        sel.appendChild(opt);
+      });
+      if (state.fileIndex.length) sel.value = state.fileIndex[0].name;
+    }
+
+    function populateFigures() {
+      const raw = (state.artifactManifest?.figure_files || []).filter(name => name && name.endsWith(".png"));
+      updateFigureList(raw);
+      $("figureCategorySelect").addEventListener("change", () => updateFigureList(raw));
+      $("figureSelect").addEventListener("change", updateFigurePreview);
+    }
+
+    function figureCategory(name) {
+      const n = name.toLowerCase();
+      if (n.includes("regional")) return "regional";
+      if (n.includes("municipal")) return "municipal";
+      if (n.includes("recovery") || n.includes("rebound")) return "recovery";
+      if (n.includes("diagnostic") || n.includes("explainer") || n.includes("feature")) return "diagnostic";
+      if (n.includes("island")) return "island";
+      return "all";
+    }
+
+    function updateFigureList(files) {
+      const cat = $("figureCategorySelect").value;
+      const filtered = files.filter(name => cat === "all" || figureCategory(name) === cat);
+      fillSelect($("figureSelect"), filtered);
+      updateFigurePreview();
+    }
+
+    function updateFigurePreview() {
+      const name = $("figureSelect").value;
+      const img = $("figurePreview");
+      const placeholder = $("figurePlaceholder");
+      if (!name) {
+        img.classList.add("hidden");
+        placeholder.classList.remove("hidden");
+        $("figureCaption").textContent = "";
+        return;
+      }
+      img.src = PATHS.figures + name;
+      img.classList.remove("hidden");
+      placeholder.classList.add("hidden");
+      $("figureCaption").textContent = labelize(name);
+    }
+
+    async function loadActiveDataset(fileName) {
+      clearError();
+      const file = state.fileIndex.find(f => f.name === fileName);
+      if (!file) return;
+      state.activeFile = file;
+      $("activeFileName").textContent = file.name;
+      try {
+        showStatus(`Loading <strong>${file.name}</strong>...`);
+        const text = await fetchText(file.path);
+        state.activeRows = parseCsv(text);
+        state.activeColumns = getColumns(state.activeRows);
+        configureControlsForDataset();
+        renderDashboard();
+        showStatus(`Loaded <strong>${file.name}</strong> with ${fmt.format(state.activeRows.length)} rows and ${fmt.format(state.activeColumns.length)} columns.`, "ok");
+      } catch (err) {
+        state.activeRows = [];
+        state.activeColumns = [];
+        renderEmpty();
+        showError(`Could not load <strong>${file.name}</strong>. Confirm the file exists at <code>${file.path}</code>. Details: ${err.message}`);
+        showStatus("Some dashboard files are missing or not yet copied into the expected Phase 4 folders.", "warn");
+      }
+    }
+
+    function configureControlsForDataset() {
+      const columns = state.activeColumns;
+      const rows = state.activeRows;
+      const numeric = columns.filter(c => isNumericColumn(rows, c));
+      const categorical = columns.filter(c => !numeric.includes(c));
+      const xGuess = guessCategoryColumn(columns);
+      const yGuess = guessNumericColumn(columns, rows, ["gain", "retained", "population", "2030", "impact", "prediction", "baseline"]);
+      const y2Guess = numeric.find(c => c !== yGuess && /(baseline|lower|upper|uncertainty|change|impact)/i.test(c)) || "";
+      const groupGuess = categorical.find(c => c !== xGuess && /(package|scenario|region|bundle)/i.test(c)) || "";
+
+      fillSelect($("xSelect"), columns, xGuess);
+      fillSelect($("ySelect"), numeric, yGuess);
+      fillSelect($("y2Select"), numeric, y2Guess, true);
+      fillSelect($("groupSelect"), categorical, groupGuess, true);
+      fillSelect($("sortSelect"), columns, yGuess || xGuess);
+      fillSelect($("baselineSelect"), numeric, numeric.find(c => /baseline/i.test(c)) || "", true);
+    }
+
+    function getFilteredRows() {
+      const rows = [...state.activeRows];
+      const filter = $("filterInput").value.trim().toLowerCase();
+      let out = rows;
+      if (filter) {
+        out = out.filter(row => Object.values(row).some(v => String(v ?? "").toLowerCase().includes(filter)));
+      }
+      const sortCol = $("sortSelect").value;
+      const dir = $("sortDirSelect").value === "asc" ? 1 : -1;
+      if (sortCol) {
+        out.sort((a, b) => {
+          const av = a[sortCol], bv = b[sortCol];
+          if (typeof av === "number" && typeof bv === "number") return (av - bv) * dir;
+          return String(av ?? "").localeCompare(String(bv ?? "")) * dir;
+        });
+      }
+      const topN = $("topNSelect").value;
+      if (topN !== "all") out = out.slice(0, Number(topN));
+      return out;
+    }
+
+    function transformValue(value, row, firstValue, baselineCol) {
+      if (typeof value !== "number" || !Number.isFinite(value)) return null;
+      const transform = $("transformSelect").value;
+      if (transform === "index") {
+        return firstValue ? (value / firstValue) * 100 : null;
+      }
+      if (transform === "pct_of_baseline") {
+        const base = row[baselineCol];
+        return (typeof base === "number" && base !== 0) ? (value / base) * 100 : null;
+      }
+      return value;
+    }
+
+    function chooseChartMode(rows, xCol, yCol, groupCol) {
+      const requested = $("chartModeSelect").value;
+      if (requested !== "auto") return requested;
+      if (!yCol) return "table";
+      if (groupCol) return "line";
+      if (rows.length > 30 && typeof rows[0]?.[xCol] === "number") return "scatter";
+      return "bar";
+    }
+
+    function renderDashboard() {
+      renderChart();
+      renderTable();
+      renderNarrative();
+    }
+
+    function renderEmpty() {
+      if (state.mainChart) state.mainChart.destroy();
+      $("previewTable").querySelector("thead").innerHTML = "";
+      $("previewTable").querySelector("tbody").innerHTML = "";
+      $("mainChartSubtitle").textContent = "No data loaded.";
+      $("chartNarrative").textContent = "";
+    }
+
+    function renderChart() {
+      const rows = getFilteredRows();
+      const xCol = $("xSelect").value;
+      const yCol = $("ySelect").value;
+      const y2Col = $("y2Select").value;
+      const groupCol = $("groupSelect").value;
+      const baselineCol = $("baselineSelect").value;
+      const mode = chooseChartMode(rows, xCol, yCol, groupCol);
+      const ctx = $("mainChart").getContext("2d");
+      const wrapper = $("mainChartWrapper");
+      $("tableOnlyNotice").classList.toggle("hidden", mode !== "table");
+      wrapper.style.display = mode === "table" ? "none" : "block";
+
+      if (state.mainChart) state.mainChart.destroy();
+      if (!rows.length || mode === "table" || !xCol || !yCol) return;
+
+      let chartType = mode === "scatter" ? "scatter" : mode;
+      let datasets = [];
+      const firstVal = rows.find(r => typeof r[yCol] === "number")?.[yCol] || null;
+
+      if (mode === "scatter") {
+        const y2 = y2Col || yCol;
+        datasets = [{
+          label: `${labelize(yCol)} vs ${labelize(xCol)}`,
+          data: rows.map(r => ({
+            x: r[xCol],
+            y: r[yCol],
+            label: String(r[groupCol] || r[xCol] || ""),
+            raw: r
+          })).filter(p => typeof p.x === "number" && typeof p.y === "number"),
+          pointRadius: 6,
+          pointHoverRadius: 9
+        }];
+      } else if (groupCol) {
+        const groups = Array.from(new Set(rows.map(r => r[groupCol]).filter(v => v !== null && v !== undefined)));
+        const labels = Array.from(new Set(rows.map(r => r[xCol]).filter(v => v !== null && v !== undefined)));
+        datasets = groups.slice(0, 12).map(group => ({
+          label: String(group),
+          data: labels.map(label => {
+            const r = rows.find(row => row[groupCol] === group && row[xCol] === label);
+            return r ? transformValue(r[yCol], r, firstVal, baselineCol) : null;
+          }),
+          tension: 0.25,
+          fill: false
+        }));
+        renderChartWithLabels(ctx, chartType, labels, datasets, xCol, yCol);
+        return;
+      } else {
+        const labels = rows.map(r => String(r[xCol] ?? ""));
+        datasets = [{
+          label: labelize(yCol),
+          data: rows.map(r => transformValue(r[yCol], r, firstVal, baselineCol)),
+          borderWidth: 2,
+          tension: 0.25,
+          fill: false
+        }];
+        if (y2Col) {
+          datasets.push({
+            label: labelize(y2Col),
+            data: rows.map(r => transformValue(r[y2Col], r, rows.find(rr => typeof rr[y2Col] === "number")?.[y2Col] || null, baselineCol)),
+            borderWidth: 2,
+            tension: 0.25,
+            fill: false
+          });
+        }
+        renderChartWithLabels(ctx, chartType, labels, datasets, xCol, yCol);
+        return;
+      }
+
+      state.mainChart = new Chart(ctx, {
+        type: chartType,
+        data: { datasets },
+        options: commonChartOptions(xCol, yCol, true)
+      });
+    }
+
+    function renderChartWithLabels(ctx, chartType, labels, datasets, xCol, yCol) {
+      state.mainChart = new Chart(ctx, {
+        type: chartType,
+        data: { labels, datasets },
+        options: commonChartOptions(xCol, yCol, false)
+      });
+    }
+
+    function commonChartOptions(xCol, yCol, scatter) {
+      return {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: "nearest", intersect: false },
+        plugins: {
+          legend: { display: true, position: "bottom" },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => {
+                if (scatter) {
+                  const raw = ctx.raw || {};
+                  return `${raw.label || ctx.dataset.label}: ${formatValue(raw.y)} (${labelize(yCol)})`;
+                }
+                return `${ctx.dataset.label}: ${formatValue(ctx.parsed.y)}`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: { display: true, text: labelize(xCol) },
+            ticks: { maxRotation: 45, minRotation: 0, autoSkip: true }
+          },
+          y: {
+            title: { display: true, text: labelize(yCol) },
+            ticks: { callback: v => formatValue(v) }
+          }
+        }
+      };
+    }
+
+    function formatValue(v) {
+      if (v === null || v === undefined || Number.isNaN(v)) return "--";
+      if (typeof v !== "number") return String(v);
+      const yName = $("ySelect")?.value?.toLowerCase() || "";
+      if (yName.includes("pct") || yName.includes("percent") || yName.includes("rate")) return `${fmt2.format(v)}%`;
+      if (Math.abs(v) >= 1000000) return `${fmt2.format(v / 1000000)}M`;
+      if (Math.abs(v) >= 1000) return fmt.format(v);
+      return fmt2.format(v);
+    }
+
+    function renderTable() {
+      const rows = getFilteredRows();
+      const table = $("previewTable");
+      const thead = table.querySelector("thead");
+      const tbody = table.querySelector("tbody");
+      thead.innerHTML = "";
+      tbody.innerHTML = "";
+      const cols = state.activeColumns.slice(0, 12);
+      const trh = document.createElement("tr");
+      cols.forEach(c => {
+        const th = document.createElement("th");
+        th.className = "px-3 py-2 text-left font-bold text-gray-700 whitespace-nowrap";
+        th.textContent = labelize(c);
+        trh.appendChild(th);
+      });
+      thead.appendChild(trh);
+      rows.slice(0, 100).forEach(row => {
+        const tr = document.createElement("tr");
+        tr.className = "border-t border-gray-100 hover:bg-gray-50";
+        cols.forEach(c => {
+          const td = document.createElement("td");
+          td.className = "px-3 py-2 whitespace-nowrap";
+          td.textContent = formatValue(row[c]);
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderNarrative() {
+      const rows = getFilteredRows();
+      const file = state.activeFile?.name || "";
+      const x = $("xSelect").value;
+      const y = $("ySelect").value;
+      $("mainChartTitle").textContent = labelize(file);
+      $("mainChartSubtitle").textContent = `${fmt.format(rows.length)} rows shown. X-axis: ${labelize(x)}. Metric: ${labelize(y)}.`;
+      if (!rows.length) {
+        $("chartNarrative").textContent = "No rows match the current filter.";
+        return;
+      }
+      const yVals = rows.map(r => r[y]).filter(v => typeof v === "number");
+      if (yVals.length) {
+        const max = Math.max(...yVals), min = Math.min(...yVals);
+        const maxRow = rows.find(r => r[y] === max);
+        const minRow = rows.find(r => r[y] === min);
+        $("chartNarrative").innerHTML =
+          `For the selected view, <strong>${labelize(y)}</strong> ranges from <strong>${formatValue(min)}</strong> to <strong>${formatValue(max)}</strong>. ` +
+          `The highest displayed row is <strong>${String(maxRow?.[x] ?? "n/a")}</strong>; the lowest displayed row is <strong>${String(minRow?.[x] ?? "n/a")}</strong>. ` +
+          `Interpret these values as Phase 4 predictive-counterfactual outputs rather than causal estimates.`;
+      } else {
+        $("chartNarrative").textContent = "This table does not expose a numeric column suitable for graphing. Use table mode or choose another dataset.";
+      }
+    }
+
+    function updateKpis() {
+      const manifest = state.artifactManifest || {};
+      const tableCount = (manifest.data_files || []).length + (manifest.table_files || []).length;
+      const figureCount = (manifest.figure_files || []).filter(f => f.endsWith(".png")).length;
+      $("kpiTables").textContent = fmt.format(tableCount || 0);
+      $("kpiFigures").textContent = fmt.format(figureCount || 0);
+      $("kpiFeatures").textContent = state.backboneMetadata?.feature_count_expected_by_pipeline ?? "--";
+      const shape = state.backboneMetadata?.dataset_shape;
+      $("kpiShape").textContent = Array.isArray(shape) ? `${fmt.format(shape[0])} × ${fmt.format(shape[1])}` : "--";
+      $("selectedPipeline").textContent = state.backboneMetadata?.selected_pipeline_path || state.inputManifest?.selected_pipeline_path || "--";
+      $("copiedPipeline").textContent = state.backboneMetadata?.copied_pipeline_path || "--";
+      $("phase1Path").textContent = state.inputManifest?.phase1_data_path || "--";
+    }
+
+    function setQuickView(kind) {
+      const names = {
+        island: "phase4_policy_island_policy_summary.csv",
+        regional: "phase4_policy_region_policy_summary.csv",
+        municipal: "phase4_policy_top_municipal_gains_retention_bundle.csv",
+        recovery: "phase4_policy_recovery_rebound_sensitivity.csv"
+      };
+      const target = names[kind];
+      if (target && state.fileIndex.some(f => f.name === target)) {
+        $("datasetSelect").value = target;
+        loadActiveDataset(target);
+      }
+      const figPrefs = {
+        island: "phase4_policy_island_policy_ranking.png",
+        regional: "phase4_policy_regional_retained_residents_comparison.png",
+        municipal: "phase4_policy_top_municipal_gains_retention_bundle.png",
+        recovery: "phase4_policy_recovery_rebound_sensitivity_path.png"
+      };
+      if (figPrefs[kind]) {
+        $("figureCategorySelect").value = "all";
+        updateFigureList((state.artifactManifest?.figure_files || []).filter(f => f.endsWith(".png")));
+        if ([...$("figureSelect").options].some(o => o.value === figPrefs[kind])) {
+          $("figureSelect").value = figPrefs[kind];
+          updateFigurePreview();
+        }
+      }
+    }
+
+    function wireEvents() {
+      $("datasetSelect").addEventListener("change", e => loadActiveDataset(e.target.value));
+      ["chartModeSelect", "xSelect", "ySelect", "y2Select", "groupSelect", "filterInput", "topNSelect", "sortSelect", "sortDirSelect", "transformSelect", "baselineSelect"]
+        .forEach(id => $(id).addEventListener(id === "filterInput" ? "input" : "change", renderDashboard));
+      $("reloadBtn").addEventListener("click", initDashboard);
+      $("downloadActiveCsv").addEventListener("click", () => {
+        if (state.activeFile) window.open(state.activeFile.path, "_blank");
+      });
+      $("toggleFullscreenBtn").addEventListener("click", () => {
+        const el = $("dashboardVisuals");
+        const isMax = el.classList.toggle("maximized");
+        $("scale-wrapper").classList.toggle("disable-scale", isMax);
+        $("toggleFullscreenBtn").textContent = isMax ? "Exit maximize" : "Maximize";
+        setTimeout(() => state.mainChart?.resize(), 150);
+      });
+      document.querySelectorAll(".quick-view").forEach(btn => {
+        btn.addEventListener("click", () => setQuickView(btn.dataset.view));
+      });
+    }
+
     async function initDashboard() {
-        try {
-            // Fetch all required JSON files
-            const promises = Object.entries(FILES_TO_FETCH).map(async ([key, url]) => {
-                const response = await fetch(url);
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                const data = await response.json();
-                return { key, data };
-            });
-
-            const results = await Promise.all(promises);
-            const rawData = {};
-            results.forEach(res => rawData[res.key] = res.data);
-
-            renderMetadata(rawData.backbone_metadata, rawData.input_manifest);
-            renderArtifacts(rawData.artifact_manifest);
-
-            // Hide loader and show content
-            document.getElementById('loading-state').classList.add('hidden');
-            document.getElementById('dashboard-content').classList.remove('hidden');
-
-        } catch (error) {
-            console.error("Failed to load Phase 4 metadata:", error);
-            document.getElementById('loading-state').innerHTML = `
-                <div class="text-red-500 font-bold text-xl mb-2">Error Loading Data</div>
-                <p class="text-gray-600">Ensure the directory structure <code>${METADATA_PATH}</code> exists and contains the requested JSON files.</p>
-                <p class="text-sm text-gray-500 mt-4">${error.message}</p>
-            `;
-        }
+      clearError();
+      try {
+        showStatus("Loading Phase 4 metadata manifests...");
+        const [artifact, backbone, input] = await Promise.all([
+          fetchJson(PATHS.metadata + MANIFEST_FILES.artifact),
+          fetchJson(PATHS.metadata + MANIFEST_FILES.backbone),
+          fetchJson(PATHS.metadata + MANIFEST_FILES.input)
+        ]);
+        state.artifactManifest = artifact;
+        state.backboneMetadata = backbone;
+        state.inputManifest = input;
+        updateKpis();
+        buildFileIndex();
+        populateDatasetSelect();
+        populateFigures();
+        if (!state.fileIndex.length) throw new Error("No CSV outputs were listed in the artifact manifest.");
+        await loadActiveDataset($("datasetSelect").value);
+      } catch (err) {
+        showError(`The dashboard could not initialize. Check that the metadata files exist under <code>${PATHS.metadata}</code>. Details: ${err.message}`);
+        showStatus("Dashboard initialization failed.", "warn");
+      }
     }
 
-    function createStatCard(label, value) {
-        return `
-            <div class="stat-card">
-                <div class="stat-label">${label}</div>
-                <div class="stat-value text-indigo-600">${value}</div>
-            </div>
-        `;
-    }
-
-    function renderMetadata(backbone, input) {
-        const container = document.getElementById('metadata-cards');
-        
-        // Extracting key info from backbone_metadata.json and input_manifest.json
-        const shape = backbone.dataset_shape ? `${backbone.dataset_shape[0]} rows × ${backbone.dataset_shape[1]} cols` : 'Unknown';
-        const featureCount = backbone.feature_count_expected_by_pipeline || 'N/A';
-        
-        // Clean up pipeline paths for display
-        const pipelinePath = (input.selected_pipeline_path || backbone.selected_pipeline_path || '').split('/').pop();
-        const baseDataPath = (input.phase1_data_path || '').split('/').pop();
-
-        container.innerHTML = `
-            ${createStatCard('Panel Data Shape', shape)}
-            ${createStatCard('Expected Features', featureCount)}
-            ${createStatCard('Forecasting Pipeline', pipelinePath)}
-            ${createStatCard('Phase 1 Input Data', baseDataPath)}
-        `;
-    }
-
-    function renderArtifacts(manifest) {
-        // Render Figures
-        const galleryContainer = document.getElementById('figures-gallery');
-        const figureFiles = manifest.figure_files || [];
-        
-        document.getElementById('figure-count').innerText = `${figureFiles.length} Figures`;
-
-        if (figureFiles.length === 0) {
-            galleryContainer.innerHTML = `<p class="col-span-full text-gray-500 italic">No figures found in manifest.</p>`;
-        } else {
-            let figuresHTML = '';
-            figureFiles.forEach(filename => {
-                // Formatting filename for display title
-                const cleanTitle = filename
-                    .replace('phase4_policy_', '')
-                    .replace('.png', '')
-                    .replace(/_/g, ' ')
-                    .replace(/\b\w/g, l => l.toUpperCase());
-
-                figuresHTML += `
-                    <div class="card artifact-image-card overflow-hidden border border-gray-200 flex flex-col cursor-pointer bg-white">
-                        <div class="h-48 bg-gray-100 flex items-center justify-center relative overflow-hidden border-b border-gray-200">
-                            <img src="${FIGURES_PATH}${filename}" alt="${cleanTitle}" class="object-cover w-full h-full text-xs text-gray-400 text-center" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-gray-400 text-sm p-4 text-center\\'>Image not found at path:<br/>${FIGURES_PATH}${filename}</span>'">
-                        </div>
-                        <div class="p-4">
-                            <h3 class="text-sm font-bold text-gray-800 leading-tight">${cleanTitle}</h3>
-                            <p class="text-xs text-gray-500 mt-1 font-mono">${filename}</p>
-                        </div>
-                    </div>
-                `;
-            });
-            galleryContainer.innerHTML = figuresHTML;
-        }
-
-        // Render Tables
-        const tableContainer = document.getElementById('table-list');
-        const tableFiles = manifest.table_files || [];
-        tableContainer.innerHTML = tableFiles.map(file => `
-            <li class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-100 hover:bg-blue-50 transition-colors cursor-default">
-                <svg class="w-5 h-5 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                <span class="text-sm text-gray-700 font-medium">${file}</span>
-            </li>
-        `).join('');
-
-        // Render Data Files
-        const dataContainer = document.getElementById('data-list');
-        const dataFiles = manifest.data_files || [];
-        dataContainer.innerHTML = dataFiles.map(file => `
-            <li class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-100 hover:bg-green-50 transition-colors cursor-default">
-                <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
-                <span class="text-sm text-gray-700 font-medium">${file}</span>
-            </li>
-        `).join('');
-    }
-
-    // Initialize Dropdowns (Preserved from socio_economic.html)
     function wireDropdown() {
       const dropdownRoots = document.querySelectorAll('.nav-dropdown-root');
       dropdownRoots.forEach(root => {
@@ -342,12 +1065,11 @@
       });
     }
 
-    // Run Initialization
-    document.addEventListener('DOMContentLoaded', () => {
-        wireDropdown();
-        initDashboard();
+    document.addEventListener("DOMContentLoaded", () => {
+      wireDropdown();
+      wireEvents();
+      initDashboard();
     });
-
-  </script>
+    </script>
 </body>
 </html>
