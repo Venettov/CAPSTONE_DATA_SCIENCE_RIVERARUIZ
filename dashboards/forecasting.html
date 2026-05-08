@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Forecasting & Policy Dashboard | Puerto Rico</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root {
+      --blue: #2563eb;
+      --indigo: #4f46e5;
+      --slate: #334155;
+      --muted: #64748b;
+      --panel: #f8fafc;
+      --border: #e2e8f0;
+    }
+
+    body {
+      background: #f8fafc;
+      color: #111827;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 10px 15px -3px rgba(15,23,42,.10), 0 4px 6px -2px rgba(15,23,42,.05);
+      border: 1px solid rgba(226,232,240,.9);
+      overflow: hidden;
+    }
+
+    .hero {
+      background:
+        radial-gradient(1200px 600px at 20% -10%, rgba(239,68,68,.12), transparent 60%),
+        radial-gradient(1200px 600px at 80% -10%, rgba(37,99,235,.12), transparent 60%),
+        linear-gradient(180deg, #ffffff 0%, #eef2ff 100%);
+    }
+
+    .nav-dropdown-menu {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(4px);
+      pointer-events: none;
+      transition: all .15s ease;
+    }
+
+    .nav-dropdown-root:hover .nav-dropdown-menu,
+    .nav-dropdown-root.hovering .nav-dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .nav-dropdown-root:hover .nav-chevron,
+    .nav-dropdown-root.hovering .nav-chevron {
+      transform: rotate(180deg);
+    }
+
+    .dashboard-block {
+      background: #f1f5f9;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px -1px rgba(15,23,42,.10), 0 2px 4px -2px rgba(15,23,42,.06);
+    }
+
+    .stat-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: .5rem;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: .9rem;
+      padding: 1rem;
+      min-height: 118px;
+      box-shadow: 0 4px 10px rgba(15,23,42,.06);
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: .82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .stat-value {
+      color: #0f172a;
+      font-size: 1.85rem;
+      line-height: 1;
+      font-weight: 850;
+    }
+
+    .stat-note {
+      color: #64748b;
+      font-size: .78rem;
+      line-height: 1.25rem;
+    }
+
+    .chart-wrapper {
+      position: relative;
+      height: 300px;
+    }
+
+    .image-stage {
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 1rem;
+      min-height: 420px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+    }
+
+    .image-stage img {
+      max-width: 100%;
+      max-height: 700px;
+      object-fit: contain;
+      border-radius: .75rem;
+      box-shadow: 0 8px 24px rgba(15,23,42,.10);
+      background: white;
+    }
+
+    .artifact-pill {
+      border: 1px solid #cbd5e1;
+      border-radius: 999px;
+      padding: .35rem .7rem;
+      font-size: .8rem;
+      color: #334155;
+      background: #fff;
+      cursor: pointer;
+      transition: all .12s ease;
+      white-space: nowrap;
+    }
+
+    .artifact-pill:hover {
+      border-color: #60a5fa;
+      color: #1d4ed8;
+      background: #eff6ff;
+    }
+
+    .artifact-pill.active {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+      font-weight: 700;
+    }
+
+    .table-wrap {
+      max-height: 420px;
+      overflow: auto;
+      border-radius: .75rem;
+      border: 1px solid #e2e8f0;
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .82rem;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: 800;
+      text-align: left;
+      border-bottom: 1px solid #cbd5e1;
+      padding: .6rem .7rem;
+      white-space: nowrap;
+    }
+
+    td {
+      border-bottom: 1px solid #e2e8f0;
+      padding: .55rem .7rem;
+      vertical-align: top;
+      color: #334155;
+      max-width: 260px;
+    }
+
+    .path-code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: .78rem;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      padding: .45rem .55rem;
+      border-radius: .55rem;
+      color: #334155;
+      overflow-wrap: anywhere;
+    }
+
+    .loader {
+      border: 4px solid rgba(148,163,184,.35);
+      border-top: 4px solid var(--blue);
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 900px) {
+      .chart-wrapper { height: 250px; }
+      .image-stage { min-height: 300px; }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="bg-white shadow sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-center gap-6 text-sm sm:text-base">
+      <a href="../index.html" class="border-b-2 border-transparent hover:text-blue-600">Home</a>
+
+      <div class="relative nav-dropdown-root">
+        <div class="border-b-2 border-transparent inline-flex items-center gap-1 cursor-pointer select-none hover:text-blue-600">
+          Metrics
+          <svg xmlns="http://www.w3.org/2000/svg" class="nav-chevron w-4 h-4 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <div class="nav-dropdown-menu absolute right-0 mt-2 w-64 rounded-xl border border-gray-200 bg-white shadow-lg ring-1 ring-black/5 z-50">
+          <div class="py-2">
+            <a href="../metrics.html" class="block px-4 py-2 hover:bg-gray-50 font-semibold">All Metrics Overview</a>
+            <div class="my-1 border-t border-gray-100"></div>
+            <a href="../metrics/population.html" class="block px-4 py-2 hover:bg-gray-50">Population</a>
+            <a href="../metrics/employment.html" class="block px-4 py-2 hover:bg-gray-50">Employment Rate</a>
+            <a href="../metrics/establishments.html" class="block px-4 py-2 hover:bg-gray-50">Employer Establishments</a>
+            <a href="../metrics/income.html" class="block px-4 py-2 hover:bg-gray-50">Household Income</a>
+            <a href="../metrics/housing.html" class="block px-4 py-2 hover:bg-gray-50">Housing Units</a>
+            <a href="../metrics/education.html" class="block px-4 py-2 hover:bg-gray-50">Education</a>
+            <a href="../metrics/health.html" class="block px-4 py-2 hover:bg-gray-50">Health</a>
+            <a href="../metrics/disasters_earthquakes.html" class="block px-4 py-2 hover:bg-gray-50">Earthquakes</a>
+            <a href="../metrics/disasters_hurricanes.html" class="block px-4 py-2 hover:bg-gray-50">Hurricanes</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative nav-dropdown-root">
+        <div class="border-b-2 border-blue-600 text-blue-600 font-semibold inline-flex items-center gap-1 cursor-pointer select-none">
+          Dashboards
+          <svg xmlns="http://www.w3.org/2000/svg" class="nav-chevron w-4 h-4 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <div class="nav-dropdown-menu absolute right-0 mt-2 w-72 rounded-xl border border-gray-200 bg-white shadow-lg ring-1 ring-black/5 z-50">
+          <div class="py-2">
+            <a href="../dashboards.html" class="block px-4 py-2 hover:bg-gray-50 font-semibold">Dashboards Main</a>
+            <div class="my-1 border-t border-gray-100"></div>
+            <a href="socio_economic.html" class="block px-4 py-2 hover:bg-gray-50">Socio-Economic Relationships</a>
+            <a href="forecasting.html" class="block px-4 py-2 hover:bg-gray-50 text-blue-600 font-semibold">Forecasting & Policy Dashboard</a>
+          </div>
+        </div>
+      </div>
+
+      <a href="../literature.html" class="border-b-2 border-transparent hover:text-blue-600">Literature</a>
+      <a href="../strategy.html" class="border-b-2 border-transparent hover:text-blue-600">Strategy</a>
+      <a href="../about.html" class="border-b-2 border-transparent hover:text-blue-600">About</a>
+    </div>
+  </nav>
+
+  <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+    <header class="card hero p-6 sm:p-8 lg:p-10">
+      <p class="text-sm font-semibold text-gray-500 uppercase">Phase 4 Forecasting Dashboard</p>
+      <h1 class="mt-2 text-4xl sm:text-5xl font-extrabold leading-tight">
+        Population Forecasting & Policy Stress Test
+      </h1>
+      <p class="mt-3 text-lg text-gray-700 max-w-5xl">
+        Interactive dashboard for Phase 4 artifacts: model lineage, policy-output tables,
+        forecasting figures, recovery-rebound sensitivity outputs, and retained-resident summaries.
+      </p>
+      <div class="mt-5 grid grid-cols-1 lg:grid-cols-3 gap-3 text-sm">
+        <div class="path-code">
+          Metadata base: <span id="metadataBaseLabel"></span>
+        </div>
+        <div class="path-code">
+          Tables/Data base: <span id="tableBaseLabel"></span>
+        </div>
+        <div class="path-code">
+          Figures base: <span id="figureBaseLabel"></span>
+        </div>
+      </div>
+    </header>
+
+    <section id="statusPanel" class="card p-5">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900">Dashboard Load Status</h2>
+          <p id="statusText" class="text-sm text-slate-600 mt-1">Loading Phase 4 metadata files...</p>
+        </div>
+        <div id="loadingSpinner" class="loader"></div>
+      </div>
+      <div id="errorBox" class="hidden mt-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"></div>
+    </section>
+
+    <section class="dashboard-block space-y-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div class="stat-card">
+          <div class="stat-label">Dataset Rows</div>
+          <div class="stat-value" id="datasetRows">--</div>
+          <div class="stat-note">Rows in the Phase 4 modeling dataset.</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Dataset Columns</div>
+          <div class="stat-value" id="datasetCols">--</div>
+          <div class="stat-note">Columns available after reconstruction.</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pipeline Features</div>
+          <div class="stat-value" id="pipelineFeatures">--</div>
+          <div class="stat-note">Expected feature count in the selected pipeline.</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Tables</div>
+          <div class="stat-value" id="tableCount">--</div>
+          <div class="stat-note">CSV tables listed in the artifact manifest.</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Figures</div>
+          <div class="stat-value" id="figureCount">--</div>
+          <div class="stat-note">PNG figures listed in the artifact manifest.</div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="card p-5 lg:col-span-1">
+          <h2 class="text-xl font-bold text-slate-900">Artifact Inventory</h2>
+          <p class="text-sm text-slate-600 mt-1">
+            Counts are read from the Phase 4 artifact manifest.
+          </p>
+          <div class="chart-wrapper mt-4">
+            <canvas id="artifactChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card p-5 lg:col-span-2">
+          <h2 class="text-xl font-bold text-slate-900">Model Lineage</h2>
+          <p class="text-sm text-slate-600 mt-1">
+            This panel verifies that the Phase 4 dashboard remains tied to the same Phase 3 forecasting backbone.
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
+            <div>
+              <div class="text-xs font-bold text-slate-500 uppercase mb-1">Selected Pipeline</div>
+              <div class="path-code" id="selectedPipeline">--</div>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-slate-500 uppercase mb-1">Copied Phase 4 Pipeline</div>
+              <div class="path-code" id="copiedPipeline">--</div>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-slate-500 uppercase mb-1">Phase 2 Summary</div>
+              <div class="path-code" id="phase2Summary">--</div>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-slate-500 uppercase mb-1">Phase 3 Summary</div>
+              <div class="path-code" id="phase3Summary">--</div>
+            </div>
+          </div>
+
+          <div class="mt-5 rounded-xl bg-blue-50 border border-blue-100 p-4 text-sm text-blue-900">
+            <strong>Interpretation note:</strong>
+            Phase 4 should be presented as a model-aware policy stress test. These outputs are predictive counterfactuals
+            built on the validated forecasting backbone, not causal estimates of what a real-world intervention would guarantee.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <aside class="card p-5 lg:col-span-3">
+        <h2 class="text-xl font-bold text-slate-900">Figure Browser</h2>
+        <p class="text-sm text-slate-600 mt-1">
+          Select a Phase 4 figure listed in the manifest.
+        </p>
+        <input id="figureSearch" type="text" placeholder="Search figures..."
+               class="mt-4 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+        <div id="figureList" class="mt-4 flex flex-wrap gap-2 max-h-[520px] overflow-auto pr-1"></div>
+      </aside>
+
+      <section class="card p-5 lg:col-span-9">
+        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+          <div>
+            <h2 id="selectedFigureTitle" class="text-xl font-bold text-slate-900">Selected Figure</h2>
+            <p id="selectedFigureCaption" class="text-sm text-slate-600 mt-1">
+              Figure preview will appear here when the PNG file exists at the configured Phase 4 figure path.
+            </p>
+          </div>
+          <a id="figureOpenLink" href="#" target="_blank" rel="noopener"
+             class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-white text-sm font-bold hover:bg-blue-700">
+            Open figure
+          </a>
+        </div>
+        <div class="image-stage">
+          <div id="figurePlaceholder" class="text-center text-slate-500 px-6">
+            <div class="text-lg font-bold">No figure selected yet</div>
+            <div class="text-sm mt-1">Choose a figure from the browser.</div>
+          </div>
+          <img id="figurePreview" class="hidden" alt="Selected Phase 4 figure preview"/>
+        </div>
+      </section>
+    </section>
+
+    <section class="card p-5">
+      <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900">Table/Data Preview</h2>
+          <p class="text-sm text-slate-600 mt-1">
+            Select a CSV from the Phase 4 manifest. The dashboard previews the first rows when the file is available.
+          </p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <select id="tableSelect" class="rounded-lg border border-slate-300 px-3 py-2 text-sm min-w-[320px] focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
+          <a id="tableOpenLink" href="#" target="_blank" rel="noopener"
+             class="inline-flex items-center justify-center rounded-lg bg-slate-800 px-4 py-2 text-white text-sm font-bold hover:bg-slate-900">
+            Open CSV
+          </a>
+        </div>
+      </div>
+
+      <div id="tableMessage" class="mt-4 rounded-xl bg-slate-50 border border-slate-200 p-4 text-sm text-slate-600">
+        Choose a table to preview.
+      </div>
+      <div id="tablePreviewWrap" class="table-wrap mt-4 hidden">
+        <table id="tablePreview"></table>
+      </div>
+    </section>
+
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="card p-5">
+        <h2 class="text-xl font-bold text-slate-900">Dashboard Interpretation</h2>
+        <div class="mt-4 space-y-3 text-sm text-slate-700 leading-relaxed">
+          <p>
+            Use this dashboard to review the Phase 4 artifact system: which tables were produced,
+            which figures are available, and whether the policy analysis is connected to the intended model backbone.
+          </p>
+          <p>
+            The most useful figures for the final report are likely the island policy ranking, retained-residents ranking,
+            regional policy comparison, regional heatmap, recovery-rebound endpoint comparison, and recovery-rebound sensitivity paths.
+          </p>
+          <p>
+            The most useful tables for appendix review are likely the executive summary table, island policy summary,
+            region policy summary, best package by region, recovery endpoint uncertainty table, and policy mechanism table.
+          </p>
+        </div>
+      </div>
+
+      <div class="card p-5">
+        <h2 class="text-xl font-bold text-slate-900">Path Assumptions</h2>
+        <p class="text-sm text-slate-600 mt-1">
+          This page assumes <code>forecasting.html</code> is inside your <code>dashboards/</code> folder.
+        </p>
+        <div class="mt-4 space-y-3">
+          <div class="path-code">../model_population_analysis/Phase4/metadata/</div>
+          <div class="path-code">../model_population_analysis/Phase4/tables/</div>
+          <div class="path-code">../model_population_analysis/Phase4/data/</div>
+          <div class="path-code">../model_population_analysis/Phase4/figures/</div>
+          <div class="path-code">../model_population_analysis/Phase4/models/</div>
+        </div>
+        <p class="text-xs text-slate-500 mt-4">
+          If your HTML file is stored at the site root instead, remove the leading <code>../</code> from each base path in the JavaScript configuration.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ---------------------------------------------------------------------
+    // PATH CONFIGURATION
+    // ---------------------------------------------------------------------
+    // Assumption: this file lives in /dashboards/forecasting.html.
+    // If this file lives at the project root, remove the leading "../".
+    const BASE = "../model_population_analysis/Phase4/";
+
+    const PATHS = {
+      metadata: BASE + "metadata/",
+      tables: BASE + "tables/",
+      data: BASE + "data/",
+      figures: BASE + "figures/",
+      models: BASE + "models/"
+    };
+
+    const METADATA_FILES = {
+      artifactManifest: "phase4_policy_artifact_manifest.json",
+      backboneMetadata: "phase4_policy_backbone_metadata.json",
+      inputManifest: "phase4_policy_input_manifest.json"
+    };
+
+    let artifactManifest = null;
+    let backboneMetadata = null;
+    let inputManifest = null;
+    let artifactChart = null;
+    let activeFigure = null;
+
+    const fmt = new Intl.NumberFormat("en-US");
+
+    function setText(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value ?? "--";
+    }
+
+    function fileLabel(name) {
+      return String(name || "")
+        .replace(/^phase4_policy_/, "")
+        .replace(/\.(csv|png|json|joblib)$/i, "")
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, char => char.toUpperCase());
+    }
+
+    function groupTablePath(filename) {
+      const dataFiles = artifactManifest?.data_files || [];
+      return dataFiles.includes(filename) ? PATHS.data + filename : PATHS.tables + filename;
+    }
+
+    async function fetchJson(url) {
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) throw new Error(`${url} returned ${res.status}`);
+      return res.json();
+    }
+
+    async function fetchText(url) {
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) throw new Error(`${url} returned ${res.status}`);
+      return res.text();
+    }
+
+    function parseCSV(text) {
+      const rows = [];
+      let row = [];
+      let cell = "";
+      let inQuotes = false;
+
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const next = text[i + 1];
+
+        if (char === '"' && inQuotes && next === '"') {
+          cell += '"';
+          i++;
+        } else if (char === '"') {
+          inQuotes = !inQuotes;
+        } else if (char === "," && !inQuotes) {
+          row.push(cell);
+          cell = "";
+        } else if ((char === "\n" || char === "\r") && !inQuotes) {
+          if (char === "\r" && next === "\n") i++;
+          row.push(cell);
+          if (row.some(value => value.trim() !== "")) rows.push(row);
+          row = [];
+          cell = "";
+        } else {
+          cell += char;
+        }
+      }
+
+      if (cell.length || row.length) {
+        row.push(cell);
+        if (row.some(value => value.trim() !== "")) rows.push(row);
+      }
+
+      return rows;
+    }
+
+    function renderArtifactChart() {
+      const ctx = document.getElementById("artifactChart");
+      if (!ctx || !artifactManifest) return;
+
+      const figureFiles = (artifactManifest.figure_files || []).filter(f => f !== ".DS_Store");
+      const labels = ["Data CSVs", "Table CSVs", "Figures", "Models", "Metadata"];
+      const values = [
+        (artifactManifest.data_files || []).length,
+        (artifactManifest.table_files || []).length,
+        figureFiles.length,
+        (artifactManifest.model_files || []).length,
+        (artifactManifest.metadata_files || []).length
+      ];
+
+      if (artifactChart) artifactChart.destroy();
+
+      artifactChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [{
+            label: "Artifact count",
+            data: values,
+            borderWidth: 1,
+            backgroundColor: [
+              "rgba(37, 99, 235, .75)",
+              "rgba(79, 70, 229, .75)",
+              "rgba(14, 165, 233, .75)",
+              "rgba(15, 23, 42, .75)",
+              "rgba(100, 116, 139, .75)"
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: ctx => `${ctx.raw} file(s)` } }
+          },
+          scales: {
+            x: { ticks: { color: "#334155", font: { size: 11 } }, grid: { display: false } },
+            y: { beginAtZero: true, ticks: { precision: 0, color: "#334155" }, grid: { color: "#e2e8f0" } }
+          }
+        }
+      });
+    }
+
+    function populateKPIs() {
+      const shape = backboneMetadata?.dataset_shape || [];
+      const figures = (artifactManifest.figure_files || []).filter(f => f !== ".DS_Store");
+
+      setText("datasetRows", Number.isFinite(shape[0]) ? fmt.format(shape[0]) : "--");
+      setText("datasetCols", Number.isFinite(shape[1]) ? fmt.format(shape[1]) : "--");
+      setText("pipelineFeatures", backboneMetadata?.feature_count_expected_by_pipeline ?? "--");
+      setText("tableCount", fmt.format((artifactManifest.table_files || []).length));
+      setText("figureCount", fmt.format(figures.length));
+
+      setText("selectedPipeline", backboneMetadata?.selected_pipeline_path || inputManifest?.selected_pipeline_path || "--");
+      setText("copiedPipeline", backboneMetadata?.copied_pipeline_path || "--");
+      setText("phase2Summary", backboneMetadata?.phase2_summary_path || inputManifest?.phase2_summary_path || "--");
+      setText("phase3Summary", backboneMetadata?.phase3_summary_path || inputManifest?.phase3_summary_path || "--");
+    }
+
+    function renderFigureList() {
+      const list = document.getElementById("figureList");
+      const search = document.getElementById("figureSearch");
+      if (!list || !artifactManifest) return;
+
+      const query = (search?.value || "").toLowerCase().trim();
+      const figures = (artifactManifest.figure_files || [])
+        .filter(f => f !== ".DS_Store")
+        .filter(f => fileLabel(f).toLowerCase().includes(query))
+        .sort();
+
+      list.innerHTML = "";
+
+      figures.forEach((filename, index) => {
+        const button = document.createElement("button");
+        button.className = "artifact-pill" + (filename === activeFigure ? " active" : "");
+        button.textContent = fileLabel(filename);
+        button.title = filename;
+        button.addEventListener("click", () => selectFigure(filename));
+        list.appendChild(button);
+
+        if (!activeFigure && index === 0 && !query) {
+          setTimeout(() => selectFigure(filename), 0);
+        }
+      });
+
+      if (!figures.length) {
+        list.innerHTML = `<div class="text-sm text-slate-500">No matching figures.</div>`;
+      }
+    }
+
+    function selectFigure(filename) {
+      activeFigure = filename;
+      const title = document.getElementById("selectedFigureTitle");
+      const caption = document.getElementById("selectedFigureCaption");
+      const img = document.getElementById("figurePreview");
+      const placeholder = document.getElementById("figurePlaceholder");
+      const link = document.getElementById("figureOpenLink");
+      const src = PATHS.figures + filename;
+
+      title.textContent = fileLabel(filename);
+      caption.textContent = filename;
+      link.href = src;
+      img.src = src;
+      img.alt = fileLabel(filename);
+      img.classList.remove("hidden");
+      placeholder.classList.add("hidden");
+
+      img.onerror = () => {
+        img.classList.add("hidden");
+        placeholder.classList.remove("hidden");
+        placeholder.innerHTML = `
+          <div class="text-lg font-bold">Figure file not found at expected path</div>
+          <div class="text-sm mt-2 path-code">${src}</div>
+          <div class="text-sm mt-3">Check that the PNG exists in the Phase4/figures folder and that the relative path is correct.</div>
+        `;
+      };
+
+      renderFigureList();
+    }
+
+    function populateTableSelect() {
+      const select = document.getElementById("tableSelect");
+      if (!select || !artifactManifest) return;
+
+      const dataFiles = artifactManifest.data_files || [];
+      const tableFiles = artifactManifest.table_files || [];
+      const allFiles = [
+        ...dataFiles.map(f => ({ group: "Data", file: f })),
+        ...tableFiles.map(f => ({ group: "Tables", file: f }))
+      ];
+
+      select.innerHTML = allFiles.map(item => {
+        const label = `${item.group}: ${fileLabel(item.file)}`;
+        return `<option value="${item.file}">${label}</option>`;
+      }).join("");
+
+      select.addEventListener("change", () => previewTable(select.value));
+
+      if (allFiles.length) {
+        previewTable(allFiles[0].file);
+      }
+    }
+
+    async function previewTable(filename) {
+      const link = document.getElementById("tableOpenLink");
+      const message = document.getElementById("tableMessage");
+      const wrap = document.getElementById("tablePreviewWrap");
+      const table = document.getElementById("tablePreview");
+      const url = groupTablePath(filename);
+
+      link.href = url;
+      message.classList.remove("hidden");
+      wrap.classList.add("hidden");
+      message.className = "mt-4 rounded-xl bg-slate-50 border border-slate-200 p-4 text-sm text-slate-600";
+      message.textContent = `Loading preview from ${url}...`;
+
+      try {
+        const text = await fetchText(url);
+        const rows = parseCSV(text);
+        if (!rows.length) throw new Error("CSV appears to be empty.");
+
+        const headers = rows[0];
+        const body = rows.slice(1, 16);
+
+        table.innerHTML = `
+          <thead>
+            <tr>${headers.map(h => `<th>${escapeHtml(h)}</th>`).join("")}</tr>
+          </thead>
+          <tbody>
+            ${body.map(row => `
+              <tr>${headers.map((_, i) => `<td>${escapeHtml(row[i] ?? "")}</td>`).join("")}</tr>
+            `).join("")}
+          </tbody>
+        `;
+
+        message.classList.add("hidden");
+        wrap.classList.remove("hidden");
+      } catch (err) {
+        message.className = "mt-4 rounded-xl bg-amber-50 border border-amber-200 p-4 text-sm text-amber-800";
+        message.innerHTML = `
+          <strong>CSV preview unavailable.</strong>
+          The manifest lists <span class="font-mono">${escapeHtml(filename)}</span>, but the browser could not load it from:
+          <div class="path-code mt-2">${escapeHtml(url)}</div>
+          <div class="mt-2">This usually means the CSV is not deployed yet, is in a different folder, or the relative path needs adjustment.</div>
+        `;
+        wrap.classList.add("hidden");
+      }
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function wireDropdown() {
+      const dropdownRoots = document.querySelectorAll(".nav-dropdown-root");
+      dropdownRoots.forEach(root => {
+        const menu = root.querySelector(".nav-dropdown-menu");
+        if (!menu) return;
+        let hoverTimeout;
+        const addHovering = () => {
+          clearTimeout(hoverTimeout);
+          root.classList.add("hovering");
+        };
+        const removeHovering = () => {
+          hoverTimeout = setTimeout(() => root.classList.remove("hovering"), 300);
+        };
+        root.addEventListener("mouseenter", addHovering);
+        root.addEventListener("mouseleave", removeHovering);
+        menu.addEventListener("mouseenter", addHovering);
+        menu.addEventListener("mouseleave", removeHovering);
+      });
+    }
+
+    async function init() {
+      document.getElementById("metadataBaseLabel").textContent = PATHS.metadata;
+      document.getElementById("tableBaseLabel").textContent = `${PATHS.tables} and ${PATHS.data}`;
+      document.getElementById("figureBaseLabel").textContent = PATHS.figures;
+
+      document.getElementById("figureSearch").addEventListener("input", renderFigureList);
+
+      try {
+        const [artifact, backbone, inputs] = await Promise.all([
+          fetchJson(PATHS.metadata + METADATA_FILES.artifactManifest),
+          fetchJson(PATHS.metadata + METADATA_FILES.backboneMetadata),
+          fetchJson(PATHS.metadata + METADATA_FILES.inputManifest)
+        ]);
+
+        artifactManifest = artifact;
+        backboneMetadata = backbone;
+        inputManifest = inputs;
+
+        populateKPIs();
+        renderArtifactChart();
+        renderFigureList();
+        populateTableSelect();
+
+        document.getElementById("loadingSpinner").classList.add("hidden");
+        document.getElementById("statusText").textContent = "Phase 4 metadata loaded successfully.";
+      } catch (err) {
+        document.getElementById("loadingSpinner").classList.add("hidden");
+        document.getElementById("statusText").textContent = "Dashboard metadata could not be loaded.";
+        const errorBox = document.getElementById("errorBox");
+        errorBox.classList.remove("hidden");
+        errorBox.innerHTML = `
+          <strong>Load error:</strong> ${escapeHtml(err.message)}
+          <div class="mt-2">Expected metadata files:</div>
+          <ul class="list-disc ml-6 mt-1">
+            <li>${escapeHtml(PATHS.metadata + METADATA_FILES.artifactManifest)}</li>
+            <li>${escapeHtml(PATHS.metadata + METADATA_FILES.backboneMetadata)}</li>
+            <li>${escapeHtml(PATHS.metadata + METADATA_FILES.inputManifest)}</li>
+          </ul>
+          <div class="mt-2">If this file is not inside the dashboards folder, adjust the <span class="font-mono">BASE</span> path near the top of the script.</div>
+        `;
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      wireDropdown();
+      init();
+    });
+  </script>
+</body>
+</html>
