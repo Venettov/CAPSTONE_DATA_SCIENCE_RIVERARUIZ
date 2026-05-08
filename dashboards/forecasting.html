@@ -338,7 +338,16 @@
                 Source: <span id="activeFileName" class="font-semibold text-gray-800">--</span>
               </div>
             </div>
-            <div id="mainChartWrapper" style="height:520px;">
+            <div id="recoveryPathControls" class="hidden rounded-xl border border-blue-100 bg-blue-50/60 p-4 mb-4">
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                <label class="inline-flex items-center gap-2 text-sm font-semibold text-gray-700"><input type="checkbox" id="showObservedChk" checked> Observed history</label>
+                <label class="inline-flex items-center gap-2 text-sm font-semibold text-gray-700"><input type="checkbox" id="showBandChk" checked> Uncertainty band</label>
+                <label class="inline-flex items-center gap-2 text-sm font-semibold text-gray-700"><input type="checkbox" id="showForecastStartChk" checked> Forecast marker</label>
+                <label class="inline-flex items-center gap-2 text-sm font-semibold text-gray-700"><input type="checkbox" id="showLatestLevelChk" checked> Latest observed line</label>
+              </div>
+              <p class="text-xs text-gray-600 mt-3">This default chart is rendered from <code>phase4_policy_recovery_rebound_path_data.json</code>, not from the PNG image. The scenario paths are exported by the Phase 4 notebook.</p>
+            </div>
+            <div id="mainChartWrapper" style="height:560px;">
               <canvas id="mainChart"></canvas>
             </div>
             <div id="tableOnlyNotice" class="hidden rounded-xl bg-yellow-50 border border-yellow-200 text-yellow-900 p-4 mt-3">
@@ -401,7 +410,8 @@
     const FALLBACK_ARTIFACT_MANIFEST = {
       "data_files": [
             "phase4_policy_municipal_policy_summary.csv",
-            "phase4_policy_top_municipal_gains_retention_bundle.csv"
+            "phase4_policy_top_municipal_gains_retention_bundle.csv",
+            "phase4_policy_recovery_rebound_path_data.json"
       ],
       "table_files": [
             "phase4_policy_actionable_feature_stats.csv",
@@ -504,7 +514,9 @@
       activeFile: null,
       activeRows: [],
       activeColumns: [],
-      mainChart: null
+      mainChart: null,
+      recoveryPathData: null,
+      recoveryPathAvailable: false
     };
 
     const $ = (id) => document.getElementById(id);
@@ -659,7 +671,7 @@
         opt.textContent = `${labelize(f.name)} (${f.type})`;
         sel.appendChild(opt);
       });
-      const defaultDataset = "phase4_policy_relative_impact_table.csv";
+      const defaultDataset = "phase4_policy_recovery_rebound_sensitivity.csv";
       if (state.fileIndex.some(f => f.name === defaultDataset)) sel.value = defaultDataset;
       else if (state.fileIndex.length) sel.value = state.fileIndex[0].name;
     }
@@ -876,7 +888,197 @@
       return "bar";
     }
 
+    async function loadRecoveryPathData() {
+      const url = PATHS.data + "phase4_policy_recovery_rebound_path_data.json";
+      try {
+        state.recoveryPathData = await fetchJson(url);
+        state.recoveryPathAvailable = true;
+        return state.recoveryPathData;
+      } catch (err) {
+        state.recoveryPathData = null;
+        state.recoveryPathAvailable = false;
+        console.warn("Recovery path JSON not available yet:", err);
+        return null;
+      }
+    }
+
+    function isRecoveryPathView() {
+      return Boolean(
+        state.recoveryPathAvailable &&
+        state.recoveryPathData &&
+        state.activeFile?.name === "phase4_policy_recovery_rebound_sensitivity.csv"
+      );
+    }
+
+    function pathPointArray(points, valueKey = "population") {
+      return (points || [])
+        .map(p => ({ x: Number(p.year), y: Number(p[valueKey]) }))
+        .filter(p => Number.isFinite(p.x) && Number.isFinite(p.y));
+    }
+
+    function renderRecoveryPathChart() {
+      const data = state.recoveryPathData;
+      const ctx = $("mainChart").getContext("2d");
+      if (state.mainChart) state.mainChart.destroy();
+
+      $("recoveryPathControls").classList.remove("hidden");
+      $("tableOnlyNotice").classList.add("hidden");
+      $("mainChartTitle").textContent = "Islandwide recovery scenarios: standard policy vs recovery rebound";
+      $("mainChartSubtitle").textContent = "Rendered from notebook-exported JSON path data. Use the checkboxes to change the view.";
+      $("activeFileName").textContent = "phase4_policy_recovery_rebound_path_data.json";
+
+      const showObserved = $("showObservedChk")?.checked ?? true;
+      const showBand = $("showBandChk")?.checked ?? true;
+      const showForecastStart = $("showForecastStartChk")?.checked ?? true;
+      const showLatestLevel = $("showLatestLevelChk")?.checked ?? true;
+
+      const series = data.series || [];
+      const meta = data.metadata || {};
+      const forecastStart = Number(meta.forecast_start_year || 2024);
+      const latestObserved = Number(meta.latest_observed_population);
+
+      const colorMap = {
+        "Observed": "#1f77b4",
+        "Baseline decline": "#ff7f0e",
+        "Retention bundle": "#e377c2",
+        "Recovery bundle (model-implied)": "#17becf",
+        "Recovery rebound + return-migration sensitivity": "#2ca02c"
+      };
+
+      const datasets = [];
+
+      const band = data.uncertainty_band || data.uncertainty || null;
+      if (showBand && band && Array.isArray(band.points)) {
+        datasets.push({
+          label: "Rebound uncertainty lower",
+          data: pathPointArray(band.points, "low"),
+          type: "line",
+          parsing: false,
+          borderColor: "rgba(44,160,44,0)",
+          backgroundColor: "rgba(44,160,44,0)",
+          pointRadius: 0,
+          tension: 0.25,
+          order: 10
+        });
+        datasets.push({
+          label: "Rebound uncertainty band",
+          data: pathPointArray(band.points, "high"),
+          type: "line",
+          parsing: false,
+          borderColor: "rgba(44,160,44,0)",
+          backgroundColor: "rgba(44,160,44,0.12)",
+          fill: "-1",
+          pointRadius: 0,
+          tension: 0.25,
+          order: 9
+        });
+      }
+
+      series.forEach(s => {
+        if (!showObserved && String(s.role || s.name).toLowerCase().includes("observed")) return;
+        const name = s.display_name || s.name;
+        datasets.push({
+          label: name,
+          data: pathPointArray(s.points, "population"),
+          type: "line",
+          parsing: false,
+          borderColor: s.color || colorMap[name] || "#374151",
+          backgroundColor: s.color || colorMap[name] || "#374151",
+          borderDash: s.line_style === "dashed" ? [6, 4] : [],
+          borderWidth: name?.includes("rebound") ? 3.2 : 2.4,
+          pointRadius: String(s.role || s.name).toLowerCase().includes("observed") ? 3 : 0,
+          pointHoverRadius: 5,
+          tension: 0.25,
+          fill: false
+        });
+      });
+
+      const annotations = {};
+      if (showForecastStart && Number.isFinite(forecastStart)) {
+        annotations.forecastStart = {
+          type: "line",
+          xMin: forecastStart,
+          xMax: forecastStart,
+          borderColor: "rgba(37,99,235,0.8)",
+          borderDash: [6, 5],
+          borderWidth: 1.5,
+          label: {
+            display: true,
+            content: "forecast starts",
+            position: "start",
+            color: "#2563eb",
+            backgroundColor: "rgba(255,255,255,0.75)",
+            font: { size: 10 }
+          }
+        };
+      }
+      if (showLatestLevel && Number.isFinite(latestObserved)) {
+        annotations.latestObserved = {
+          type: "line",
+          yMin: latestObserved,
+          yMax: latestObserved,
+          borderColor: "rgba(107,114,128,0.9)",
+          borderDash: [2, 3],
+          borderWidth: 1.2,
+          label: {
+            display: true,
+            content: "latest observed level",
+            position: "end",
+            color: "#6b7280",
+            backgroundColor: "rgba(255,255,255,0.75)",
+            font: { size: 10 }
+          }
+        };
+      }
+
+      state.mainChart = new Chart(ctx, {
+        type: "line",
+        data: { datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: "nearest", intersect: false },
+          plugins: {
+            legend: { position: "top", labels: { boxWidth: 16, usePointStyle: true } },
+            tooltip: {
+              callbacks: {
+                label: c => `${c.dataset.label}: ${fmt.format(Math.round(c.parsed.y))}`
+              }
+            },
+            annotation: { annotations }
+          },
+          scales: {
+            x: {
+              type: "linear",
+              title: { display: true, text: "Year" },
+              ticks: { stepSize: 1, callback: v => String(v) },
+              grid: { color: "rgba(0,0,0,0.08)" }
+            },
+            y: {
+              title: { display: true, text: "Population" },
+              ticks: { callback: v => fmt.format(v) },
+              grid: { color: "rgba(0,0,0,0.08)" }
+            }
+          }
+        }
+      });
+
+      const endpoints = data.endpoints || [];
+      const rebound = endpoints.find(r => String(r.scenario || "").toLowerCase().includes("rebound"));
+      const baseline = endpoints.find(r => String(r.scenario || "").toLowerCase().includes("baseline"));
+      if (rebound && baseline) {
+        $("chartNarrative").innerHTML = `The default view recreates the Phase 4 recovery-rebound graph from exported path data. The rebound sensitivity ends at <strong>${fmt.format(Math.round(rebound.endpoint_2030))}</strong> in 2030, compared with <strong>${fmt.format(Math.round(baseline.endpoint_2030))}</strong> under baseline decline. This remains a predictive counterfactual stress test, not a causal treatment estimate.`;
+      } else {
+        $("chartNarrative").textContent = "The default view recreates the recovery-rebound path from exported Phase 4 chart data.";
+      }
+    }
+
     function renderDashboard() {
+      if (isRecoveryPathView()) {
+        renderRecoveryPathChart();
+        return;
+      }
+      $("recoveryPathControls").classList.add("hidden");
       renderChart();
       renderNarrative();
     }
@@ -1132,6 +1334,10 @@
         $("toggleFullscreenBtn").textContent = isMax ? "Exit maximize" : "Maximize";
         setTimeout(() => state.mainChart?.resize(), 150);
       });
+      ["showObservedChk", "showBandChk", "showForecastStartChk", "showLatestLevelChk"].forEach(id => {
+        const el = $(id);
+        if (el) el.addEventListener("change", () => { if (isRecoveryPathView()) renderRecoveryPathChart(); });
+      });
       document.querySelectorAll(".quick-view").forEach(btn => {
         btn.addEventListener("click", () => setQuickView(btn.dataset.view));
       });
@@ -1161,6 +1367,7 @@
         buildFileIndex();
         populateDatasetSelect();
         populateFigures();
+        await loadRecoveryPathData();
         if (!state.fileIndex.length) {
           renderEmpty();
           showError(`The JSON artifact manifest loaded, but it does not list any CSV outputs.`);

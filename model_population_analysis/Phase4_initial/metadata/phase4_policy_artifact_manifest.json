@@ -1,7 +1,6 @@
 {
   "data_files": [
     "phase4_policy_municipal_policy_summary.csv",
-    "phase4_policy_recovery_rebound_path_data.json",
     "phase4_policy_top_municipal_gains_retention_bundle.csv"
   ],
   "table_files": [
@@ -23,9 +22,11 @@
     "phase4_policy_region_policy_summary.csv",
     "phase4_policy_regional_recovery_rebound_sensitivity.csv",
     "phase4_policy_relative_impact_table.csv",
+    "phase4_policy_stylized_policy_path_explainer.csv",
     "phase4_policy_top_policy_by_region.csv"
   ],
   "figure_files": [
+    ".DS_Store",
     "phase4_policy_best_package_by_region.png",
     "phase4_policy_combined_policy_path_explainer.png",
     "phase4_policy_combined_recovery_rebound_explainer.png",
@@ -36,6 +37,7 @@
     "phase4_policy_recovery_gain_vs_baseline_explainer.png",
     "phase4_policy_recovery_rebound_endpoint_comparison.png",
     "phase4_policy_recovery_rebound_sensitivity_path.png",
+    "phase4_policy_recovery_scenario_difference_explainer.png",
     "phase4_policy_recovery_scenario_difference_explainer_clean.png",
     "phase4_policy_regional_policy_comparison.png",
     "phase4_policy_regional_policy_heatmap.png",
@@ -45,12 +47,14 @@
     "phase4_policy_relative_impact_pct_chart.png",
     "phase4_policy_stylized_island_policy_paths_with_bands.png",
     "phase4_policy_stylized_island_policy_paths_zoomed.png",
+    "phase4_policy_stylized_policy_path_explainer.png",
     "phase4_policy_top_municipal_gains_retention_bundle.png"
   ],
   "model_files": [
     "phase4_policy_backbone_pipeline.joblib"
   ],
   "metadata_files": [
+    "phase4_policy_artifact_manifest.json",
     "phase4_policy_backbone_metadata.json",
     "phase4_policy_input_manifest.json"
   ]
